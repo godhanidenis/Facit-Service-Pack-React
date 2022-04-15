@@ -2,38 +2,53 @@
 import React, { useEffect, useState } from 'react';
 
 import { useTour } from '@reactour/tour';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteUsersStart, loadUsersStart } from '../../redux/ducks/users';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 
 import Page from '../../layout/Page/Page';
-import Card, { CardBody, CardHeader, CardLabel, CardTitle } from '../../components/bootstrap/Card';
+import Card, {
+	CardActions,
+	CardBody,
+	CardHeader,
+	CardLabel,
+	CardTitle,
+} from '../../components/bootstrap/Card';
 
+import Modal, {
+	ModalBody,
+	ModalFooter,
+	ModalHeader,
+	ModalTitle,
+} from '../../components/bootstrap/Modal';
 import Icon from '../../components/icon/Icon';
 
 import { demoPages } from '../../menu';
 import PaginationButtons, { dataPagination, PER_COUNT } from '../../components/PaginationButtons';
 import useSortableData from '../../hooks/useSortableData';
-
-const TableRow = ({ id, username, email, phone_number: phoneNumber }) => {
-	return (
-		<tr>
-			<th scope='row'>{id}</th>
-			<td>{username}</td>
-			<td>{email}</td>
-			<td>{phoneNumber}</td>
-		</tr>
-	);
-};
+import Button from '../../components/bootstrap/Button';
+import AddEditUser from './AddEditUser';
 
 const DashboardPage = () => {
 	/**
 	 * Tour Start
 	 */
 	const { setIsOpen } = useTour();
-	const [tableData, setTableDta] = useState([]);
 
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['3']);
-	const { items, requestSort, getClassNamesFor } = useSortableData(tableData);
+	const dispatch = useDispatch();
+	const { users } = useSelector((state) => state.data);
+	console.log('user::::', users);
+	const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+	const [modalOpen, setModalOpen] = useState(false);
+	const [currentUser, setCurrentUser] = useState(null);
+	const [isUpdateUser, setIsUpdateUser] = useState(false);
+
+	const handleDeleteUser = async (id) => {
+		await dispatch(deleteUsersStart(id));
+		setConfirmModalOpen(false);
+	};
 
 	useEffect(() => {
 		if (localStorage.getItem('tourModalStarted') !== 'shown') {
@@ -46,23 +61,16 @@ const DashboardPage = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const AllUsers = async () => {
-		await fetch('http://3.215.147.147/admin_panel/users/')
-			.then((response) => response.json())
-			.then((dta) => {
-				setTableDta(dta.data);
-				// eslint-disable-next-line no-console
-				console.log('data', dta.data);
-			});
-	};
-
 	useEffect(() => {
-		AllUsers();
+		dispatch(loadUsersStart());
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
 	// eslint-disable-next-line no-console
-	console.log('data table', tableData);
+	console.log('data table', users);
 	// eslint-disable-next-line no-console
 	console.log('items', items);
+	const { items, requestSort, getClassNamesFor } = useSortableData(users);
 
 	return (
 		<PageWrapper title={demoPages.sales.subMenu.dashboard.text}>
@@ -76,6 +84,20 @@ const DashboardPage = () => {
 										All Users
 									</CardTitle>
 								</CardLabel>
+								<CardActions>
+									<Button
+										icon='PersonAdd'
+										color='info'
+										isLight
+										tag='a'
+										// eslint-disable-next-line react/no-unstable-nested-components
+										onClick={() => {
+											setIsUpdateUser(false);
+											setModalOpen(true);
+										}}>
+										New User
+									</Button>
+								</CardActions>
 							</CardHeader>
 							<CardBody className='table-responsive'>
 								<table className='table table-modern table-hover'>
@@ -127,12 +149,80 @@ const DashboardPage = () => {
 													icon='FilterList'
 												/>
 											</th>
+											<th
+												scope='col'
+												onClick={() => requestSort('actions')}
+												className='cursor-pointer text-decoration-underline'>
+												Actions
+												<Icon
+													size='lg'
+													className={getClassNamesFor('actions')}
+													icon='FilterList'
+												/>
+											</th>
 										</tr>
 									</thead>
 									<tbody>
-										{dataPagination(items, currentPage, perPage).map((i) => (
-											// eslint-disable-next-line react/jsx-props-no-spreading
-											<TableRow key={i.id} {...i} />
+										{dataPagination(items, currentPage, perPage).map((item) => (
+											<>
+												<tr key={item.id}>
+													<th scope='row'>{item.id}</th>
+													<td>{item.username}</td>
+													<td>{item.email}</td>
+													<td>{item.phone_number}</td>
+													<td>
+														<Icon
+															size='lg'
+															icon='Edit'
+															color='info'
+															style={{ cursor: 'pointer' }}
+															onClick={() => {
+																setCurrentUser(item);
+																setIsUpdateUser(true);
+																setModalOpen(true);
+															}}
+														/>
+														<Icon
+															size='lg'
+															icon='Delete'
+															color='danger'
+															style={{
+																marginLeft: '10px',
+																cursor: 'pointer',
+															}}
+															onClick={() => {
+																setConfirmModalOpen(true);
+															}}
+														/>
+													</td>
+												</tr>
+												<Modal
+													isOpen={confirmModalOpen}
+													setIsOpen={setConfirmModalOpen}
+													size='lg'
+													isScrollable>
+													<ModalHeader setIsOpen={setConfirmModalOpen}>
+														<ModalTitle>Confirmation Modal</ModalTitle>
+													</ModalHeader>
+
+													<ModalBody>
+														<h1>
+															Do you really want to delete{' '}
+															{item.username}
+														</h1>
+													</ModalBody>
+
+													<ModalFooter>
+														<Button
+															color='info'
+															onClick={() =>
+																handleDeleteUser(item.id)
+															}>
+															ok
+														</Button>
+													</ModalFooter>
+												</Modal>
+											</>
 										))}
 									</tbody>
 								</table>
@@ -148,6 +238,11 @@ const DashboardPage = () => {
 						</Card>
 					</div>
 				</div>
+				<AddEditUser
+					modalOpen={modalOpen}
+					setModalOpen={setModalOpen}
+					currentUser={isUpdateUser ? currentUser : null}
+				/>
 			</Page>
 		</PageWrapper>
 	);

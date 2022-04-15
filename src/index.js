@@ -2,16 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import './styles/styles.scss';
+import { Provider } from 'react-redux';
 import App from './App/App';
 import reportWebVitals from './reportWebVitals';
 import { ThemeContextProvider } from './contexts/themeContext';
 import './i18n';
+import store from './redux/store';
 
 ReactDOM.render(
 	<Router>
 		<React.StrictMode>
 			<ThemeContextProvider>
-				<App />
+				<Provider store={store}>
+					<App />
+				</Provider>
 			</ThemeContextProvider>
 		</React.StrictMode>
 	</Router>,
