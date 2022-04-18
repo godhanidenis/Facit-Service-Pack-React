@@ -53,9 +53,9 @@ export function* handleDeleteUser({ payload }) {
 	}
 }
 
-export function* handleUpdateUser({ payload: { id, formValue } }) {
+export function* handleUpdateUser({ payload: { id, toBeUpdatedUser } }) {
 	try {
-		const response = yield call(requestUpdateUsers, id, formValue);
+		const response = yield call(requestUpdateUsers, id, toBeUpdatedUser);
 
 		if (response.status === 200) {
 			yield put(updateUsersSuccess(response.data.data));

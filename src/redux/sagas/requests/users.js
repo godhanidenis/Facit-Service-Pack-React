@@ -16,11 +16,11 @@ export function requestCreateUsers(user) {
 	});
 }
 
-export function requestUpdateUsers(userId, userInfo) {
+export function requestUpdateUsers(id, toBeUpdatedUser) {
 	return axios.request({
 		method: 'put',
-		url: `http://3.215.147.147/admin_panel/users/${userId}`,
-		data: userInfo,
+		url: `http://3.215.147.147/admin_panel/users/${id}`,
+		data: toBeUpdatedUser,
 	});
 }
 
