@@ -33,8 +33,9 @@ export const createUsersStart = (user) => ({
 	payload: user,
 });
 
-export const createUsersSuccess = () => ({
+export const createUsersSuccess = (user) => ({
 	type: CREATE_USER_SUCCESS,
+	payload: user,
 });
 
 export const createUsersError = (error) => ({
@@ -62,8 +63,9 @@ export const updateUsersStart = (userInfo) => ({
 	payload: userInfo,
 });
 
-export const updateUsersSuccess = () => ({
+export const updateUsersSuccess = (userInfo) => ({
 	type: UPDATE_USER_SUCCESS,
+	payload: userInfo,
 });
 
 export const updateUsersError = (error) => ({
@@ -88,6 +90,7 @@ const usersReducer = (state = initialState, action) => {
 				...state,
 				loading: true,
 			};
+
 		case LOAD_USERS_SUCCESS:
 			return {
 				...state,
@@ -99,12 +102,18 @@ const usersReducer = (state = initialState, action) => {
 			return {
 				...state,
 				loading: false,
-				users: [...state.user, action.payload],
+				users: [...state.users.concat(action.payload)],
 			};
 		case UPDATE_USER_SUCCESS:
+			const index = state.users.findIndex((user) => user.id === action.payload.id);
+
+			const newArray = [...state.users];
+
+			newArray[index] = action.payload;
 			return {
 				...state,
 				loading: false,
+				users: newArray,
 			};
 
 		case DELETE_USER_SUCCESS: {

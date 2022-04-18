@@ -36,10 +36,9 @@ const DashboardPage = () => {
 	const { setIsOpen } = useTour();
 
 	const [currentPage, setCurrentPage] = useState(1);
-	const [perPage, setPerPage] = useState(PER_COUNT['3']);
+	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const dispatch = useDispatch();
 	const { users } = useSelector((state) => state.data);
-	console.log('user::::', users);
 	const [confirmModalOpen, setConfirmModalOpen] = useState(false);
 	const [modalOpen, setModalOpen] = useState(false);
 	const [currentUser, setCurrentUser] = useState(null);
@@ -66,10 +65,6 @@ const DashboardPage = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	// eslint-disable-next-line no-console
-	console.log('data table', users);
-	// eslint-disable-next-line no-console
-	console.log('items', items);
 	const { items, requestSort, getClassNamesFor } = useSortableData(users);
 
 	return (

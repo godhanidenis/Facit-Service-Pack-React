@@ -20,11 +20,8 @@ export const dataPagination = (data, currentPage, perPage) =>
 
 const PaginationButtons = ({ setCurrentPage, currentPage, perPage, setPerPage, data, label }) => {
 	const totalItems = data.length;
-	// eslint-disable-next-line no-console
-	console.log('ttl items', totalItems);
+
 	const totalPage = Math.ceil(totalItems / perPage);
-	// eslint-disable-next-line no-console
-	console.log('ttl page', totalPage);
 
 	const pagination = () => {
 		let items = [];

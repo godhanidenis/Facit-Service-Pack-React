@@ -14,17 +14,15 @@
 	],
 	"parserOptions": {
 		"ecmaFeatures": {
-			"jsx": true
-		},
-		"ecmaVersion": 12,
-		"sourceType": "module",
-		"allowImportExportEverywhere": true
+			"jsx": true,
+			"modules": true
+		}
 	},
 	"plugins": ["import", "prettier", "eslint-comments", "react", "jsx-a11y", "react-hooks"],
 	"rules": {
-		"react/prop-types": 0,
-		"prettier/prettier": ["error", { "endOfLine": "auto" }],
-		// "prettier/prettier": ["warn"],
+		// "react/prop-types": 0,
+		// "prettier/prettier": ["error", { "endOfLine": "auto" }],
+		"prettier/prettier": ["warn"],
 		"no-use-before-define": "off",
 		"no-case-declarations": "off",
 		"no-underscore-dangle": "off",

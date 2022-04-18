@@ -1,70 +1,79 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable react/destructuring-assignment */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+// {
+// 	useEffect, useState;
+// }
+import { useForm } from 'react-hook-form';
+
 import { useDispatch } from 'react-redux';
 import Button from '../../components/bootstrap/Button';
 import FormGroup from '../../components/bootstrap/forms/FormGroup';
 import Input from '../../components/bootstrap/forms/Input';
 // import Label from '../../components/bootstrap/forms/Label';
-import Modal, {
-	ModalBody,
-	ModalFooter,
-	ModalHeader,
-	ModalTitle,
-} from '../../components/bootstrap/Modal';
+import Modal, { ModalBody, ModalHeader, ModalTitle } from '../../components/bootstrap/Modal';
 import { createUsersStart, updateUsersStart } from '../../redux/ducks/users';
 
-const initialState = {
-	email: '',
-	password: '',
-	username: '',
-	first_name: '',
-	last_name: '',
-	phone_number: '',
-};
+// const initialState = {
+// 	email: '',
+// 	password: '',
+// 	username: '',
+// 	first_name: '',
+// 	last_name: '',
+// 	phone_number: '',
+// };
 const AddEditUser = (props) => {
-	console.log('props', props);
 	const { modalOpen } = props;
 	const { setModalOpen } = props;
 	const { currentUser } = props;
-	const [formValue, setFormValue] = useState(initialState);
-	const [id, setId] = useState('');
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		// setValue,
+		reset,
+	} = useForm();
+	// const [formValue, setFormValue] = useState({});
+	// const [id, setId] = useState();
 	// eslint-disable-next-line camelcase
-	const { email, password, username, first_name, last_name, phone_number } = formValue;
+	// const { email, password, username, first_name, last_name, phone_number } = formValue;
 	const dispatch = useDispatch();
 
-	useEffect(() => {
-		if (currentUser) {
-			console.log('p id', currentUser.id);
-			setId(currentUser.id);
-			console.log('hy');
+	const onSubmit = (data) => {
+		// eslint-disable-next-line no-console
+		console.log('data', data);
 
-			setFormValue({
-				username: currentUser.username,
-				email: currentUser.email,
-				first_name: currentUser.first_name,
-				last_name: currentUser.last_name,
-				phone_number: currentUser.phone_number,
-			});
-		} else {
-			console.log('hello');
-			setFormValue({ ...initialState });
-		}
-	}, [currentUser]);
-	const handleSubmit = async () => {
 		if (currentUser === null) {
-			await dispatch(createUsersStart(formValue));
+			console.log('add');
+
+			dispatch(createUsersStart(data));
 			setModalOpen(false);
 		} else {
-			console.log(':::::', id);
-			await dispatch(updateUsersStart({ id, formValue }));
+			console.log('update');
+			dispatch(updateUsersStart({ currentUser.id, data }));
 			setModalOpen(false);
 		}
 	};
+	// useEffect(() => {
+	// 	if (currentUser) {
+	// 		setId(currentUser.id);
 
-	const onValueChange = (e) => {
-		setFormValue({ ...formValue, [e.target.name]: e.target.value });
-	};
+	// 		const fields = ['username', 'email', 'first_name', 'last_name', 'phone_number'];
+	// 		fields.forEach((field) => setValue(field, currentUser[field]));
+	// 		// setFormValue(currentUser);
+
+	// 		// setFormValue({
+	// 		// 	username: currentUser.username,
+	// 		// 	email: currentUser.email,
+	// 		// 	first_name: currentUser.first_name,
+	// 		// 	last_name: currentUser.last_name,
+	// 		// 	phone_number: currentUser.phone_number,
+	// 		// });
+	// 	}
+	// }, [currentUser, setValue]);
+	// const onValueChange = (e) => {
+	// 	setFormValue({ ...formValue, [e.target.name]: e.target.value });
+	// };
 
 	return (
 		<div>
@@ -73,27 +82,31 @@ const AddEditUser = (props) => {
 					<ModalTitle>{currentUser === null ? 'Create User' : 'Update User'}</ModalTitle>
 				</ModalHeader>
 				<ModalBody>
-					<form className='row g-4'>
+					<form className='row g-4' onSubmit={handleSubmit(onSubmit)} onReset={reset}>
 						<div className='col-12'>
 							<FormGroup id='username' isFloating label='Your Username'>
 								<Input
-									autoComplete='username'
-									onChange={(e) => onValueChange(e)}
-									value={username || ''}
+									autoComplete='off'
+									{...register('username', { required: true })}
 								/>
 							</FormGroup>
 						</div>
+						{/* <p>{errors.username?.message}</p> */}
+						{errors.username && 'Username is required'}
 						{currentUser === null && (
-							<div className='col-12'>
-								<FormGroup id='password' isFloating label='Your Password'>
-									<Input
-										autoComplete='password'
-										type='password'
-										onChange={(e) => onValueChange(e)}
-										value={password || ''}
-									/>
-								</FormGroup>
-							</div>
+							<>
+								<div className='col-12'>
+									<FormGroup id='password' isFloating label='Your Password'>
+										<Input
+											autoComplete='off'
+											type='password'
+											{...register('password', { required: true })}
+										/>
+									</FormGroup>
+								</div>
+								{/* <p>{errors.password?.message}</p> */}
+								{errors.password && 'Password is required'}
+							</>
 						)}
 						{/* <div className='col-12'>
 												<FormGroup
@@ -110,57 +123,64 @@ const AddEditUser = (props) => {
 							<FormGroup id='email' isFloating label='Your email'>
 								<Input
 									type='email'
-									autoComplete='email'
-									onChange={(e) => onValueChange(e)}
-									value={email || ''}
+									autoComplete='off'
+									{...register('email', { required: true })}
 								/>
 							</FormGroup>
 						</div>
+						{/* <p>{errors.email?.message}</p> */}
+						{errors.email && 'Email is required'}
 						<div className='col-12'>
 							<FormGroup id='first_name' isFloating label='Your FirstName'>
 								<Input
 									type='text'
-									autoComplete='firstName'
-									onChange={(e) => onValueChange(e)}
-									// eslint-disable-next-line camelcase
-									value={first_name || ''}
+									autoComplete='off'
+									{...register('first_name', { required: true })}
 								/>
 							</FormGroup>
 						</div>
+						{/* <p>{errors.first_name?.message}</p> */}
+						{errors.first_name && 'First Name is required'}
+
 						<div className='col-12'>
 							<FormGroup id='last_name' isFloating label='Your LastName'>
 								<Input
-									autoComplete='lastName'
-									onChange={(e) => onValueChange(e)}
-									// eslint-disable-next-line camelcase
-									value={last_name || ''}
+									autoComplete='off'
+									{...register('last_name', { required: true })}
 								/>
 							</FormGroup>
 						</div>
+						{/* <p>{errors.last_name?.message}</p> */}
+						{errors.last_name && 'Last Name is required'}
+
 						<div className='col-12'>
 							<FormGroup id='phone_number' isFloating label='Your PhoneNumber'>
 								<Input
-									autoComplete='phoneNumber'
+									autoComplete='off'
 									type='number'
-									onChange={(e) => onValueChange(e)}
-									// eslint-disable-next-line camelcase
-									value={phone_number || ''}
+									{...register('phone_number', { required: true })}
 								/>
 							</FormGroup>
 						</div>
+						{/* <p>{errors.phone_number?.message}</p> */}
+						{errors.phone_number && 'Phone Number is required'}
 
 						{/* <div className='col-12'>
 							<FormGroup>
 								<Label>Profile Picture</Label>
 								<Input
 									type='file'
-									autoComplete='photo'
+									autoComplete='off'
+									{...register('profile_picture', { required: true })}
+
 									// eslint-disable-next-line camelcase
-									value={profile_picture}
-									onChange={(e) => onValueChange(e)}
+									// value={profile_picture}
+									// onChange={(e) => onValueChange(e)}
 								/>
 							</FormGroup>
-						</div> */}
+						</div>
+						{errors.profile_picture && 'Profile Picture is required'} */}
+
 						{/* 	<div className='col-4'>
 												<FormGroup>
 													<Label>Is Active</Label>
@@ -253,16 +273,26 @@ const AddEditUser = (props) => {
 													</ChecksGroup>
 												</FormGroup>
 											</div> */}
+						<div className='col-12'>
+							<Button
+								color={currentUser === null ? 'info' : 'success'}
+								className='w-100 py-3'
+								type='submit'
+								// onClick={() => handleSubmit()}
+							>
+								{currentUser === null ? 'Create' : 'Update'}
+							</Button>
+						</div>
 					</form>
 				</ModalBody>
-				<ModalFooter>
+				{/* <ModalFooter>
 					<Button
 						color={currentUser === null ? 'info' : 'success'}
 						className='w-100 py-3'
 						onClick={() => handleSubmit()}>
 						{currentUser === null ? 'Create' : 'Update'}
 					</Button>
-				</ModalFooter>
+				</ModalFooter> */}
 			</Modal>
 		</div>
 	);

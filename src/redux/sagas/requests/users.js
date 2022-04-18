@@ -12,7 +12,7 @@ export function requestCreateUsers(user) {
 	return axios.request({
 		method: 'post',
 		url: 'http://3.215.147.147/admin_panel/users/',
-		user,
+		data: user,
 	});
 }
 
@@ -20,7 +20,7 @@ export function requestUpdateUsers(userId, userInfo) {
 	return axios.request({
 		method: 'put',
 		url: `http://3.215.147.147/admin_panel/users/${userId}`,
-		userInfo,
+		data: userInfo,
 	});
 }
 
