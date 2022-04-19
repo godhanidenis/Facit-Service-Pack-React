@@ -24,7 +24,7 @@ import { demoPages } from '../../menu';
 import PaginationButtons, { dataPagination, PER_COUNT } from '../../components/PaginationButtons';
 import useSortableData from '../../hooks/useSortableData';
 import Button from '../../components/bootstrap/Button';
-import AddEditUserModal from './AddEditUserModal';
+import { useNavigate } from 'react-router-dom';
 
 const DashboardPage = () => {
 	const dispatch = useDispatch();
@@ -32,15 +32,16 @@ const DashboardPage = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-	const [modalOpen, setModalOpen] = useState(false);
+
 	const [currentUser, setCurrentUser] = useState(null);
-	const [isUpdateUser, setIsUpdateUser] = useState(false);
 
 	const { users } = useSelector((state) => state.data);
 	const { items, requestSort, getClassNamesFor } = useSortableData(users);
-
+	const navigate = useNavigate();
 	useEffect(() => {
-		dispatch(loadUsersStart());
+		if (users.length === 0) {
+			dispatch(loadUsersStart());
+		}
 	}, []);
 
 	const handleDeleteUser = () => {
@@ -67,10 +68,7 @@ const DashboardPage = () => {
 											color='info'
 											isLight
 											tag='a'
-											onClick={() => {
-												setIsUpdateUser(false);
-												setModalOpen(true);
-											}}>
+											to='/user'>
 											New User
 										</Button>
 									</CardActions>
@@ -153,9 +151,7 @@ const DashboardPage = () => {
 																color='info'
 																style={{ cursor: 'pointer' }}
 																onClick={() => {
-																	setCurrentUser(item);
-																	setIsUpdateUser(true);
-																	setModalOpen(true);
+																	navigate(`/user/${item.id}`);
 																}}
 															/>
 															<Icon
@@ -206,13 +202,6 @@ const DashboardPage = () => {
 					</Button>
 				</ModalFooter>
 			</Modal>
-			{modalOpen && (
-				<AddEditUserModal
-					modalOpen={modalOpen}
-					setModalOpen={setModalOpen}
-					currentUser={isUpdateUser ? currentUser : null}
-				/>
-			)}
 		</>
 	);
 };

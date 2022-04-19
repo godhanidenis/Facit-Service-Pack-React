@@ -4,6 +4,8 @@ import Login from '../pages/presentation/auth/Login';
 
 const LANDING = {
 	DASHBOARD: lazy(() => import('../pages/dashboard/DashboardPage')),
+	CREATE_USER: lazy(() => import('../pages/dashboard/AddEditUser')),
+	EDIT_USER: lazy(() => import('../pages/dashboard/AddEditUser')),
 	DASHBOARD_BOOKING: lazy(() => import('../pages/dashboard/DashboardBookingPage')),
 	SUMMARY: lazy(() => import('../pages/SummaryPage')),
 };
@@ -181,6 +183,16 @@ const presentation = [
 	{
 		path: dashboardMenu.dashboard.path,
 		element: <LANDING.DASHBOARD />,
+		exact: true,
+	},
+	{
+		path: 'user',
+		element: <LANDING.CREATE_USER />,
+		exact: true,
+	},
+	{
+		path: 'user/:id',
+		element: <LANDING.EDIT_USER />,
 		exact: true,
 	},
 	{

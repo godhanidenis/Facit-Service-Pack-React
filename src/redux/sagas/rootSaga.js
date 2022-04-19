@@ -35,7 +35,6 @@ const userSagas = [
 	fork(onUpdateUsers),
 ];
 
-// eslint-disable-next-line import/prefer-default-export
 export default function* watcherSaga() {
 	yield all([...userSagas]);
 }

@@ -109,7 +109,6 @@ const GridFluidPage = () => {
 				category: '',
 			});
 		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [editItem]);
 
 	return (

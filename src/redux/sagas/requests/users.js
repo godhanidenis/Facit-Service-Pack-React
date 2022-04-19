@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// eslint-disable-next-line import/prefer-default-export
 export function requestGetUsers() {
 	return axios.request({
 		method: 'get',

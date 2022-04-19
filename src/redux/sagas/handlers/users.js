@@ -16,7 +16,6 @@ import {
 	requestUpdateUsers,
 } from '../requests/users';
 
-// eslint-disable-next-line import/prefer-default-export
 export function* handleGetUsers() {
 	try {
 		const response = yield call(requestGetUsers);
