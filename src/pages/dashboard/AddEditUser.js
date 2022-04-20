@@ -153,15 +153,16 @@ const AddEditUser = () => {
 													type='file'
 													autoComplete='off'
 													{...register('profile_picture', {
-														required: editMode ? false : true,
+														required: editMode
+															? false
+															: 'Profile Picture is required',
 													})}
 													onChange={imageChange}
 													style={{ display: 'none' }}
 													id='profile'
 													// ref={profileFile}
 												/>
-												{errors.profile_picture &&
-													'Profile Picture is required'}
+												{errors.profile_picture?.message}
 											</div>
 										</div>
 										<div className='col-12'>
@@ -171,10 +172,12 @@ const AddEditUser = () => {
 												label='Your Username'>
 												<Input
 													autoComplete='off'
-													{...register('username', { required: true })}
+													{...register('username', {
+														required: 'Username is required',
+													})}
 												/>
 											</FormGroup>
-											{errors.username && 'Username is required'}
+											{errors.username?.message}
 										</div>
 										{!editMode && (
 											<>
@@ -187,12 +190,24 @@ const AddEditUser = () => {
 															autoComplete='off'
 															type='password'
 															{...register('password', {
-																required: editMode ? false : true,
+																required: editMode
+																	? false
+																	: 'Password is required',
+																minLength: {
+																	value: 4,
+																	message:
+																		'Password must be more than 4 characters',
+																},
+																maxLength: {
+																	value: 10,
+																	message:
+																		'Password cannot exceed more than 10 characters',
+																},
 															})}
 														/>
 													</FormGroup>
 												</div>
-												{errors.password && 'Password is required'}
+												{errors.password?.message}
 											</>
 										)}
 										<div className='col-12'>
@@ -200,10 +215,16 @@ const AddEditUser = () => {
 												<Input
 													type='email'
 													autoComplete='off'
-													{...register('email', { required: true })}
+													{...register('email', {
+														required: 'Email is required',
+														pattern: {
+															value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+															message: 'Please enter a valid email',
+														},
+													})}
 												/>
 											</FormGroup>
-											{errors.email && 'Email is required'}
+											{errors.email?.message}
 										</div>
 										<div className='col-12'>
 											<FormGroup
@@ -213,10 +234,12 @@ const AddEditUser = () => {
 												<Input
 													type='text'
 													autoComplete='off'
-													{...register('first_name', { required: true })}
+													{...register('first_name', {
+														required: 'First Name is required',
+													})}
 												/>
 											</FormGroup>
-											{errors.first_name && 'First Name is required'}
+											{errors.first_name?.message}
 										</div>
 
 										<div className='col-12'>
@@ -226,10 +249,12 @@ const AddEditUser = () => {
 												label='Your LastName'>
 												<Input
 													autoComplete='off'
-													{...register('last_name', { required: true })}
+													{...register('last_name', {
+														required: 'Last Name is required',
+													})}
 												/>
 											</FormGroup>
-											{errors.last_name && 'Last Name is required'}
+											{errors.last_name?.message}
 										</div>
 
 										<div className='col-12'>
@@ -241,11 +266,21 @@ const AddEditUser = () => {
 													autoComplete='off'
 													type='number'
 													{...register('phone_number', {
-														required: true,
+														required: 'Phone Number is required',
+														minLength: {
+															value: 10,
+															message:
+																'Phone Number must be 10 numbers',
+														},
+														maxLength: {
+															value: 10,
+															message:
+																'Phone Number must be 10 numbers',
+														},
 													})}
 												/>
 											</FormGroup>
-											{errors.phone_number && 'Phone Number is required'}
+											{errors.phone_number?.message}
 										</div>
 
 										<div className='col-12'>
