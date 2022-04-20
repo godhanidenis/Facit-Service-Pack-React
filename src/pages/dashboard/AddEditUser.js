@@ -22,12 +22,10 @@ import axios from 'axios';
 const AddEditUser = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-
+	const profileFile = useRef(null);
 	const { id } = useParams();
-	console.log('id', id);
 
 	const [editMode, setEditMode] = useState(false);
-	const { users } = useSelector((state) => state.data);
 
 	const [selectedImage, setSelectedImage] = useState();
 	const [updateProfilePictureFile, setUpdateProfilePictureFile] = useState();
@@ -69,7 +67,7 @@ const AddEditUser = () => {
 
 			srcToFile(
 				`http://3.215.147.147${singleUser.data.data.profile_picture}`,
-				'arrow.png',
+				'profile.png',
 				'image/png',
 			).then(function (file) {
 				console.log('file', file);
@@ -91,11 +89,8 @@ const AddEditUser = () => {
 		formData.append('first_name', data.first_name);
 		formData.append('last_name', data.last_name);
 		formData.append('phone_number', data.phone_number);
-		if (id) {
-			formData.append('profile_picture', updateProfilePictureFile);
-		} else {
-			formData.append('profile_picture', data.profile_picture[0]);
-		}
+
+		formData.append('profile_picture', updateProfilePictureFile);
 
 		if (editMode) {
 			dispatch(updateUsersStart({ id: id, toBeUpdatedUser: formData }));
@@ -110,19 +105,15 @@ const AddEditUser = () => {
 
 	const imageChange = (e) => {
 		if (e.target.files && e.target.files.length > 0) {
+			console.log('::::', e.target.files[0]);
 			setUpdateProfilePictureFile(e.target.files[0]);
 			setSelectedImage(URL.createObjectURL(e.target.files[0]));
 		}
 	};
 
-	// const deleteFile = () => {
-	// 	setSelectedImage();
-	// };
-	// const inputFile = useRef(null);
-
-	// const onClick = (e) => {
-	// 	inputFile.current.click();
-	// };
+	const Open = () => {
+		document.getElementById('profile').click();
+	};
 
 	return (
 		<>
@@ -148,6 +139,31 @@ const AddEditUser = () => {
 										className='row g-4'
 										onSubmit={handleSubmit(onSubmit, onError)}
 										onReset={reset}>
+										<div className='col-12'>
+											<div className='col-lg d-flex align-items-center justify-content-center'>
+												<Avatar
+													src={selectedImage || UserImage}
+													onClick={() => Open()}
+													// onClick={() => profileFile.current.click()}
+												/>
+											</div>
+
+											<div className='col-lg'>
+												<Input
+													type='file'
+													autoComplete='off'
+													{...register('profile_picture', {
+														required: editMode ? false : true,
+													})}
+													onChange={imageChange}
+													style={{ display: 'none' }}
+													id='profile'
+													// ref={profileFile}
+												/>
+												{errors.profile_picture &&
+													'Profile Picture is required'}
+											</div>
+										</div>
 										<div className='col-12'>
 											<FormGroup
 												id='username'
@@ -231,42 +247,13 @@ const AddEditUser = () => {
 											</FormGroup>
 											{errors.phone_number && 'Phone Number is required'}
 										</div>
-										<div className='col-12'>
-											<div className='row g-4 align-items-center'>
-												<div className='col-lg-auto'>
-													<Avatar
-														src={selectedImage || UserImage}
-														// onClick={onClick}
-													/>
-												</div>
-												<div className='col-lg'>
-													<div className='row g-4'>
-														<div className='col-auto'>
-															<Input
-																type='file'
-																autoComplete='off'
-																{...register('profile_picture', {
-																	required: editMode
-																		? false
-																		: true,
-																})}
-																onChange={imageChange}
-																// ref={inputFile}
-															/>
-														</div>
-														{errors.profile_picture &&
-															'Profile Picture is required'}
-													</div>
-												</div>
-											</div>
-										</div>
 
 										<div className='col-12'>
 											<Button
 												color={editMode ? 'success' : 'info'}
 												className='w-100 py-3'
 												type='submit'>
-												{!editMode ? 'Add' : 'Update'}
+												{!editMode ? 'Create' : 'Update'}
 											</Button>
 										</div>
 									</form>
