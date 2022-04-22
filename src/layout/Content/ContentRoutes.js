@@ -7,7 +7,6 @@ const ContentRoutes = () => {
 	return (
 		<Routes>
 			{contents.map((page) => (
-				// eslint-disable-next-line react/jsx-props-no-spreading
 				<Route key={page.path} {...page} />
 			))}
 			<Route path='*' element={<PAGE_404 />} />
