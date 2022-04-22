@@ -125,7 +125,7 @@ const AddEditUser = () => {
 								<CardHeader>
 									<CardLabel icon='People' iconColor='info'>
 										<CardTitle tag='h4' className='h5'>
-											{!editMode ? 'Add User Detail' : 'Update User Detail'}
+											{!editMode ? 'Add User Details' : 'Update User Details'}
 										</CardTitle>
 									</CardLabel>
 									<CardActions>

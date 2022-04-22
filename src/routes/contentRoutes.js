@@ -4,8 +4,13 @@ import Login from '../pages/presentation/auth/Login';
 
 const LANDING = {
 	DASHBOARD: lazy(() => import('../pages/dashboard/DashboardPage')),
-	CREATE_USER: lazy(() => import('../pages/dashboard/AddEditUser')),
-	EDIT_USER: lazy(() => import('../pages/dashboard/AddEditUser')),
+	CREATE_USER: lazy(() => import('../pages/dashboard/AddEditUser.js')),
+	EDIT_USER: lazy(() => import('../pages/dashboard/AddEditUser.js')),
+	USER_INFO: lazy(() => import('../pages/dashboard/UserDetails.js')),
+	// USER_SOPS: lazy(() => import('../pages/dashboard/Sops.js')),
+	// TEAMS: lazy(() => import('../pages/dashboard/Teams.js')),
+	// TEAMS_AGENTS: lazy(() => import('../pages/dashboard/Agents.js')),
+	// TEAMS_LOBS: lazy(() => import('../pages/dashboard/Lobs.js')),
 	DASHBOARD_BOOKING: lazy(() => import('../pages/dashboard/DashboardBookingPage')),
 	SUMMARY: lazy(() => import('../pages/SummaryPage')),
 };
@@ -181,20 +186,45 @@ const presentation = [
 	 * Landing
 	 */
 	{
-		path: dashboardMenu.dashboard.path,
+		path: '/',
 		element: <LANDING.DASHBOARD />,
 		exact: true,
 	},
 	{
-		path: 'user',
+		path: 'user/create',
 		element: <LANDING.CREATE_USER />,
 		exact: true,
 	},
 	{
-		path: 'user/:id',
+		path: 'user/edit/:id',
 		element: <LANDING.EDIT_USER />,
 		exact: true,
 	},
+	{
+		path: 'user/:id/*',
+		element: <LANDING.USER_INFO />,
+		exact: true,
+	},
+	// {
+	// 	path: 'user/:id/sops',
+	// 	element: <LANDING.USER_SOPS />,
+	// 	exact: true,
+	// },
+	// {
+	// 	path: 'user/:id/teams',
+	// 	element: <LANDING.TEAMS />,
+	// 	exact: true,
+	// },
+	// {
+	// 	path: 'user/:id/teams/agents',
+	// 	element: <LANDING.TEAMS_AGENTS />,
+	// 	exact: true,
+	// },
+	// {
+	// 	path: 'user/:id/teams/lobs',
+	// 	element: <LANDING.TEAMS_LOBS />,
+	// 	exact: true,
+	// },
 	{
 		path: dashboardMenu.dashboardBooking.path,
 		element: <LANDING.DASHBOARD_BOOKING />,

@@ -68,7 +68,7 @@ const DashboardPage = () => {
 											color='info'
 											isLight
 											tag='a'
-											to='/user'>
+											to='/user/create'>
 											New User
 										</Button>
 									</CardActions>
@@ -151,7 +151,9 @@ const DashboardPage = () => {
 																color='info'
 																style={{ cursor: 'pointer' }}
 																onClick={() => {
-																	navigate(`/user/${item.id}`);
+																	navigate(
+																		`/user/edit/${item.id}`,
+																	);
 																}}
 															/>
 															<Icon
@@ -165,6 +167,18 @@ const DashboardPage = () => {
 																onClick={() => {
 																	setCurrentUser(item);
 																	setDeleteModalOpen(true);
+																}}
+															/>
+															<Icon
+																size='lg'
+																icon='Eye'
+																color='success'
+																style={{
+																	cursor: 'pointer',
+																	marginLeft: '10px',
+																}}
+																onClick={() => {
+																	navigate(`/user/${item.id}`);
 																}}
 															/>
 														</td>
