@@ -26,13 +26,21 @@ import PaginationButtons, { dataPagination, PER_COUNT } from '../../components/P
 import useSortableData from '../../hooks/useSortableData';
 import Button from '../../components/bootstrap/Button';
 import UserDetails from './userDetails';
+import AddUpdateUser from './addUpdateUser';
 
 const UsersPage = () => {
+	const dispatch = useDispatch();
+	useEffect(() => {
+		dispatch(loadUsersStart());
+	}, [dispatch]);
+
 	return (
-		<div>
+		<div className='w-100'>
 			<Routes>
 				<Route path='' element={<Userstbl />} />
 				<Route path=':id/*' element={<UserDetails />} />
+				<Route path='create' element={<AddUpdateUser />} />
+				<Route path='edit/:id' element={<AddUpdateUser />} />
 			</Routes>
 		</div>
 	);
@@ -47,12 +55,14 @@ const Userstbl = () => {
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [currentUser, setCurrentUser] = useState(null);
 
-	const { users } = useSelector((state) => state.data);
+	const { users } = useSelector((state) => state.users);
+	console.log('users::', users);
+
 	const { items, requestSort, getClassNamesFor } = useSortableData(users);
 
-	useEffect(() => {
-		dispatch(loadUsersStart());
-	}, [dispatch]);
+	// useEffect(() => {
+	// 	dispatch(loadUsersStart());
+	// }, [dispatch]);
 
 	const handleDeleteUser = () => {
 		dispatch(deleteUsersStart(currentUser.id));
@@ -78,7 +88,7 @@ const Userstbl = () => {
 											color='info'
 											isLight
 											tag='a'
-											to='/user/create'>
+											to='/users/create'>
 											New User
 										</Button>
 									</CardActions>
@@ -162,7 +172,7 @@ const Userstbl = () => {
 																style={{ cursor: 'pointer' }}
 																onClick={() => {
 																	navigate(
-																		`/user/edit/${item.id}`,
+																		`/users/edit/${item.id}`,
 																	);
 																}}
 															/>

@@ -22,6 +22,7 @@ module.exports = {
 	},
 	plugins: ['import', 'prettier', 'eslint-comments', 'react', 'jsx-a11y', 'react-hooks'],
 	rules: {
+		'jsx-a11y/anchor-is-valid': 'off',
 		'prettier/prettier': ['warn'],
 		'no-use-before-define': 'off',
 		'no-case-declarations': 'off',
@@ -50,6 +51,8 @@ module.exports = {
 		'react/no-arrow-function-lifecycle': 'off',
 		'react/no-invalid-html-attribute': 'off',
 		'react/no-unused-class-component-methods': 'off',
+		camelcase: 'off',
 		'no-shadow': 'off',
+		'no-unused-vars': 'warn',
 	},
 };

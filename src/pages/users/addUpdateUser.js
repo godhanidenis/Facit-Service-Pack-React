@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
 import Button from '../../components/bootstrap/Button';
 import FormGroup from '../../components/bootstrap/forms/FormGroup';
 import Input from '../../components/bootstrap/forms/Input';
@@ -36,48 +35,52 @@ const AddUpdateUser = () => {
 		setValue,
 		reset,
 	} = useForm();
+
+	const { users } = useSelector((state) => state.users);
+	console.log('users::', users);
+
 	useEffect(() => {
 		if (id) {
 			setEditMode(true);
 
-			const singleUser = await axios.get(`http://3.215.147.147/admin_panel/users/${id}`);
+			if (users.length) {
+				const singleUser = users.find((user) => user.id === Number(id));
 
-			await console.log('singleUser', singleUser);
-			const fields = [
-				'username',
-				'email',
-				'first_name',
-				'last_name',
-				'phone_number',
-				'profile_picture',
-			];
-			await fields.forEach((field) => setValue(field, singleUser.data.data[field]));
-			setSelectedImage(`http://3.215.147.147${singleUser.data.data.profile_picture}`);
+				console.log('singleUser', singleUser);
+				const fields = [
+					'username',
+					'email',
+					'first_name',
+					'last_name',
+					'phone_number',
+					'profile_picture',
+				];
 
-			function srcToFile(src, fileName, mimeType) {
-				return fetch(src)
-					.then(function (res) {
-						return res.arrayBuffer();
-					})
-					.then(function (buf) {
-						return new File([buf], fileName, { type: mimeType });
-					});
+				fields.forEach((field) => setValue(field, singleUser[field]));
+				setSelectedImage(`${singleUser?.profile_picture}`);
+
+				srcToFile(`${singleUser?.profile_picture}`, 'profile.png', 'image/png').then(
+					function (file) {
+						console.log('file', file);
+						setUpdateProfilePictureFile(file);
+					},
+				);
 			}
-
-			srcToFile(
-				`http://3.215.147.147${singleUser.data.data.profile_picture}`,
-				'profile.png',
-				'image/png',
-			).then(function (file) {
-				console.log('file', file);
-				setUpdateProfilePictureFile(file);
-			});
 		} else {
 			setEditMode(false);
 		}
-	}, [id]);
+	}, [id, users, setValue]);
 
-	const onSubmit = (data, e) => {
+	function srcToFile(src, fileName, mimeType) {
+		return fetch(src)
+			.then(function (res) {
+				return res.arrayBuffer();
+			})
+			.then(function (buf) {
+				return new File([buf], fileName, { type: mimeType });
+			});
+	}
+	const onSubmit = (data) => {
 		console.log('AddEdit FormData', data);
 
 		const formData = new FormData();
@@ -92,10 +95,10 @@ const AddUpdateUser = () => {
 
 		if (editMode) {
 			dispatch(updateUsersStart({ id, toBeUpdatedUser: formData }));
-			navigate('/');
+			navigate('/users');
 		} else {
 			dispatch(createUsersStart(formData));
-			navigate('/');
+			navigate('/users');
 		}
 	};
 
@@ -125,7 +128,12 @@ const AddUpdateUser = () => {
 									</CardTitle>
 								</CardLabel>
 								<CardActions>
-									<Button icon='Back' color='info' isLight tag='a' to='/'>
+									<Button
+										icon='Backspace'
+										color='info'
+										isLight
+										tag='a'
+										to='/users'>
 										Back to Users
 									</Button>
 								</CardActions>
