@@ -156,7 +156,7 @@ const AddEditTeam = () => {
 			No_agentns: Number(data.No_agentns),
 			Team_lead: Number(data.Team_lead),
 			LOB: [Number(data.LOB)],
-			User: id.id,
+			User: Number(id.id),
 		};
 
 		if (editMode) {

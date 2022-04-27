@@ -1,5 +1,5 @@
 import axios from 'axios';
-console.log('::::', process.env.REACT_APP_DOMAIN);
+
 export function requestGetUsers() {
 	return axios.request({
 		method: 'get',

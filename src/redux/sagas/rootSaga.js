@@ -16,12 +16,7 @@ import {
 	LOAD_TEAMS_START,
 	UPDATE_TEAM_START,
 } from '../ducks/teams';
-import {
-	CREATE_TEAM_START,
-	DELETE_TEAM_START,
-	LOAD_TEAMS_START,
-	UPDATE_TEAM_START,
-} from '../ducks/teams';
+
 import {
 	CREATE_USER_START,
 	DELETE_USER_START,
@@ -45,12 +40,7 @@ import {
 	handleGetTeams,
 	handleUpdateTeam,
 } from './handlers/teams';
-import {
-	handleCreateTeam,
-	handleDeleteTeam,
-	handleGetTeams,
-	handleUpdateTeam,
-} from './handlers/teams';
+
 import {
 	handleCreateUser,
 	handleDeleteUser,
@@ -135,16 +125,10 @@ const teamSagas = [
 	fork(onDeleteTeams),
 	fork(onUpdateTeams),
 ];
-<<<<<<< HEAD
-
-export default function* watcherSaga() {
-	yield all([...userSagas, ...teamSagas]);
-=======
 const locationSagas = [fork(onLoadLocations), fork(onCreateLocations), fork(onDeleteLocations)];
 const teamLeadSagas = [fork(onLoadTeamLeads), fork(onCreateTeamLeads), fork(onDeleteTeamLeads)];
 const lobSagas = [fork(onLoadLobs), fork(onCreateLobs), fork(onDeleteLobs)];
 
 export default function* watcherSaga() {
 	yield all([...userSagas, ...teamSagas, ...locationSagas, ...teamLeadSagas, ...lobSagas]);
->>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 }

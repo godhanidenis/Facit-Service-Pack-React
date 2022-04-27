@@ -11,9 +11,8 @@ import Card, {
 } from '../../../components/bootstrap/Card';
 import Page from '../../../layout/Page/Page';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
-import { deleteTeamsStart } from '../../../redux/ducks/teams';
+import { deleteTeamsStart, loadTeamsStart } from '../../../redux/ducks/teams';
 import Agents from './Agents/Agents';
-import Lobs from './Lobs/Lobs';
 import Nav, { NavItem } from '../../../components/bootstrap/Nav';
 import Icon from '../../../components/icon/Icon';
 import useSortableData from '../../../hooks/useSortableData';
@@ -40,16 +39,12 @@ const Teams = () => {
 				<NavItem>
 					<NavLink to='agents'>Agents</NavLink>
 				</NavItem>
-				<NavItem>
-					<NavLink to='lobs'>Lobs</NavLink>
-				</NavItem>
 			</Nav>
 			<Routes>
 				<Route path='' element={<UsersTeams />} />
 				<Route path='create' element={<AddEditTeam />} />
 				<Route path='edit/:id1' element={<AddEditTeam />} />
 				<Route path='agents' element={<Agents />} />
-				<Route path='lobs' element={<Lobs />} />
 			</Routes>
 		</div>
 	);

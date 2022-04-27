@@ -19,6 +19,7 @@ import { loadLocationsStart } from '../../redux/ducks/locations';
 import { loadTeamLeadsStart } from '../../redux/ducks/teamLeads';
 import { loadLobsStart } from '../../redux/ducks/lobs';
 import { loadTeamsStart } from '../../redux/ducks/teams';
+import Lobs from './Lobs/Lobs';
 
 const UserDetails = () => {
 	const { id } = useParams();
@@ -42,6 +43,9 @@ const UserDetails = () => {
 					<NavLink to='teams'>Teams</NavLink>
 				</NavItem>
 				<NavItem>
+					<NavLink to='lobs'>Lobs</NavLink>
+				</NavItem>
+				<NavItem>
 					<NavLink to='sops'>Sops</NavLink>
 				</NavItem>
 			</Nav>
@@ -49,6 +53,7 @@ const UserDetails = () => {
 			<Routes>
 				<Route path='' element={<UserDetail />} />
 				<Route path='teams/*' element={<Teams />} />
+				<Route path='lobs' element={<Lobs />} />
 				<Route path='sops' element={<Sops />} />
 			</Routes>
 		</>
