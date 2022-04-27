@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -28,6 +27,7 @@ import Select from '../../../components/bootstrap/forms/Select';
 import Option from '../../../components/bootstrap/Option';
 import Label from '../../../components/bootstrap/forms/Label';
 import { createTeamsStart, updateTeamsStart } from '../../../redux/ducks/teams';
+<<<<<<< HEAD
 
 const AddEditTeam = () => {
 	const id = useParams();
@@ -36,22 +36,45 @@ const AddEditTeam = () => {
 	const initialLocation = {
 		Location_name: '',
 		User: id.id,
+=======
+import { createLocationsStart, deleteLocationsStart } from '../../../redux/ducks/locations';
+import { createTeamLeadsStart, deleteTeamLeadsStart } from '../../../redux/ducks/teamLeads';
+import { createLobsStart, deleteLobsStart } from '../../../redux/ducks/lobs';
+
+const AddEditTeam = () => {
+	const id = useParams();
+
+	const initialLocation = {
+		Location_name: '',
+		User: Number(id.id),
+>>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 	};
 
 	const initialTeamLead = {
 		TeamLead_name: '',
+<<<<<<< HEAD
 		User: id.id,
+=======
+		User: Number(id.id),
+>>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 	};
 	const initialLob = {
 		Lob_name: '',
 		No_of_teams: '',
+<<<<<<< HEAD
 		User: id.id,
 	};
+=======
+		User: Number(id.id),
+	};
+
+>>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [editMode, setEditMode] = useState(false);
 
 	const { darkModeStatus } = useDarkMode();
+<<<<<<< HEAD
 	const [locationList, setLocationList] = useState();
 	const [addLocationModalOpen, setAddLocationModalOpen] = useState(false);
 	const [selectedLocation, setSelectedLocation] = useState();
@@ -71,12 +94,28 @@ const AddEditTeam = () => {
 	const { TeamLead_name, User: userId } = formTeamLeadValue;
 	const { Lob_name, No_of_teams, User: userID } = formLobValue;
 
+=======
+
+	const [addLocationModalOpen, setAddLocationModalOpen] = useState(false);
+	const [formLocationValue, setFormLocationValue] = useState(initialLocation);
+
+	const [teamLeadModalOpen, setTeamLeadModalOpen] = useState(false);
+	const [formTeamLeadValue, setFormTeamLeadValue] = useState(initialTeamLead);
+
+	const [lobModalOpen, setLobModalOpen] = useState(false);
+	const [formLobValue, setFormLobValue] = useState(initialLob);
+
+	const { Location_name } = formLocationValue;
+	const { TeamLead_name } = formTeamLeadValue;
+	const { Lob_name, No_of_teams } = formLobValue;
+>>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 		setValue,
 		reset,
+<<<<<<< HEAD
 	} = useForm();
 	const { teams } = useSelector((state) => state.teams);
 	console.log('teams', teams);
@@ -96,10 +135,24 @@ const AddEditTeam = () => {
 		setAddLocationModalOpen(false);
 		await GetLocation();
 	};
+=======
+		getValues,
+	} = useForm();
+
+	const { teams } = useSelector((state) => state.teams);
+
+	const { locations } = useSelector((state) => state.locations);
+
+	const { teamLeads } = useSelector((state) => state.teamLeads);
+
+	const { lobs } = useSelector((state) => state.lobs);
+
+>>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 	const onChangeLocationValue = (e) => {
 		const { name, value } = e.target;
 		setFormLocationValue({ ...formLocationValue, [name]: value });
 	};
+<<<<<<< HEAD
 
 	const handleLocationDelete = async () => {
 		const deleteLocation = await axios.delete(
@@ -113,12 +166,24 @@ const AddEditTeam = () => {
 		);
 
 		await setTeamLeadList(teamLead.data.data);
+=======
+	const handleAddLocation = () => {
+		dispatch(createLocationsStart(formLocationValue));
+		setAddLocationModalOpen(false);
+	};
+
+	const handleLocationDelete = () => {
+		const locationId = getValues('Location');
+
+		dispatch(deleteLocationsStart(Number(locationId)));
+>>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 	};
 
 	const onChangeTeamLeadValue = (e) => {
 		const { name, value } = e.target;
 		setFormTeamLeadValue({ ...formTeamLeadValue, [name]: value });
 	};
+<<<<<<< HEAD
 	const handleAddTeamLead = async () => {
 		const addTeamLead = await axios.post(
 			'http://3.215.147.147/admin_panel/manageteamlead/',
@@ -141,11 +206,24 @@ const AddEditTeam = () => {
 		);
 		await setLobList(allLob.data.data);
 	};
+=======
+	const handleAddTeamLead = () => {
+		dispatch(createTeamLeadsStart(formTeamLeadValue));
+		setTeamLeadModalOpen(false);
+	};
+	const handleTeamLeadDelete = () => {
+		const teamLeadId = getValues('Team_lead');
+
+		dispatch(deleteTeamLeadsStart(Number(teamLeadId)));
+	};
+
+>>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 	const onChangeLobValue = (e) => {
 		const { name, value } = e.target;
 		setFormLobValue({ ...formLobValue, [name]: value });
 	};
 
+<<<<<<< HEAD
 	const handleAddLob = async () => {
 		const addLob = await axios.post(
 			'http://3.215.147.147/admin_panel/managelob/',
@@ -168,6 +246,18 @@ const AddEditTeam = () => {
 		GetTeamLead();
 		GetLob();
 	}, []);
+=======
+	const handleAddLob = () => {
+		dispatch(createLobsStart(formLobValue));
+		setLobModalOpen(false);
+	};
+
+	const handleLobDelete = () => {
+		const lobId = getValues('LOB');
+
+		dispatch(deleteLobsStart(Number(lobId)));
+	};
+>>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 
 	useEffect(() => {
 		if (id.id1) {
@@ -176,6 +266,7 @@ const AddEditTeam = () => {
 			if (teams.length) {
 				const singleTeam = teams.find((team) => team.id === Number(id.id1));
 
+<<<<<<< HEAD
 				console.log('singleTeam', singleTeam.LOB[0].id);
 				// const fields = ['Team_name', 'No_agentns', 'Location', 'Team_lead', 'LOB'];
 
@@ -185,6 +276,8 @@ const AddEditTeam = () => {
 				setSelectedTeamLead(singleTeam.Team_lead.id);
 				setSelectedLob(singleTeam?.LOB[0]?.id);
 
+=======
+>>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 				setValue('Team_name', singleTeam.Team_name);
 				setValue('No_agentns', singleTeam.No_agentns);
 				setValue('Location', singleTeam.Location.id);
@@ -197,6 +290,7 @@ const AddEditTeam = () => {
 	}, [id, teams, setValue]);
 
 	const onSubmit = (data) => {
+<<<<<<< HEAD
 		const Lob = [];
 		console.log('AddEdit FormData', data);
 		console.log('Team_name', data.Team_name);
@@ -236,6 +330,26 @@ const AddEditTeam = () => {
 		// 	);
 		// 	navigate(`/users/${id.id}/teams`);
 		// }
+=======
+		console.log('AddEdit FormData', data);
+
+		const formData = {
+			Team_name: data.Team_name,
+			Location: Number(data.Location),
+			No_agentns: Number(data.No_agentns),
+			Team_lead: Number(data.Team_lead),
+			LOB: [Number(data.LOB)],
+			User: id.id,
+		};
+
+		if (editMode) {
+			dispatch(updateTeamsStart({ id: id.id1, toBeUpdatedTeam: formData }));
+			navigate(`/users/${id.id}/teams`);
+		} else {
+			dispatch(createTeamsStart(formData));
+			navigate(`/users/${id.id}/teams`);
+		}
+>>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 	};
 	const onError = (errors) => console.log('Errors Occurred !! :', errors);
 	return (
@@ -306,6 +420,7 @@ const AddEditTeam = () => {
 															ariaLabel='Select Location'
 															{...register('Location', {
 																required: 'Location is required',
+<<<<<<< HEAD
 															})}
 															value={selectedLocation}
 															onChange={(e) => {
@@ -328,25 +443,50 @@ const AddEditTeam = () => {
 																		</Option>
 																	);
 																})}
+=======
+															})}>
+															<Option value=''>
+																Select Location
+															</Option>
+															{locations?.map((loc) => {
+																return (
+																	<Option
+																		key={loc?.id}
+																		value={loc?.id}>
+																		{loc?.Location_name}
+																	</Option>
+																);
+															})}
+>>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 														</Select>
 														{errors.Location?.message}
 													</FormGroup>
 												</div>
 												<div className='col-4'>
 													<Button
+<<<<<<< HEAD
 														icon='edit'
 														color={darkModeStatus && 'dark'}
 													/>
 													<Button
 														icon='delete'
 														color={darkModeStatus && 'dark'}
+=======
+														icon='delete'
+														color={darkModeStatus ? 'dark' : 'danger'}
+>>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 														onClick={handleLocationDelete}
 													/>
 												</div>
 												<div className='col-4'>
 													<Button
 														icon='add'
+<<<<<<< HEAD
 														color={darkModeStatus && 'dark'}
+=======
+														isLight
+														color={darkModeStatus ? 'dark' : 'info'}
+>>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 														onClick={() => {
 															setAddLocationModalOpen(true);
 														}}>
@@ -366,6 +506,7 @@ const AddEditTeam = () => {
 															ariaLabel='Select Team Lead'
 															{...register('Team_lead', {
 																required: 'Team Lead is required',
+<<<<<<< HEAD
 															})}
 															value={selectedTeamLead}
 															onChange={(e) => {
@@ -388,25 +529,50 @@ const AddEditTeam = () => {
 																		</Option>
 																	);
 																})}
+=======
+															})}>
+															<Option value=''>
+																Select Team Lead
+															</Option>
+															{teamLeads?.map((lead) => {
+																return (
+																	<Option
+																		key={lead?.id}
+																		value={lead?.id}>
+																		{lead?.TeamLead_name}
+																	</Option>
+																);
+															})}
+>>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 														</Select>
 														{errors.Team_lead?.message}
 													</FormGroup>
 												</div>
 												<div className='col-4'>
 													<Button
+<<<<<<< HEAD
 														icon='edit'
 														color={darkModeStatus && 'dark'}
 													/>
 													<Button
 														icon='delete'
 														color={darkModeStatus && 'dark'}
+=======
+														icon='delete'
+														color={darkModeStatus ? 'dark' : 'danger'}
+>>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 														onClick={handleTeamLeadDelete}
 													/>
 												</div>
 												<div className='col-4'>
 													<Button
 														icon='add'
+<<<<<<< HEAD
 														color={darkModeStatus && 'dark'}
+=======
+														isLight
+														color={darkModeStatus ? 'dark' : 'info'}
+>>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 														onClick={() => {
 															setTeamLeadModalOpen(true);
 														}}>
@@ -426,6 +592,7 @@ const AddEditTeam = () => {
 															ariaLabel='Select LOB'
 															{...register('LOB', {
 																required: 'LOB is required',
+<<<<<<< HEAD
 															})}
 															value={selectedLob}
 															onChange={(e) => {
@@ -445,25 +612,48 @@ const AddEditTeam = () => {
 																		</Option>
 																	);
 																})}
+=======
+															})}>
+															<Option value=''>Select LOB</Option>
+															{lobs?.map((lob) => {
+																return (
+																	<Option
+																		key={lob?.id}
+																		value={lob?.id}>
+																		{lob?.Lob_name}
+																	</Option>
+																);
+															})}
+>>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 														</Select>
 														{errors.LOB?.message}
 													</FormGroup>
 												</div>
 												<div className='col-4'>
 													<Button
+<<<<<<< HEAD
 														icon='edit'
 														color={darkModeStatus && 'dark'}
 													/>
 													<Button
 														icon='delete'
 														color={darkModeStatus && 'dark'}
+=======
+														icon='delete'
+														color={darkModeStatus ? 'dark' : 'danger'}
+>>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 														onClick={handleLobDelete}
 													/>
 												</div>
 												<div className='col-4'>
 													<Button
 														icon='add'
+<<<<<<< HEAD
 														color={darkModeStatus && 'dark'}
+=======
+														isLight
+														color={darkModeStatus ? 'dark' : 'info'}
+>>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 														onClick={() => {
 															setLobModalOpen(true);
 														}}>

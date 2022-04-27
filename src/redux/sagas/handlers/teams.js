@@ -17,10 +17,9 @@ import {
 } from '../requests/teams';
 
 export function* handleGetTeams({ payload }) {
-	// console.log('payload', payload);
 	try {
 		const response = yield call(requestGetTeams, payload);
-		// console.log(':::', response);
+
 		if (response.status === 200) {
 			yield put(loadTeamsSuccess(response.data.data));
 		}
@@ -30,11 +29,11 @@ export function* handleGetTeams({ payload }) {
 }
 
 export function* handleCreateTeam({ payload }) {
-	console.log('payload', payload);
+	// console.log('payload', payload);1
 
 	try {
 		const response = yield call(requestCreateTeams, payload);
-		console.log('response', response);
+		// console.log('response', response);
 
 		if (response.status === 200) {
 			yield put(createTeamsSuccess(response.data.data));

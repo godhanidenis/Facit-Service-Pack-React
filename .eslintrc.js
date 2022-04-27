@@ -58,6 +58,9 @@ module.exports = {
 		'react/no-arrow-function-lifecycle': 'off',
 		'react/no-invalid-html-attribute': 'off',
 		'react/no-unused-class-component-methods': 'off',
+		camelcase: 'off',
 		'no-shadow': 'off',
+		'no-unused-vars': 'warn',
+		'no-console': 'off',
 	},
 };
