@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
-=======
-import React, { useState } from 'react';
->>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, Route, Routes, useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../components/bootstrap/Button';
@@ -15,11 +11,7 @@ import Card, {
 } from '../../../components/bootstrap/Card';
 import Page from '../../../layout/Page/Page';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
-<<<<<<< HEAD
-import { loadTeamsStart, deleteTeamsStart } from '../../../redux/ducks/teams';
-=======
 import { deleteTeamsStart } from '../../../redux/ducks/teams';
->>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 import Agents from './Agents/Agents';
 import Lobs from './Lobs/Lobs';
 import Nav, { NavItem } from '../../../components/bootstrap/Nav';
@@ -41,11 +33,7 @@ import AddEditTeam from './AddEditTeam';
 const Teams = () => {
 	return (
 		<div>
-<<<<<<< HEAD
-			<Nav design='tabs' className='w-50' style={{ margin: 'auto' }}>
-=======
 			<Nav design='tabs' isJustified className='w-50' style={{ margin: 'auto' }}>
->>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 				<NavItem>
 					<NavLink to=''>Teams Details</NavLink>
 				</NavItem>
@@ -197,11 +185,7 @@ const UsersTeams = () => {
 											{dataPagination(items, currentPage, perPage).map(
 												(item) => (
 													<tr key={item.id}>
-<<<<<<< HEAD
-														<th>{item.Team_name}</th>
-=======
 														<td>{item.Team_name}</td>
->>>>>>> 094e58a51e736b37d547f579df49db7267591eaa
 														<td>{item.No_agentns}</td>
 														<td>{item.LOB[0]?.Lob_name}</td>
 														<td>{item.Team_lead.TeamLead_name}</td>
