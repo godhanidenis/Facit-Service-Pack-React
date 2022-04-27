@@ -33,7 +33,6 @@ import { createLobsStart, deleteLobsStart } from '../../../redux/ducks/lobs';
 
 const AddEditTeam = () => {
 	const id = useParams();
-	// console.log('id', id);
 
 	const initialLocation = {
 		Location_name: '',
@@ -80,10 +79,6 @@ const AddEditTeam = () => {
 	const { teams } = useSelector((state) => state.teams);
 
 	const { locations } = useSelector((state) => state.locations);
-
-	useEffect(() => {
-		console.log('locations', locations);
-	}, [locations]);
 
 	const { teamLeads } = useSelector((state) => state.teamLeads);
 
@@ -259,20 +254,17 @@ const AddEditTeam = () => {
 													</FormGroup>
 												</div>
 												<div className='col-4'>
-													{/* <Button
-														icon='edit'
-														color={darkModeStatus && 'dark'}
-													/> */}
 													<Button
 														icon='delete'
-														color={darkModeStatus && 'dark'}
+														color={darkModeStatus ? 'dark' : 'danger'}
 														onClick={handleLocationDelete}
 													/>
 												</div>
 												<div className='col-4'>
 													<Button
 														icon='add'
-														color={darkModeStatus && 'dark'}
+														isLight
+														color={darkModeStatus ? 'dark' : 'info'}
 														onClick={() => {
 															setAddLocationModalOpen(true);
 														}}>
@@ -310,20 +302,17 @@ const AddEditTeam = () => {
 													</FormGroup>
 												</div>
 												<div className='col-4'>
-													{/* <Button
-														icon='edit'
-														color={darkModeStatus && 'dark'}
-													/> */}
 													<Button
 														icon='delete'
-														color={darkModeStatus && 'dark'}
+														color={darkModeStatus ? 'dark' : 'danger'}
 														onClick={handleTeamLeadDelete}
 													/>
 												</div>
 												<div className='col-4'>
 													<Button
 														icon='add'
-														color={darkModeStatus && 'dark'}
+														isLight
+														color={darkModeStatus ? 'dark' : 'info'}
 														onClick={() => {
 															setTeamLeadModalOpen(true);
 														}}>
@@ -359,20 +348,17 @@ const AddEditTeam = () => {
 													</FormGroup>
 												</div>
 												<div className='col-4'>
-													{/* <Button
-														icon='edit'
-														color={darkModeStatus && 'dark'}
-													/> */}
 													<Button
 														icon='delete'
-														color={darkModeStatus && 'dark'}
+														color={darkModeStatus ? 'dark' : 'danger'}
 														onClick={handleLobDelete}
 													/>
 												</div>
 												<div className='col-4'>
 													<Button
 														icon='add'
-														color={darkModeStatus && 'dark'}
+														isLight
+														color={darkModeStatus ? 'dark' : 'info'}
 														onClick={() => {
 															setLobModalOpen(true);
 														}}>

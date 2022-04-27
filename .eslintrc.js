@@ -23,7 +23,12 @@ module.exports = {
 	plugins: ['import', 'prettier', 'eslint-comments', 'react', 'jsx-a11y', 'react-hooks'],
 	rules: {
 		'jsx-a11y/anchor-is-valid': 'off',
-		'prettier/prettier': ['warn'],
+		'prettier/prettier': [
+			'error',
+			{
+				endOfLine: 'auto',
+			},
+		],
 		'no-use-before-define': 'off',
 		'no-case-declarations': 'off',
 		'no-underscore-dangle': 'off',
@@ -54,5 +59,6 @@ module.exports = {
 		camelcase: 'off',
 		'no-shadow': 'off',
 		'no-unused-vars': 'warn',
+		'no-console': 'off',
 	},
 };

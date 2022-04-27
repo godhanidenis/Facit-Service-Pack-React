@@ -34,7 +34,7 @@ const UserDetails = () => {
 
 	return (
 		<>
-			<Nav design='tabs' style={{ marginBottom: '20px' }}>
+			<Nav design='tabs' isJustified style={{ marginBottom: '20px' }}>
 				<NavItem>
 					<NavLink to=''>Details</NavLink>
 				</NavItem>
