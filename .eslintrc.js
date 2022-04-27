@@ -19,10 +19,18 @@ module.exports = {
 		},
 		ecmaVersion: 'latest',
 		sourceType: 'module',
+		allowImportExportEverywhere: true,
 	},
 	plugins: ['import', 'prettier', 'eslint-comments', 'react', 'jsx-a11y', 'react-hooks'],
 	rules: {
-		'prettier/prettier': ['warn'],
+		'jsx-a11y/anchor-is-valid': 'off',
+		'prettier/prettier': [
+			'error',
+			{
+				endOfLine: 'auto',
+			},
+		],
+		'no-unused-vars': 0,
 		'no-use-before-define': 'off',
 		'no-case-declarations': 'off',
 		'no-underscore-dangle': 'off',

@@ -1,85 +1,94 @@
 import React, { useEffect, useState } from 'react';
-import { Routes, Route, useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteUsersStart, loadUsersStart } from '../../redux/ducks/users';
-import PageWrapper from '../../layout/PageWrapper/PageWrapper';
-
-import Page from '../../layout/Page/Page';
+import { NavLink, Route, Routes, useNavigate, useParams } from 'react-router-dom';
+import Button from '../../../components/bootstrap/Button';
 import Card, {
 	CardActions,
 	CardBody,
 	CardHeader,
 	CardLabel,
 	CardTitle,
-} from '../../components/bootstrap/Card';
+} from '../../../components/bootstrap/Card';
+import Page from '../../../layout/Page/Page';
+import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
+import { loadTeamsStart, deleteTeamsStart } from '../../../redux/ducks/teams';
+import Agents from './Agents/Agents';
+import Lobs from './Lobs/Lobs';
+import Nav, { NavItem } from '../../../components/bootstrap/Nav';
+import Icon from '../../../components/icon/Icon';
+import useSortableData from '../../../hooks/useSortableData';
+import PaginationButtons, {
+	dataPagination,
+	PER_COUNT,
+} from '../../../components/PaginationButtons';
 
 import Modal, {
 	ModalBody,
 	ModalFooter,
 	ModalHeader,
 	ModalTitle,
-} from '../../components/bootstrap/Modal';
-import Icon from '../../components/icon/Icon';
+} from '../../../components/bootstrap/Modal';
+import AddEditTeam from './AddEditTeam';
 
-import { demoPages } from '../../menu';
-import PaginationButtons, { dataPagination, PER_COUNT } from '../../components/PaginationButtons';
-import useSortableData from '../../hooks/useSortableData';
-import Button from '../../components/bootstrap/Button';
-import UserDetails from './userDetails';
-import AddUpdateUser from './addUpdateUser';
-
-const UsersPage = () => {
-	const dispatch = useDispatch();
-	useEffect(() => {
-		dispatch(loadUsersStart());
-	}, [dispatch]);
-
+const Teams = () => {
 	return (
-		<div className='w-100'>
+		<div>
+			<Nav design='tabs' className='w-50' style={{ margin: 'auto' }}>
+				<NavItem>
+					<NavLink to=''>Teams Details</NavLink>
+				</NavItem>
+				<NavItem>
+					<NavLink to='agents'>Agents</NavLink>
+				</NavItem>
+				<NavItem>
+					<NavLink to='lobs'>Lobs</NavLink>
+				</NavItem>
+			</Nav>
 			<Routes>
-				<Route path='' element={<Userstbl />} />
-				<Route path=':id/*' element={<UserDetails />} />
-				<Route path='create' element={<AddUpdateUser />} />
-				<Route path='edit/:id' element={<AddUpdateUser />} />
+				<Route path='' element={<UsersTeams />} />
+				<Route path='create' element={<AddEditTeam />} />
+				<Route path='edit/:id1' element={<AddEditTeam />} />
+				<Route path='agents' element={<Agents />} />
+				<Route path='lobs' element={<Lobs />} />
 			</Routes>
 		</div>
 	);
 };
 
-const Userstbl = () => {
+const UsersTeams = () => {
+	const id = useParams();
+
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const { teams } = useSelector((state) => state.teams);
+	console.log('teams::::', teams);
+	const [currentTeam, setCurrentTeam] = useState(null);
+	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
+	const { items, requestSort, getClassNamesFor } = useSortableData(teams);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
-	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-	const [currentUser, setCurrentUser] = useState(null);
 
-	const { users } = useSelector((state) => state.users);
-	console.log('users::', users);
+	useEffect(() => {
+		dispatch(loadTeamsStart(id.id));
+	}, [dispatch, id.id]);
 
-	const { items, requestSort, getClassNamesFor } = useSortableData(users);
-
-	// useEffect(() => {
-	// 	dispatch(loadUsersStart());
-	// }, [dispatch]);
-
-	const handleDeleteUser = () => {
-		dispatch(deleteUsersStart(currentUser.id));
+	const handleDeleteTeam = () => {
+		dispatch(deleteTeamsStart(currentTeam.id));
 		setDeleteModalOpen(false);
 	};
 
 	return (
 		<>
-			<PageWrapper title={demoPages.sales.subMenu.dashboard.text}>
-				<Page container='fluid'>
+			<PageWrapper>
+				<Page className='p-0'>
 					<div className='row'>
 						<div className='col-xxl-12'>
 							<Card>
 								<CardHeader>
 									<CardLabel icon='People' iconColor='info'>
 										<CardTitle tag='h4' className='h5'>
-											All Users
+											All Teams
 										</CardTitle>
 									</CardLabel>
 									<CardActions>
@@ -88,8 +97,8 @@ const Userstbl = () => {
 											color='info'
 											isLight
 											tag='a'
-											to='/users/create'>
-											New User
+											to={`/users/${id.id}/teams/create`}>
+											New Team
 										</Button>
 									</CardActions>
 								</CardHeader>
@@ -99,47 +108,63 @@ const Userstbl = () => {
 											<tr>
 												<th
 													scope='col'
-													onClick={() => requestSort('id')}
+													onClick={() => requestSort('Team_name')}
 													className='cursor-pointer text-decoration-underline'>
-													ID
+													Teams
 													<Icon
 														size='lg'
-														className={getClassNamesFor('id')}
+														className={getClassNamesFor('Team_name')}
 														icon='FilterList'
 													/>
 												</th>
 
 												<th
 													scope='col'
-													onClick={() => requestSort('username')}
+													onClick={() => requestSort('No_agentns')}
 													className='cursor-pointer text-decoration-underline'>
-													UserName
+													No of Agents
 													<Icon
 														size='lg'
-														className={getClassNamesFor('username')}
+														className={getClassNamesFor('No_agentns')}
 														icon='FilterList'
 													/>
 												</th>
 
 												<th
 													scope='col'
-													onClick={() => requestSort('phone_number')}
+													onClick={() => requestSort('Lob_name')}
 													className='cursor-pointer text-decoration-underline'>
-													Email
+													LOB
 													<Icon
 														size='lg'
-														className={getClassNamesFor('phone_number')}
+														className={getClassNamesFor('Lob_name')}
+														icon='FilterList'
+													/>
+												</th>
+
+												<th
+													scope='col'
+													onClick={() => requestSort('TeamLead_name')}
+													className='cursor-pointer text-decoration-underline'>
+													Team Lead
+													<Icon
+														size='lg'
+														className={getClassNamesFor(
+															'TeamLead_name',
+														)}
 														icon='FilterList'
 													/>
 												</th>
 												<th
 													scope='col'
-													onClick={() => requestSort('email')}
+													onClick={() => requestSort('Location_name')}
 													className='cursor-pointer text-decoration-underline'>
-													Phone Number
+													Location Name
 													<Icon
 														size='lg'
-														className={getClassNamesFor('email')}
+														className={getClassNamesFor(
+															'Location_name',
+														)}
 														icon='FilterList'
 													/>
 												</th>
@@ -160,10 +185,11 @@ const Userstbl = () => {
 											{dataPagination(items, currentPage, perPage).map(
 												(item) => (
 													<tr key={item.id}>
-														<th>{item.id}</th>
-														<td>{item.username}</td>
-														<td>{item.email}</td>
-														<td>{item.phone_number}</td>
+														<th>{item.Team_name}</th>
+														<td>{item.No_agentns}</td>
+														<td>{item.LOB[0]?.Lob_name}</td>
+														<td>{item.Team_lead.TeamLead_name}</td>
+														<td>{item.Location.Location_name}</td>
 														<td>
 															<Icon
 																size='lg'
@@ -172,7 +198,7 @@ const Userstbl = () => {
 																style={{ cursor: 'pointer' }}
 																onClick={() => {
 																	navigate(
-																		`/users/edit/${item.id}`,
+																		`/users/${id.id}/teams/edit/${item.id}`,
 																	);
 																}}
 															/>
@@ -185,21 +211,10 @@ const Userstbl = () => {
 																	cursor: 'pointer',
 																}}
 																onClick={() => {
-																	setCurrentUser(item);
+																	setCurrentTeam(item);
 																	setDeleteModalOpen(true);
 																}}
 															/>
-															<Link to={`/users/${item.id}`}>
-																<Icon
-																	size='lg'
-																	icon='Eye'
-																	color='success'
-																	style={{
-																		cursor: 'pointer',
-																		marginLeft: '10px',
-																	}}
-																/>
-															</Link>
 														</td>
 													</tr>
 												),
@@ -209,7 +224,7 @@ const Userstbl = () => {
 								</CardBody>
 								<PaginationButtons
 									data={items}
-									label='No. Of Users'
+									label='No. Of Teams'
 									setCurrentPage={setCurrentPage}
 									currentPage={currentPage}
 									perPage={perPage}
@@ -226,11 +241,11 @@ const Userstbl = () => {
 				</ModalHeader>
 
 				<ModalBody>
-					<h1>Do you really want to delete {currentUser?.username}</h1>
+					<h1>Do you really want to delete {currentTeam?.Team_name}</h1>
 				</ModalBody>
 
 				<ModalFooter>
-					<Button color='info' onClick={() => handleDeleteUser()}>
+					<Button color='info' onClick={() => handleDeleteTeam()}>
 						ok
 					</Button>
 				</ModalFooter>
@@ -239,4 +254,4 @@ const Userstbl = () => {
 	);
 };
 
-export default UsersPage;
+export default Teams;
