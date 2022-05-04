@@ -40,9 +40,9 @@ const UpdateSopDetails = () => {
 
 		setValue('Sub_category', singleSop?.Sub_category);
 		setValue('Category', singleSop?.Category?.id);
-		setValue('enabled', singleSop?.enabled);
-		setValue('filter', singleSop?.filter);
-		setValue('sop', singleSop?.sop);
+		setValue('enabled', JSON.stringify(singleSop?.enabled));
+		setValue('filter', JSON.stringify(singleSop?.filter));
+		setValue('sop', JSON.stringify(singleSop?.sop));
 		setValue('type', singleSop?.type);
 		setValue('user_type', singleSop?.user_type);
 		setValue('weightage', singleSop?.weightage);
@@ -108,7 +108,7 @@ const UpdateSopDetails = () => {
 					</div>
 					<div className='col-12'>
 						<Label>Select Enabled</Label>
-						<div style={{ display: 'flex', alignItems: 'center' }}>
+						{/* <div style={{ display: 'flex', alignItems: 'center' }}>
 							<input
 								type='radio'
 								checked={JSON.stringify(selectedSop?.enabled) === 'true'}
@@ -140,12 +140,24 @@ const UpdateSopDetails = () => {
 								style={{ marginLeft: '20px' }}
 							/>
 							<span style={{ marginLeft: '5px' }}>False</span>
-						</div>
+						</div> */}
+						<FormGroup>
+							<Select
+								size='sm'
+								ariaLabel='Select enabled'
+								{...register('enabled', {
+									required: 'enabled is required',
+								})}>
+								<Option value=''>Select enabled</Option>
+								<Option value='true'>True</Option>
+								<Option value='false'>False</Option>
+							</Select>
+						</FormGroup>
 						{errors.enabled?.message}
 					</div>
 					<div className='col-12'>
 						<Label>Select Filter</Label>
-						<div style={{ display: 'flex', alignItems: 'center' }}>
+						{/* <div style={{ display: 'flex', alignItems: 'center' }}>
 							<input
 								type='radio'
 								checked={JSON.stringify(selectedSop?.filter) === 'true'}
@@ -177,13 +189,25 @@ const UpdateSopDetails = () => {
 								style={{ marginLeft: '20px' }}
 							/>
 							<span style={{ marginLeft: '5px' }}>False</span>
-						</div>
+						</div> */}
+						<FormGroup>
+							<Select
+								size='sm'
+								ariaLabel='Select filter'
+								{...register('filter', {
+									required: 'filter is required',
+								})}>
+								<Option value=''>Select filter</Option>
+								<Option value='true'>True</Option>
+								<Option value='false'>False</Option>
+							</Select>
+						</FormGroup>
 						{errors.filter?.message}
 					</div>
 					<div className='col-12'>
 						<Label>Select SOP</Label>
 
-						<div style={{ display: 'flex', alignItems: 'center' }}>
+						{/* <div style={{ display: 'flex', alignItems: 'center' }}>
 							<input
 								type='radio'
 								checked={JSON.stringify(selectedSop?.sop) === 'true'}
@@ -215,7 +239,19 @@ const UpdateSopDetails = () => {
 								style={{ marginLeft: '20px' }}
 							/>
 							<span style={{ marginLeft: '5px' }}>False</span>
-						</div>
+						</div> */}
+						<FormGroup>
+							<Select
+								size='sm'
+								ariaLabel='Select sop'
+								{...register('sop', {
+									required: 'sop is required',
+								})}>
+								<Option value=''>Select sop</Option>
+								<Option value='true'>True</Option>
+								<Option value='false'>False</Option>
+							</Select>
+						</FormGroup>
 						{errors.sop?.message}
 					</div>
 					<div className='col-12'>
