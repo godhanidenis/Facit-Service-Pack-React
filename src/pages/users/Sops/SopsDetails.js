@@ -155,16 +155,157 @@ const SopsDetails = () => {
 															cursor: 'pointer',
 															marginLeft: '25px',
 														}}
-														// onClick={() => {
-														// 	// eslint-disable-next-line no-alert
-														// 	if (window.confirm('Are you sure??')) {
-														// 		dispatch(
-														// 			deleteSubSopsStart({
-														// 				id: subSop._id,
-														// 			}),
-														// 		);
-														// 	}
-														// }}
+														onClick={() => {
+															// eslint-disable-next-line no-alert
+															if (window.confirm('Are you sure??')) {
+																dispatch(
+																	deleteSubSopsStart({
+																		id: subSop._id,
+																	}),
+																);
+															}
+														}}
+													/>
+												</div>
+											</div>
+										</div>
+									);
+								})
+							);
+
+						case 'customer_silence_incidents_found':
+						case 'silence_incidents_found':
+							return (
+								subSops.length &&
+								subSops?.map((subSop) => {
+									return (
+										<div className='col-12'>
+											<div className='d-flex align-items-center justify-content-between'>
+												<div
+													className='row'
+													style={{
+														padding: '15px',
+														alignContent: 'center',
+													}}>
+													<p className='col-lg-6 fw-bold'>Min Value :</p>
+													<p className='col-lg-6'>
+														{subSop?._source?.min}
+													</p>
+													<p className='col-lg-6 fw-bold'>Max Value :</p>
+													<p className='col-lg-6'>
+														{subSop?._source?.max}
+													</p>
+													<p className='col-lg-6 fw-bold'>
+														Incident Type :
+													</p>
+													<p className='col-lg-6'>
+														{subSop?._source?.incidents_type}
+													</p>
+												</div>
+												<div>
+													<Icon
+														size='lg'
+														icon='Edit'
+														color='info'
+														style={{ cursor: 'pointer' }}
+														onClick={() => {
+															navigate(
+																`/users/${id.id}/sops/${id.id1}/sub/update`,
+																{
+																	state: { id: subSop?._id },
+																},
+															);
+														}}
+													/>
+													<Icon
+														size='lg'
+														icon='Delete'
+														color='danger'
+														style={{
+															cursor: 'pointer',
+															marginLeft: '25px',
+														}}
+														onClick={() => {
+															// eslint-disable-next-line no-alert
+															if (window.confirm('Are you sure??')) {
+																dispatch(
+																	deleteSubSopsStart({
+																		id: subSop._id,
+																	}),
+																);
+															}
+														}}
+													/>
+												</div>
+											</div>
+										</div>
+									);
+								})
+							);
+
+						case 'rate_of_speech_found':
+						case 'responsiveness_found':
+						case 'customer_rate_of_speech_found':
+						case 'customer_responsiveness_found':
+						case 'customer_clarity_found':
+							return (
+								subSops.length &&
+								subSops?.map((subSop) => {
+									return (
+										<div className='col-12'>
+											<div className='d-flex align-items-center justify-content-between'>
+												<div
+													className='row'
+													style={{
+														padding: '15px',
+														alignContent: 'center',
+													}}>
+													<p className='col-lg-6 fw-bold'>Min Value :</p>
+													<p className='col-lg-6'>
+														{subSop?._source?.min}
+													</p>
+													<p className='col-lg-6 fw-bold'>Max Value :</p>
+													<p className='col-lg-6'>
+														{subSop?._source?.max}
+													</p>
+													<p className='col-lg-6 fw-bold'>Type :</p>
+													<p className='col-lg-6'>
+														{subSop?._source?.type}
+													</p>
+												</div>
+												<div>
+													<Icon
+														size='lg'
+														icon='Edit'
+														color='info'
+														style={{ cursor: 'pointer' }}
+														onClick={() => {
+															navigate(
+																`/users/${id.id}/sops/${id.id1}/sub/update`,
+																{
+																	state: { id: subSop?._id },
+																},
+															);
+														}}
+													/>
+													<Icon
+														size='lg'
+														icon='Delete'
+														color='danger'
+														style={{
+															cursor: 'pointer',
+															marginLeft: '25px',
+														}}
+														onClick={() => {
+															// eslint-disable-next-line no-alert
+															if (window.confirm('Are you sure??')) {
+																dispatch(
+																	deleteSubSopsStart({
+																		id: subSop._id,
+																	}),
+																);
+															}
+														}}
 													/>
 												</div>
 											</div>

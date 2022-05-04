@@ -64,6 +64,8 @@ const AddUpdateSubSops = () => {
 				setValue('min', singleSubSop?._source?.min);
 				setValue('max', singleSubSop?._source?.max);
 				setValue('sentiment_type', singleSubSop?._source?.sentiment_type);
+				setValue('incidents_type', singleSubSop?._source?.incidents_type);
+				setValue('type', singleSubSop?._source?.type);
 
 				setKeywordsList(singleSubSop?._source?.keywords);
 				setTagList(singleSubSop?._source?.tag_list);
@@ -154,6 +156,39 @@ const AddUpdateSubSops = () => {
 			sentiment_type: data?.sentiment_type,
 		};
 
+		const formDataCreateMinMaxIncident = {
+			record: {
+				doctype: id.id1.replace('_found', ''),
+				user_id: Number(id.id),
+				min: Number(data?.min),
+				max: Number(data?.max),
+				incidents_type: data?.incidents_type,
+			},
+		};
+		const formDataUpdateMinMaxIncident = {
+			doctype: id.id1.replace('_found', ''),
+			user_id: Number(id.id),
+			min: Number(data?.min),
+			max: Number(data?.max),
+			incidents_type: data?.incidents_type,
+		};
+		const formDataCreateMinMaxType = {
+			record: {
+				doctype: id.id1.replace('_found', ''),
+				user_id: Number(id.id),
+				min: Number(data?.min),
+				max: Number(data?.max),
+				type: data?.type,
+			},
+		};
+		const formDataUpdateMinMaxType = {
+			doctype: id.id1.replace('_found', ''),
+			user_id: Number(id.id),
+			min: Number(data?.min),
+			max: Number(data?.max),
+			type: data?.type,
+		};
+
 		if (editMode) {
 			if (id.id1 === 'on_hold_found' || id.id1 === 'call_refreshment_found') {
 				dispatch(
@@ -185,6 +220,29 @@ const AddUpdateSubSops = () => {
 						record: formDataUpdateMinMaxSentimate,
 					}),
 				);
+			} else if (
+				id.id1 === 'silence_incidents_found' ||
+				id.id1 === 'customer_silence_incidents_found'
+			) {
+				dispatch(
+					updateSubSopsStart({
+						id: location?.state?.id,
+						record: formDataUpdateMinMaxIncident,
+					}),
+				);
+			} else if (
+				id.id1 === 'rate_of_speech_found' ||
+				id.id1 === 'responsiveness_found' ||
+				id.id1 === 'customer_rate_of_speech_found' ||
+				id.id1 === 'customer_responsiveness_found' ||
+				id.id1 === 'customer_clarity_found'
+			) {
+				dispatch(
+					updateSubSopsStart({
+						id: location?.state?.id,
+						record: formDataUpdateMinMaxType,
+					}),
+				);
 			} else {
 				dispatch(updateSubSopsStart({ id: location?.state?.id, record: formDataUpdate }));
 			}
@@ -205,6 +263,19 @@ const AddUpdateSubSops = () => {
 				id.id1 === 'overtalk_incidents_found'
 			) {
 				dispatch(createSubSopsStart(formDataCreateMinMaxSentimate));
+			} else if (
+				id.id1 === 'silence_incidents_found' ||
+				id.id1 === 'customer_silence_incidents_found'
+			) {
+				dispatch(createSubSopsStart(formDataCreateMinMaxIncident));
+			} else if (
+				id.id1 === 'rate_of_speech_found' ||
+				id.id1 === 'responsiveness_found' ||
+				id.id1 === 'customer_rate_of_speech_found' ||
+				id.id1 === 'customer_responsiveness_found' ||
+				id.id1 === 'customer_clarity_found'
+			) {
+				dispatch(createSubSopsStart(formDataCreateMinMaxType));
 			} else {
 				dispatch(createSubSopsStart(formDataCreate));
 			}
@@ -441,7 +512,7 @@ const AddUpdateSubSops = () => {
 						id.id1 === 'responsiveness_found' ||
 						id.id1 === 'customer_rate_of_speech_found' ||
 						id.id1 === 'customer_responsiveness_found' ||
-						id.id1 === 'clarity_found') && (
+						id.id1 === 'customer_clarity_found') && (
 						<>
 							<div className='col-12'>
 								<FormGroup id='min' isFloating label='Your min value'>
@@ -491,6 +562,48 @@ const AddUpdateSubSops = () => {
 									<Option value='False'>False</Option>
 								</Select>
 								{errors.sentiment_type?.message}
+							</FormGroup>
+						</div>
+					)}
+					{(id.id1 === 'silence_incidents_found' ||
+						id.id1 === 'customer_silence_incidents_found') && (
+						<div className='col-12'>
+							<Label>Select incident Type</Label>
+							<FormGroup>
+								<Select
+									size='sm'
+									ariaLabel='Select incidents_type'
+									{...register('incidents_type', {
+										required: 'incidents_type is required',
+									})}>
+									<Option value=''>Select incidents_type</Option>
+									<Option value='True'>True</Option>
+									<Option value='False'>False</Option>
+								</Select>
+								{errors.incidents_type?.message}
+							</FormGroup>
+						</div>
+					)}
+
+					{(id.id1 === 'rate_of_speech_found' ||
+						id.id1 === 'responsiveness_found' ||
+						id.id1 === 'customer_rate_of_speech_found' ||
+						id.id1 === 'customer_responsiveness_found' ||
+						id.id1 === 'customer_clarity_found') && (
+						<div className='col-12'>
+							<Label>Select Type</Label>
+							<FormGroup>
+								<Select
+									size='sm'
+									ariaLabel='Select incidents_type'
+									{...register('type', {
+										required: 'type is required',
+									})}>
+									<Option value=''>Select type</Option>
+									<Option value='True'>True</Option>
+									<Option value='False'>False</Option>
+								</Select>
+								{errors.type?.message}
 							</FormGroup>
 						</div>
 					)}
