@@ -6,11 +6,14 @@ import {
 	deleteTeamLeadsSuccess,
 	loadTeamLeadsError,
 	loadTeamLeadsSuccess,
+	updateTeamLeadsError,
+	updateTeamLeadsSuccess,
 } from '../../ducks/teamLeads';
 import {
 	requestCreateTeamLeads,
 	requestDeleteTeamLeads,
 	requestGetTeamLeads,
+	requestUpdateTeamLeads,
 } from '../requests/teamLeads';
 
 export function* handleGetTeamLeads({ payload }) {
@@ -46,5 +49,16 @@ export function* handleDeleteTeamLead({ payload }) {
 		}
 	} catch (error) {
 		yield put(deleteTeamLeadsError(error.response.data));
+	}
+}
+export function* handleUpdateTeamLead({ payload: { id, toBeUpdatedTeamLead } }) {
+	try {
+		const response = yield call(requestUpdateTeamLeads, id, toBeUpdatedTeamLead);
+
+		if (response.status === 200) {
+			yield put(updateTeamLeadsSuccess(response.data.data));
+		}
+	} catch (error) {
+		yield put(updateTeamLeadsError(error.response.data));
 	}
 }

@@ -1,10 +1,10 @@
 import React, { forwardRef, memo } from 'react';
+import pascalcase from 'pascalcase';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as SvgIcon from './svg-icons';
 import * as Bootstrap from './bootstrap';
 import * as Material from './material-icons';
-import pascalcase from 'pascalcase';
 
 const RefWrapper = forwardRef(({ children }, ref) => {
 	if (ref) {

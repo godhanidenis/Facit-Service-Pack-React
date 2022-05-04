@@ -80,7 +80,8 @@ const initialState = {
 	error: null,
 };
 
-const agentReducer = (action, state = initialState) => {
+// eslint-disable-next-line default-param-last
+const agentReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case LOAD_AGENTS_START:
 		case CREATE_AGENT_START:

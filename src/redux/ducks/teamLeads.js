@@ -10,6 +10,10 @@ export const DELETE_TEAMLEAD_START = 'DELETE_TEAMLEAD_START';
 export const DELETE_TEAMLEAD_SUCCESS = 'DELETE_TEAMLEAD_SUCCESS';
 export const DELETE_TEAMLEAD_ERROR = 'DELETE_TEAMLEAD_ERROR';
 
+export const UPDATE_TEAMLEAD_START = 'UPDATE_TEAMLEAD_START';
+export const UPDATE_TEAMLEAD_SUCCESS = 'UPDATE_TEAMLEAD_SUCCESS';
+export const UPDATE_TEAMLEAD_ERROR = 'UPDATE_TEAMLEAD_ERROR';
+
 export const loadTeamLeadsStart = (userId) => ({
 	type: LOAD_TEAMLEAD_START,
 	payload: userId,
@@ -55,6 +59,21 @@ export const deleteTeamLeadsError = (error) => ({
 	payload: error,
 });
 
+export const updateTeamLeadsStart = (teamLeadInfo) => ({
+	type: UPDATE_TEAMLEAD_START,
+	payload: teamLeadInfo,
+});
+
+export const updateTeamLeadsSuccess = (teamLeadInfo) => ({
+	type: UPDATE_TEAMLEAD_SUCCESS,
+	payload: teamLeadInfo,
+});
+
+export const updateTeamLeadsError = (error) => ({
+	type: UPDATE_TEAMLEAD_ERROR,
+	payload: error,
+});
+
 const initialState = {
 	teamLeads: [],
 	loading: false,
@@ -67,6 +86,7 @@ const teamLeadReducer = (state = initialState, action) => {
 		case LOAD_TEAMLEAD_START:
 		case CREATE_TEAMLEAD_START:
 		case DELETE_TEAMLEAD_START:
+		case UPDATE_TEAMLEAD_START:
 			return {
 				...state,
 				loading: true,
@@ -93,9 +113,24 @@ const teamLeadReducer = (state = initialState, action) => {
 			};
 		}
 
+		case UPDATE_TEAMLEAD_SUCCESS:
+			const index = state.teamLeads.findIndex(
+				(teamLead) => teamLead.id === action.payload.id,
+			);
+
+			const newArray = [...state.teamLeads];
+
+			newArray[index] = action.payload;
+			return {
+				...state,
+				loading: false,
+				teamLeads: newArray,
+			};
+
 		case LOAD_TEAMLEAD_ERROR:
 		case CREATE_TEAMLEAD_ERROR:
 		case DELETE_TEAMLEAD_ERROR:
+		case UPDATE_TEAMLEAD_ERROR:
 			return {
 				...state,
 				loading: false,

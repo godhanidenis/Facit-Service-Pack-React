@@ -21,3 +21,11 @@ export function requestDeleteLobs(lobId) {
 		url: `${process.env.REACT_APP_DOMAIN}/admin_panel/managelob/${lobId}`,
 	});
 }
+
+export function requestUpdateLobs(id, toBeUpdatedLobs) {
+	return axios.request({
+		method: 'put',
+		url: `${process.env.REACT_APP_DOMAIN}/admin_panel/managelob/${id}/`,
+		data: toBeUpdatedLobs,
+	});
+}

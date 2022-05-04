@@ -30,7 +30,7 @@ module.exports = {
 				endOfLine: 'auto',
 			},
 		],
-		'no-unused-vars': 0,
+
 		'no-use-before-define': 'off',
 		'no-case-declarations': 'off',
 		'no-underscore-dangle': 'off',
@@ -48,19 +48,22 @@ module.exports = {
 		],
 		'react-hooks/exhaustive-deps': 'error',
 		'react-hooks/rules-of-hooks': 'error',
-		'react/function-component-definition': [
-			2,
-			{
-				namedComponents: 'arrow-function',
-				unnamedComponents: 'arrow-function',
-			},
-		],
+		// 'react/function-component-definition': [
+		// 	2,
+		// 	{
+		// 		namedComponents: 'arrow-function',
+		// 		unnamedComponents: 'arrow-function',
+		// 	},
+		// ],
+		'react/function-component-definition': 'off',
 		'react/no-arrow-function-lifecycle': 'off',
 		'react/no-invalid-html-attribute': 'off',
 		'react/no-unused-class-component-methods': 'off',
 		camelcase: 'off',
 		'no-shadow': 'off',
-		'no-unused-vars': 'warn',
+		'no-unused-vars': 'off',
 		'no-console': 'off',
+		'react/prop-types': 'off',
+		'func-names': 'off',
 	},
 };

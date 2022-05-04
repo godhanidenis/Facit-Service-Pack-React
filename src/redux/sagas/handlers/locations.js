@@ -6,11 +6,14 @@ import {
 	deleteLocationsSuccess,
 	loadLocationsError,
 	loadLocationsSuccess,
+	updateLocationError,
+	updateLocationSuccess,
 } from '../../ducks/locations';
 import {
 	requestCreateLocations,
 	requestDeleteLocations,
 	requestGetLocations,
+	requestUpdateLocations,
 } from '../requests/locations';
 
 export function* handleGetLocations({ payload }) {
@@ -46,5 +49,17 @@ export function* handleDeleteLocation({ payload }) {
 		}
 	} catch (error) {
 		yield put(deleteLocationsError(error.response.data));
+	}
+}
+
+export function* handleUpdateLocation({ payload: { id, toBeUpdatedLocation } }) {
+	try {
+		const response = yield call(requestUpdateLocations, id, toBeUpdatedLocation);
+
+		if (response.status === 200) {
+			yield put(updateLocationSuccess(response.data.data));
+		}
+	} catch (error) {
+		yield put(updateLocationError(error.response.data));
 	}
 }

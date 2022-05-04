@@ -6,8 +6,15 @@ import {
 	deleteLobsSuccess,
 	loadLobsError,
 	loadLobsSuccess,
+	updateLobsError,
+	updateLobsSuccess,
 } from '../../ducks/lobs';
-import { requestCreateLobs, requestDeleteLobs, requestGetLobs } from '../requests/lobs';
+import {
+	requestCreateLobs,
+	requestDeleteLobs,
+	requestGetLobs,
+	requestUpdateLobs,
+} from '../requests/lobs';
 
 export function* handleGetLobs({ payload }) {
 	try {
@@ -42,5 +49,16 @@ export function* handleDeleteLob({ payload }) {
 		}
 	} catch (error) {
 		yield put(deleteLobsError(error.response.data));
+	}
+}
+export function* handleUpdateLob({ payload: { id, toBeUpdatedLob } }) {
+	try {
+		const response = yield call(requestUpdateLobs, id, toBeUpdatedLob);
+
+		if (response.status === 200) {
+			yield put(updateLobsSuccess(response.data.data));
+		}
+	} catch (error) {
+		yield put(updateLobsError(error.response.data));
 	}
 }

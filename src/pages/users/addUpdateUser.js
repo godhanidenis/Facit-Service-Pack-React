@@ -85,7 +85,9 @@ const AddUpdateUser = () => {
 
 		const formData = new FormData();
 		formData.append('username', data.username);
-		formData.append('password', data.password);
+		if (!editMode) {
+			formData.append('password', data.password);
+		}
 		formData.append('email', data.email);
 		formData.append('first_name', data.first_name);
 		formData.append('last_name', data.last_name);
@@ -148,7 +150,6 @@ const AddUpdateUser = () => {
 											<Avatar
 												src={selectedImage || UserImage}
 												onClick={() => Open()}
-												// onClick={() => profileFile.current.click()}
 											/>
 										</div>
 
@@ -164,7 +165,6 @@ const AddUpdateUser = () => {
 												onChange={imageChange}
 												style={{ display: 'none' }}
 												id='profile'
-												// ref={profileFile}
 											/>
 											{errors.profile_picture?.message}
 										</div>

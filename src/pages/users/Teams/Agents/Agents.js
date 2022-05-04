@@ -9,6 +9,12 @@ import Card, {
 	CardLabel,
 	CardTitle,
 } from '../../../../components/bootstrap/Card';
+import Modal, {
+	ModalBody,
+	ModalFooter,
+	ModalHeader,
+	ModalTitle,
+} from '../../../../components/bootstrap/Modal';
 import Icon from '../../../../components/icon/Icon';
 import PaginationButtons, {
 	dataPagination,
@@ -17,22 +23,32 @@ import PaginationButtons, {
 import useSortableData from '../../../../hooks/useSortableData';
 import Page from '../../../../layout/Page/Page';
 import PageWrapper from '../../../../layout/PageWrapper/PageWrapper';
-import { loadAgentsStart } from '../../../../redux/ducks/agents';
+import { deleteAgentsStart, loadAgentsStart } from '../../../../redux/ducks/agents';
 
 const Agents = () => {
 	const id = useParams();
+	console.log(id);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const { teams } = useSelector((state) => state.teams);
-	const { items, requestSort, getClassNamesFor } = useSortableData(teams);
-	const [currentPage, setCurrentPage] = useState(1);
-	const [currentTeam, setCurrentTeam] = useState(null);
-	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 
+	const { agents } = useSelector((state) => state.agents);
+	console.log('agents::::', agents);
+
+	const { items, requestSort, getClassNamesFor } = useSortableData(agents);
+	const [currentPage, setCurrentPage] = useState(1);
+	// const [currentTeam, setCurrentTeam] = useState(null);
+	// const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+	const [perPage, setPerPage] = useState(PER_COUNT['5']);
+	const [currentAgent, setCurrentAgent] = useState(null);
+	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 	useEffect(() => {
-		dispatch(loadAgentsStart(id.id));
+		dispatch(loadAgentsStart(Number(id.id)));
 	}, [dispatch, id.id]);
+
+	const handleDeleteTeam = () => {
+		dispatch(deleteAgentsStart(currentAgent.id));
+		setDeleteModalOpen(false);
+	};
 	return (
 		<>
 			<PageWrapper>
@@ -52,7 +68,7 @@ const Agents = () => {
 											color='info'
 											isLight
 											tag='a'
-											to={`/users/${id.id}/agents/create`}>
+											to={`/users/${id.id}/teams/agents/create`}>
 											New Agent
 										</Button>
 									</CardActions>
@@ -63,66 +79,40 @@ const Agents = () => {
 											<tr>
 												<th
 													scope='col'
-													onClick={() => requestSort('Team_name')}
+													onClick={() => requestSort('Agent_id')}
 													className='cursor-pointer text-decoration-underline'>
-													Teams
+													Agent Id
 													<Icon
 														size='lg'
-														// className={getClassNamesFor('Team_name')}
+														className={getClassNamesFor('Agent_id')}
 														icon='FilterList'
 													/>
 												</th>
 
 												<th
 													scope='col'
-													onClick={() => requestSort('No_agentns')}
+													onClick={() => requestSort('Agent_name')}
 													className='cursor-pointer text-decoration-underline'>
-													No of Agents
+													Agent Name
 													<Icon
 														size='lg'
-														// className={getClassNamesFor('No_agentns')}
+														className={getClassNamesFor('Agent_name')}
 														icon='FilterList'
 													/>
 												</th>
 
 												<th
 													scope='col'
-													onClick={() => requestSort('Lob_name')}
+													onClick={() => requestSort('phone_no')}
 													className='cursor-pointer text-decoration-underline'>
-													LOB
+													Phone Number
 													<Icon
 														size='lg'
-														// className={getClassNamesFor('Lob_name')}
+														className={getClassNamesFor('phone_no')}
 														icon='FilterList'
 													/>
 												</th>
 
-												<th
-													scope='col'
-													onClick={() => requestSort('TeamLead_name')}
-													className='cursor-pointer text-decoration-underline'>
-													Team Lead
-													<Icon
-														size='lg'
-														className={getClassNamesFor(
-															'TeamLead_name',
-														)}
-														icon='FilterList'
-													/>
-												</th>
-												<th
-													scope='col'
-													onClick={() => requestSort('Location_name')}
-													className='cursor-pointer text-decoration-underline'>
-													Location Name
-													<Icon
-														size='lg'
-														className={getClassNamesFor(
-															'Location_name',
-														)}
-														icon='FilterList'
-													/>
-												</th>
 												<th
 													scope='col'
 													onClick={() => requestSort('actions')}
@@ -140,11 +130,10 @@ const Agents = () => {
 											{dataPagination(items, currentPage, perPage).map(
 												(item) => (
 													<tr key={item.id}>
-														<th>{item.Team_name}</th>
-														<td>{item.No_agentns}</td>
-														<td>{item.LOB[0]?.Lob_name}</td>
-														<td>{item.Team_lead.TeamLead_name}</td>
-														<td>{item.Location.Location_name}</td>
+														<th>{item.Agent_id}</th>
+														<td>{item.Agent_name}</td>
+														<td>{item.phone_no}</td>
+
 														<td>
 															<Icon
 																size='lg'
@@ -153,7 +142,7 @@ const Agents = () => {
 																style={{ cursor: 'pointer' }}
 																onClick={() => {
 																	navigate(
-																		`/users/${id.id}/teams/edit/${item.id}`,
+																		`/users/${id.id}/teams/agents/edit/${item.id}`,
 																	);
 																}}
 															/>
@@ -166,7 +155,7 @@ const Agents = () => {
 																	cursor: 'pointer',
 																}}
 																onClick={() => {
-																	setCurrentTeam(item);
+																	setCurrentAgent(item);
 																	setDeleteModalOpen(true);
 																}}
 															/>
@@ -179,7 +168,7 @@ const Agents = () => {
 								</CardBody>
 								<PaginationButtons
 									data={items}
-									label='No. Of Teams'
+									label='No. Of Agents'
 									setCurrentPage={setCurrentPage}
 									currentPage={currentPage}
 									perPage={perPage}
@@ -190,13 +179,13 @@ const Agents = () => {
 					</div>
 				</Page>
 			</PageWrapper>
-			{/* <Modal isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} size='lg' isScrollable>
+			<Modal isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} size='lg' isScrollable>
 				<ModalHeader>
 					<ModalTitle>Confirmation Modal</ModalTitle>
 				</ModalHeader>
 
 				<ModalBody>
-					<h1>Do you really want to delete {currentTeam?.Team_name}</h1>
+					<h1>Do you really want to delete {currentAgent?.Agent_name}</h1>
 				</ModalBody>
 
 				<ModalFooter>
@@ -204,7 +193,7 @@ const Agents = () => {
 						ok
 					</Button>
 				</ModalFooter>
-			</Modal> */}
+			</Modal>
 		</>
 	);
 };

@@ -28,11 +28,12 @@ import Modal, {
 	ModalTitle,
 } from '../../../components/bootstrap/Modal';
 import AddEditTeam from './AddEditTeam';
+import AddEditAgent from './Agents/AddEditAgent';
 
 const Teams = () => {
 	return (
 		<div>
-			<Nav design='tabs' isJustified className='w-50' style={{ margin: 'auto' }}>
+			<Nav design='pills' tag='nav' isJustified className='w-50' style={{ margin: 'auto' }}>
 				<NavItem>
 					<NavLink to=''>Teams Details</NavLink>
 				</NavItem>
@@ -41,10 +42,12 @@ const Teams = () => {
 				</NavItem>
 			</Nav>
 			<Routes>
-				<Route path='' element={<UsersTeams />} />
-				<Route path='create' element={<AddEditTeam />} />
-				<Route path='edit/:id1' element={<AddEditTeam />} />
-				<Route path='agents' element={<Agents />} />
+				<Route exact path='' element={<UsersTeams />} />
+				<Route exact path='create' element={<AddEditTeam />} />
+				<Route exact path='edit/:id1' element={<AddEditTeam />} />
+				<Route exact path='agents' element={<Agents />} />
+				<Route exact path='agents/create' element={<AddEditAgent />} />
+				<Route exact path='agents/edit/:id1' element={<AddEditAgent />} />
 			</Routes>
 		</div>
 	);
@@ -67,7 +70,6 @@ const UsersTeams = () => {
 	useEffect(() => {
 		dispatch(loadTeamsStart(id.id));
 	}, [dispatch, id.id]);
-
 	const handleDeleteTeam = () => {
 		dispatch(deleteTeamsStart(currentTeam.id));
 		setDeleteModalOpen(false);
@@ -182,7 +184,7 @@ const UsersTeams = () => {
 													<tr key={item.id}>
 														<td>{item.Team_name}</td>
 														<td>{item.No_agentns}</td>
-														<td>{item.LOB[0]?.Lob_name}</td>
+														<td>{item.LOB.Lob_name}</td>
 														<td>{item.Team_lead.TeamLead_name}</td>
 														<td>{item.Location.Location_name}</td>
 														<td>

@@ -10,6 +10,10 @@ export const DELETE_LOBS_START = 'DELETE_LOBS_START';
 export const DELETE_LOBS_SUCCESS = 'DELETE_LOBS_SUCCESS';
 export const DELETE_LOBS_ERROR = 'DELETE_LOBS_ERROR';
 
+export const UPDATE_LOBS_START = 'UPDATE_LOBS_START';
+export const UPDATE_LOBS_SUCCESS = 'UPDATE_LOBS_SUCCESS';
+export const UPDATE_LOBS_ERROR = 'UPDATE_LOBS_ERROR';
+
 export const loadLobsStart = (userId) => ({
 	type: LOAD_LOBS_START,
 	payload: userId,
@@ -54,7 +58,20 @@ export const deleteLobsError = (error) => ({
 	type: DELETE_LOBS_ERROR,
 	payload: error,
 });
+export const updateLobsStart = (lobInfo) => ({
+	type: UPDATE_LOBS_START,
+	payload: lobInfo,
+});
 
+export const updateLobsSuccess = (lobInfo) => ({
+	type: UPDATE_LOBS_SUCCESS,
+	payload: lobInfo,
+});
+
+export const updateLobsError = (error) => ({
+	type: UPDATE_LOBS_ERROR,
+	payload: error,
+});
 const initialState = {
 	lobs: [],
 	loading: false,
@@ -67,6 +84,7 @@ const lobReducer = (state = initialState, action) => {
 		case LOAD_LOBS_START:
 		case CREATE_LOBS_START:
 		case DELETE_LOBS_START:
+		case UPDATE_LOBS_START:
 			return {
 				...state,
 				loading: true,
@@ -92,10 +110,21 @@ const lobReducer = (state = initialState, action) => {
 				lobs: state.lobs.filter((lob) => lob.id !== action.payload),
 			};
 		}
+		case UPDATE_LOBS_SUCCESS:
+			const index = state.lobs.findIndex((lob) => lob.id === action.payload.id);
 
+			const newArray = [...state.lobs];
+
+			newArray[index] = action.payload;
+			return {
+				...state,
+				loading: false,
+				lobs: newArray,
+			};
 		case LOAD_LOBS_ERROR:
 		case CREATE_LOBS_ERROR:
 		case DELETE_LOBS_ERROR:
+		case UPDATE_LOBS_ERROR:
 			return {
 				...state,
 				loading: false,

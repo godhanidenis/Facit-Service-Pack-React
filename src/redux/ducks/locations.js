@@ -10,6 +10,10 @@ export const DELETE_LOCATION_START = 'DELETE_LOCATION_START';
 export const DELETE_LOCATION_SUCCESS = 'DELETE_LOCATION_SUCCESS';
 export const DELETE_LOCATION_ERROR = 'DELETE_LOCATION_ERROR';
 
+export const UPDATE_LOCATION_START = 'UPDATE_LOCATION_START';
+export const UPDATE_LOCATION_SUCCESS = 'UPDATE_LOCATION_SUCCESS';
+export const UPDATE_LOCATION_ERROR = 'UPDATE_LOCATION_ERROR';
+
 export const loadLocationsStart = (userId) => ({
 	type: LOAD_LOCATION_START,
 	payload: userId,
@@ -55,6 +59,21 @@ export const deleteLocationsError = (error) => ({
 	payload: error,
 });
 
+export const updateLocationStart = (agentInfo) => ({
+	type: UPDATE_LOCATION_START,
+	payload: agentInfo,
+});
+
+export const updateLocationSuccess = (agentInfo) => ({
+	type: UPDATE_LOCATION_SUCCESS,
+	payload: agentInfo,
+});
+
+export const updateLocationError = (error) => ({
+	type: UPDATE_LOCATION_ERROR,
+	payload: error,
+});
+
 const initialState = {
 	locations: [],
 	loading: false,
@@ -67,6 +86,7 @@ const locationReducer = (state = initialState, action) => {
 		case LOAD_LOCATION_START:
 		case CREATE_LOCATION_START:
 		case DELETE_LOCATION_START:
+		case UPDATE_LOCATION_START:
 			return {
 				...state,
 				loading: true,
@@ -97,10 +117,23 @@ const locationReducer = (state = initialState, action) => {
 				locations: state.locations.filter((location) => location.id !== action.payload),
 			};
 		}
+		case UPDATE_LOCATION_SUCCESS:
+			const index = state.locations.findIndex(
+				(location) => location.id === action.payload.id,
+			);
 
+			const newArray = [...state.locations];
+
+			newArray[index] = action.payload;
+			return {
+				...state,
+				loading: false,
+				locations: newArray,
+			};
 		case LOAD_LOCATION_ERROR:
 		case CREATE_LOCATION_ERROR:
 		case DELETE_LOCATION_ERROR:
+		case UPDATE_LOCATION_ERROR:
 			return {
 				...state,
 				loading: false,

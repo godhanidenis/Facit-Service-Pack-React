@@ -1,10 +1,12 @@
 import React from 'react';
-import Header from '../layout/Header/Header';
+// import Header from '../layout/Header/Header';
+import DefaultHeader from '../pages/common/Headers/DefaultHeader';
 
 const headers = [
 	{
 		path: `*`,
-		element: <Header />,
+		element: <DefaultHeader />,
+		// element: <Header />,
 	},
 ];
 

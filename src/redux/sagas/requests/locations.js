@@ -21,3 +21,11 @@ export function requestDeleteLocations(locationId) {
 		url: `${process.env.REACT_APP_DOMAIN}/admin_panel/managelocation/${locationId}`,
 	});
 }
+
+export function requestUpdateLocations(id, toBeUpdatedLocation) {
+	return axios.request({
+		method: 'put',
+		url: `${process.env.REACT_APP_DOMAIN}/admin_panel/managelocation/${id}/`,
+		data: toBeUpdatedLocation,
+	});
+}

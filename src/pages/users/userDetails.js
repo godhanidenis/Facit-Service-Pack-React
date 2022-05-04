@@ -18,7 +18,7 @@ import Avatar from '../../components/Avatar';
 import { loadLocationsStart } from '../../redux/ducks/locations';
 import { loadTeamLeadsStart } from '../../redux/ducks/teamLeads';
 import { loadLobsStart } from '../../redux/ducks/lobs';
-import { loadTeamsStart } from '../../redux/ducks/teams';
+// import { loadTeamsStart } from '../../redux/ducks/teams';
 import Lobs from './Lobs/Lobs';
 
 const UserDetails = () => {
@@ -29,13 +29,13 @@ const UserDetails = () => {
 		dispatch(loadLocationsStart(id));
 		dispatch(loadTeamLeadsStart(id));
 		dispatch(loadLobsStart(id));
-		dispatch(loadTeamsStart(id));
+		// dispatch(loadTeamsStart(id));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
 		<>
-			<Nav design='tabs' isJustified style={{ marginBottom: '20px' }}>
+			<Nav design='pills' tag='nav' isJustified style={{ marginBottom: '20px' }}>
 				<NavItem>
 					<NavLink to=''>Details</NavLink>
 				</NavItem>
@@ -51,10 +51,10 @@ const UserDetails = () => {
 			</Nav>
 
 			<Routes>
-				<Route path='' element={<UserDetail />} />
-				<Route path='teams/*' element={<Teams />} />
-				<Route path='lobs' element={<Lobs />} />
-				<Route path='sops' element={<Sops />} />
+				<Route exact path='' element={<UserDetail />} />
+				<Route exact path='teams/*' element={<Teams />} />
+				<Route exact path='lobs/*' element={<Lobs />} />
+				<Route exact path='sops/*' element={<Sops />} />
 			</Routes>
 		</>
 	);

@@ -21,3 +21,10 @@ export function requestDeleteTeamLeads(teamLeadId) {
 		url: `${process.env.REACT_APP_DOMAIN}/admin_panel/manageteamlead/${teamLeadId}`,
 	});
 }
+export function requestUpdateTeamLeads(id, toBeUpdatedTeamLead) {
+	return axios.request({
+		method: 'put',
+		url: `${process.env.REACT_APP_DOMAIN}/admin_panel/manageteam/${id}/`,
+		data: toBeUpdatedTeamLead,
+	});
+}

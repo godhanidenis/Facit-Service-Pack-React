@@ -29,12 +29,9 @@ export function* handleGetTeams({ payload }) {
 }
 
 export function* handleCreateTeam({ payload }) {
-	// console.log('payload', payload);1
-
 	try {
 		const response = yield call(requestCreateTeams, payload);
-		// console.log('response', response);
-
+		console.log('res....', response);
 		if (response.status === 200) {
 			yield put(createTeamsSuccess(response.data.data));
 		}
