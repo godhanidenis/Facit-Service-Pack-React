@@ -21,7 +21,11 @@ import Label from '../../../components/bootstrap/forms/Label';
 import Select from '../../../components/bootstrap/forms/Select';
 import Option from '../../../components/bootstrap/Option';
 import { loadTeamsStart } from '../../../redux/ducks/teams';
-import { createSubSopsStart, updateSubSopsStart } from '../../../redux/ducks/subSops';
+import {
+	createSubSopsStart,
+	loadSubSopsStart,
+	updateSubSopsStart,
+} from '../../../redux/ducks/subSops';
 
 const AddUpdateSubSops = () => {
 	const dispatch = useDispatch();
@@ -30,15 +34,14 @@ const AddUpdateSubSops = () => {
 	const [editMode, setEditMode] = useState(false);
 	// console.log('::::::', location?.state?.id);
 	const id = useParams();
-	console.log('id::', id);
+	// console.log('id::', id);
 	const { teams } = useSelector((state) => state.teams);
 	const { subSops } = useSelector((state) => state.subSops);
-	console.log('sub sops', subSops);
-
+	// console.log('sub sops', subSops);
 	const [keywordsList, setKeywordsList] = useState([]);
 	const [tagList, setTagList] = useState([]);
-	console.log('keywordsList', keywordsList);
-	console.log('tagList', tagList);
+	// console.log('keywordsList', keywordsList);
+	// console.log('tagList', tagList);
 	const {
 		register,
 		handleSubmit,
@@ -48,12 +51,40 @@ const AddUpdateSubSops = () => {
 	} = useForm();
 
 	useEffect(() => {
+		if (id.id1 === 'call_additional_info_found' || id.id1 === 'call_alternate_channel_found') {
+			console.log('hiii');
+			const formDataTagging = {
+				doctype: 'tagging_found',
+			};
+			dispatch(loadSubSopsStart({ id: id.id, slug: formDataTagging }));
+		}
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	const taggingData = () => {
+		console.log('lng', subSops.length);
+		if (subSops.length) {
+			subSops?.map((sub) => {
+				console.log('sub', sub);
+
+				// eslint-disable-next-line no-sequences
+				return setTagList(sub?._source?.tag_list);
+			});
+		}
+	};
+	useEffect(() => {
+		if (subSops) {
+			taggingData();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [subSops]);
+
+	useEffect(() => {
 		if (!location?.state?.id) {
 			setEditMode(false);
-			console.log('add');
 		} else {
 			setEditMode(true);
-			console.log('edit');
 			if (subSops.length) {
 				const singleSubSop = subSops.find((subSop) => subSop._id === location?.state?.id);
 				console.log('object', singleSubSop);
@@ -66,6 +97,7 @@ const AddUpdateSubSops = () => {
 				setValue('sentiment_type', singleSubSop?._source?.sentiment_type);
 				setValue('incidents_type', singleSubSop?._source?.incidents_type);
 				setValue('type', singleSubSop?._source?.type);
+				setValue('tag_type', singleSubSop?._source?.tag_type);
 
 				setKeywordsList(singleSubSop?._source?.keywords);
 				setTagList(singleSubSop?._source?.tag_list);
@@ -84,8 +116,8 @@ const AddUpdateSubSops = () => {
 
 	const onSubmit = (data) => {
 		console.log('AddEdit FormData', data);
-		console.log('keywords FormData', keywordsList);
-		console.log('tagList FormData', tagList);
+		// console.log('keywords FormData', keywordsList);
+		// console.log('tagList FormData', tagList);
 		const arr = data.team_list;
 		const arry = [];
 		// eslint-disable-next-line array-callback-return
@@ -108,6 +140,7 @@ const AddUpdateSubSops = () => {
 			team_list: arry,
 			user_id: Number(id.id),
 		};
+
 		const formDataCreateOnHoldCallRefreshMent = {
 			record: {
 				doctype: id.id1.replace('_found', ''),
@@ -133,12 +166,25 @@ const AddUpdateSubSops = () => {
 				user_id: Number(id.id),
 			},
 		};
-		const formDataUpdateTagging = {
-			doctype: id.id1.replace('_found', ''),
-			tag_list: tagList,
-			user_id: Number(id.id),
-		};
 
+		const formDataCreateCallInfoChannel = {
+			record: {
+				doctype: id.id1.replace('_found', ''),
+				text: data.text,
+				score: Number(data.score),
+				team_list: arry,
+				user_id: Number(id.id),
+				tag_type: data.tag_type,
+			},
+		};
+		const formDataUpdateCallInfoChannel = {
+			doctype: id.id1.replace('_found', ''),
+			text: data.text,
+			score: Number(data.score),
+			team_list: arry,
+			user_id: Number(id.id),
+			tag_type: data.tag_type,
+		};
 		const formDataCreateMinMaxSentimate = {
 			record: {
 				doctype: id.id1.replace('_found', ''),
@@ -147,13 +193,6 @@ const AddUpdateSubSops = () => {
 				max: Number(data?.max),
 				sentiment_type: data?.sentiment_type,
 			},
-		};
-		const formDataUpdateMinMaxSentimate = {
-			doctype: id.id1.replace('_found', ''),
-			user_id: Number(id.id),
-			min: Number(data?.min),
-			max: Number(data?.max),
-			sentiment_type: data?.sentiment_type,
 		};
 
 		const formDataCreateMinMaxIncident = {
@@ -165,13 +204,7 @@ const AddUpdateSubSops = () => {
 				incidents_type: data?.incidents_type,
 			},
 		};
-		const formDataUpdateMinMaxIncident = {
-			doctype: id.id1.replace('_found', ''),
-			user_id: Number(id.id),
-			min: Number(data?.min),
-			max: Number(data?.max),
-			incidents_type: data?.incidents_type,
-		};
+
 		const formDataCreateMinMaxType = {
 			record: {
 				doctype: id.id1.replace('_found', ''),
@@ -180,13 +213,6 @@ const AddUpdateSubSops = () => {
 				max: Number(data?.max),
 				type: data?.type,
 			},
-		};
-		const formDataUpdateMinMaxType = {
-			doctype: id.id1.replace('_found', ''),
-			user_id: Number(id.id),
-			min: Number(data?.min),
-			max: Number(data?.max),
-			type: data?.type,
 		};
 
 		if (editMode) {
@@ -197,50 +223,14 @@ const AddUpdateSubSops = () => {
 						record: formDataUpdateOnHoldCallRefreshMent,
 					}),
 				);
-			} else if (id.id1 === 'tagging_found') {
-				dispatch(
-					updateSubSopsStart({
-						id: location?.state?.id,
-						record: formDataUpdateTagging,
-					}),
-				);
 			} else if (
-				id.id1 === 'customer_call_end_sentiment_found' ||
-				id.id1 === 'customer_overall_call_sentiment_found' ||
-				id.id1 === 'customer_call_start_sentiment_found' ||
-				id.id1 === 'customer_overtalk_incidents_found' ||
-				id.id1 === 'overall_call_sentiment_found' ||
-				id.id1 === 'call_start_sentiment_found' ||
-				id.id1 === 'call_end_sentiment_found' ||
-				id.id1 === 'overtalk_incidents_found'
+				id.id1 === 'call_additional_info_found' ||
+				id.id1 === 'call_alternate_channel_found'
 			) {
 				dispatch(
 					updateSubSopsStart({
 						id: location?.state?.id,
-						record: formDataUpdateMinMaxSentimate,
-					}),
-				);
-			} else if (
-				id.id1 === 'silence_incidents_found' ||
-				id.id1 === 'customer_silence_incidents_found'
-			) {
-				dispatch(
-					updateSubSopsStart({
-						id: location?.state?.id,
-						record: formDataUpdateMinMaxIncident,
-					}),
-				);
-			} else if (
-				id.id1 === 'rate_of_speech_found' ||
-				id.id1 === 'responsiveness_found' ||
-				id.id1 === 'customer_rate_of_speech_found' ||
-				id.id1 === 'customer_responsiveness_found' ||
-				id.id1 === 'customer_clarity_found'
-			) {
-				dispatch(
-					updateSubSopsStart({
-						id: location?.state?.id,
-						record: formDataUpdateMinMaxType,
+						record: formDataUpdateCallInfoChannel,
 					}),
 				);
 			} else {
@@ -276,6 +266,11 @@ const AddUpdateSubSops = () => {
 				id.id1 === 'customer_clarity_found'
 			) {
 				dispatch(createSubSopsStart(formDataCreateMinMaxType));
+			} else if (
+				id.id1 === 'call_additional_info_found' ||
+				id.id1 === 'call_alternate_channel_found'
+			) {
+				dispatch(createSubSopsStart(formDataCreateCallInfoChannel));
 			} else {
 				dispatch(createSubSopsStart(formDataCreate));
 			}
@@ -297,7 +292,7 @@ const AddUpdateSubSops = () => {
 						id.id1 === 'call_refreshment_found' ||
 						id.id1 === 'call_closures_found' ||
 						id.id1 === 'call_additional_info_found' ||
-						id.id1 === '    ') && (
+						id.id1 === 'call_alternate_channel_found') && (
 						<div className='col-12'>
 							<FormGroup id='text' isFloating label='Your Text'>
 								<Input

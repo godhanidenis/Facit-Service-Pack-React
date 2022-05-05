@@ -16,6 +16,8 @@ const Sops = () => {
 
 	const [activeListTab, setActiveListTab] = useState();
 	const [selectListTab, setSelectListTab] = useState();
+	const [disabled, setDisabled] = useState(false);
+	const { subSops } = useSelector((state) => state.subSops);
 
 	useEffect(() => {
 		dispatch(loadSopsStart(id.id));
@@ -27,8 +29,35 @@ const Sops = () => {
 		setActiveListTab(tabName);
 
 		const singleSop = sops.find((sop) => sop.id === Number(id));
-		console.log('sinle sop', singleSop);
+		console.log('single sop', singleSop);
 		setSelectListTab(singleSop);
+
+		if (
+			singleSop?.slug === 'tagging_found' ||
+			singleSop?.slug === 'customer_call_end_sentiment_found' ||
+			singleSop?.slug === 'customer_overall_call_sentiment_found' ||
+			singleSop?.slug === 'customer_call_start_sentiment_found' ||
+			singleSop?.slug === 'customer_overtalk_incidents_found' ||
+			singleSop?.slug === 'overall_call_sentiment_found' ||
+			singleSop?.slug === 'call_start_sentiment_found' ||
+			singleSop?.slug === 'call_end_sentiment_found' ||
+			singleSop?.slug === 'overtalk_incidents_found' ||
+			singleSop?.slug === 'silence_incidents_found' ||
+			singleSop?.slug === 'customer_silence_incidents_found' ||
+			singleSop?.slug === 'rate_of_speech_found' ||
+			singleSop?.slug === 'responsiveness_found' ||
+			singleSop?.slug === 'customer_rate_of_speech_found' ||
+			singleSop?.slug === 'customer_responsiveness_found' ||
+			singleSop?.slug === 'customer_clarity_found'
+		) {
+			if (subSops.length) {
+				setDisabled(true);
+			} else {
+				setDisabled(false);
+			}
+		} else {
+			setDisabled(false);
+		}
 	};
 	const getStatusActiveListTabColor = (tabName) => {
 		if (activeListTab === tabName) return 'success';
@@ -64,7 +93,7 @@ const Sops = () => {
 						<div className='d-flex align-items-center justify-content-between'>
 							<div className='d-flex align-items-center'>
 								<h1>{selectListTab?.Sub_category}</h1>
-								{selectListTab?.Sub_category && (
+								{activeListTab && (
 									<Button
 										icon='Edit'
 										color='info'
@@ -75,12 +104,13 @@ const Sops = () => {
 									/>
 								)}
 							</div>
-							{selectListTab?.Sub_category && (
+							{activeListTab && (
 								<Button
 									color='info'
 									isLight
 									tag='a'
-									to={`${selectListTab?.slug}/sub/create`}>
+									to={`${selectListTab?.slug}/sub/create`}
+									isDisable={disabled}>
 									Add
 								</Button>
 							)}
