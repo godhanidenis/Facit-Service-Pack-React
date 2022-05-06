@@ -46,6 +46,7 @@ const SopsDetails = () => {
 		dispatch(loadSubSopsStart({ id: id.id, slug: formData }));
 		dispatch(loadTeamsStart(id.id));
 	}, [dispatch, id.id, id.id1]);
+	console.log('sub sops::', subSops);
 
 	const taggingData = () => {
 		console.log('lng', subSops.length);
@@ -192,6 +193,7 @@ const SopsDetails = () => {
 											tagList?.map((tag) => {
 												return (
 													<div
+														key={tag}
 														style={{
 															display: 'flex',
 															alignItems: 'center',
@@ -451,7 +453,7 @@ const SopsDetails = () => {
 
 						case 'call_refreshment_found':
 						case 'on_hold_found':
-						case 'call_verification_found':
+						case 'customer_verification_found':
 						case 'call_closure_found':
 						case 'call_opening_found':
 						case 'call_additional_info_found':
@@ -474,7 +476,11 @@ const SopsDetails = () => {
 														onClick={() => {
 															navigate(
 																`/users/${id.id}/sops/${id.id1}/sub/update`,
-																{ state: { id: subSop?._id } },
+																{
+																	state: {
+																		id: subSop?._id,
+																	},
+																},
 															);
 														}}
 													/>
@@ -487,8 +493,10 @@ const SopsDetails = () => {
 															marginLeft: '25px',
 														}}
 														onClick={() => {
-															// eslint-disable-next-line no-alert
-															if (window.confirm('Are you sure??')) {
+															if (
+																// eslint-disable-next-line no-alert
+																window.confirm('Are you sure??')
+															) {
 																dispatch(
 																	deleteSubSopsStart({
 																		id: subSop._id,

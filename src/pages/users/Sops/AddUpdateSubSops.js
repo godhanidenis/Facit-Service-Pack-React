@@ -381,6 +381,7 @@ const AddUpdateSubSops = () => {
 									keywordsList?.map((keyword) => {
 										return (
 											<div
+												key={keyword}
 												style={{
 													display: 'flex',
 													alignItems: 'center',
@@ -438,6 +439,7 @@ const AddUpdateSubSops = () => {
 									tagList?.map((tag) => {
 										return (
 											<div
+												key={tag}
 												style={{
 													display: 'flex',
 													alignItems: 'center',
@@ -485,7 +487,11 @@ const AddUpdateSubSops = () => {
 									{tagList &&
 										tagList?.map((tag) => {
 											console.log('tag', tag);
-											return <Option value={tag}>{tag}</Option>;
+											return (
+												<Option key={tag} value={tag}>
+													{tag}
+												</Option>
+											);
 										})}
 								</Select>
 								{errors.tag_type?.message}
