@@ -50,7 +50,7 @@ NavItem.propTypes = {
 };
 NavItem.defaultProps = {
 	className: null,
-	// isActive: false,
+	isActive: false,
 	isDisable: false,
 };
 

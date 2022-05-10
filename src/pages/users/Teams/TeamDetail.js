@@ -1,9 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, Route, Routes, useParams } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 import Button from '../../../components/bootstrap/Button';
-import Card, { CardActions, CardBody, CardHeader, CardLabel, CardTitle } from '../../../components/bootstrap/Card';
+import Card, {
+	CardActions,
+	CardBody,
+	CardHeader,
+	CardLabel,
+	CardTitle,
+} from '../../../components/bootstrap/Card';
 import Nav, { NavItem } from '../../../components/bootstrap/Nav';
 import Spinner from '../../../components/bootstrap/Spinner';
 import Toasts from '../../../components/bootstrap/Toasts';
@@ -11,7 +17,6 @@ import Page from '../../../layout/Page/Page';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import AddEditAgent from './Agents/AddEditAgent';
 import AgentPage from './Agents/Agents';
-import Agents from './Agents/Agents';
 
 const TeamsPage = () => {
 	const [AgentlinkActie, setAgentlinkActie] = useState('');
@@ -21,20 +26,27 @@ const TeamsPage = () => {
 		<div className='w-100 h-100'>
 			<Nav design='pills' tag='nav' isJustified className='w-50' style={{ margin: 'auto' }}>
 				<NavItem>
-					<NavLink to={`./`} exact className={AgentdetaillinkActie} onClick={
-						() => {
-							setAgentdetaillinkActie('active')
-							setAgentlinkActie('')
-						}
-					}>Teams Details</NavLink>
+					<NavLink
+						to='./'
+						exact
+						className={AgentdetaillinkActie}
+						onClick={() => {
+							setAgentdetaillinkActie('active');
+							setAgentlinkActie('');
+						}}>
+						Teams Details
+					</NavLink>
 				</NavItem>
 				<NavItem>
-					<NavLink to='agents' className={AgentlinkActie}
+					<NavLink
+						to='agents'
+						className={AgentlinkActie}
 						onClick={() => {
-							setAgentdetaillinkActie('')
-							setAgentlinkActie('active')
-						}}
-					>Agents</NavLink>
+							setAgentdetaillinkActie('');
+							setAgentlinkActie('active');
+						}}>
+						Agents
+					</NavLink>
 				</NavItem>
 			</Nav>
 			<div className='w-100 h-100'>
@@ -58,8 +70,8 @@ const TeamDetail = () => {
 	const { teams, loading, error } = useSelector((state) => state.teams);
 	const { addToast } = useToasts();
 	useEffect(() => {
-		console.log("loading???????????", error);
-		if (error!=='') {
+		console.log('loading???????????', error);
+		if (error !== '') {
 			addToast(
 				<Toasts
 					title='Error in Team'
@@ -73,13 +85,13 @@ const TeamDetail = () => {
 				{
 					autoDismiss: true,
 				},
-			)
+			);
 		}
-	}, [error]);
+	}, [addToast, error]);
 	useEffect(() => {
 		if (id) {
 			// const singleTeam = await axios.get(`http://3.215.147.147/admin_panel/teams/${id}`);
-			
+
 			if (teams) {
 				const singleTeam = teams.find((team) => team.id === Number(id.teamId));
 
@@ -91,11 +103,12 @@ const TeamDetail = () => {
 		}
 	}, [id, teams]);
 	return (
-		<>
-			{loading ?
+		<div>
+			{loading ? (
 				<div className='d-flex align-items-center justify-content-center w-100 h-100'>
-					<Spinner isGrow={false} color={'red'} isCentered={true} />
-				</div> :
+					<Spinner isGrow={false} isCentered />
+				</div>
+			) : (
 				<PageWrapper>
 					<Page className='p-0'>
 						<div className='row h-100 align-items-center justify-content-center'>
@@ -132,20 +145,29 @@ const TeamDetail = () => {
 												<p className='col-lg-6'>{teamInfoData?.id}</p>
 
 												<p className='col-lg-6 fw-bold'>TeamName:</p>
-												<p className='col-lg-6'>{teamInfoData?.Team_name}</p>
+												<p className='col-lg-6'>
+													{teamInfoData?.Team_name}
+												</p>
 
 												<p className='col-lg-6 fw-bold'>TeamLead Name:</p>
-												<p className='col-lg-6'>{teamInfoData?.Team_lead.TeamLead_name}</p>
+												<p className='col-lg-6'>
+													{teamInfoData?.Team_lead.TeamLead_name}
+												</p>
 
 												<p className='col-lg-6 fw-bold'>Location:</p>
-												<p className='col-lg-6'>{teamInfoData?.Location.Location_name}</p>
+												<p className='col-lg-6'>
+													{teamInfoData?.Location.Location_name}
+												</p>
 
 												<p className='col-lg-6 fw-bold'>Total Agent:</p>
-												<p className='col-lg-6'>{teamInfoData?.No_agentns}</p>
+												<p className='col-lg-6'>
+													{teamInfoData?.No_agentns}
+												</p>
 
 												<p className='col-lg-6 fw-bold'>Lob:</p>
-												<p className='col-lg-6'>{teamInfoData?.LOB.Lob_name}</p>
-
+												<p className='col-lg-6'>
+													{teamInfoData?.LOB.Lob_name}
+												</p>
 											</div>
 										</div>
 									</CardBody>
@@ -154,9 +176,9 @@ const TeamDetail = () => {
 						</div>
 					</Page>
 				</PageWrapper>
-			}
-		</>
+			)}
+		</div>
 	);
 };
 
-export default TeamsPage
+export default TeamsPage;

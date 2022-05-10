@@ -33,7 +33,7 @@ const AddEditAgent = () => {
 		reset,
 	} = useForm();
 	const { teams } = useSelector((state) => state.teams);
-	const { agents } = useSelector((state) => state.agents);	
+	const { agents } = useSelector((state) => state.agents);
 	useEffect(() => {
 		if (id.id1) {
 			setEditMode(true);

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useToasts } from 'react-toast-notifications';
+import { ToastContainer, toast } from 'react-toastify';
 import { deleteUsersStart, loadUsersStart } from '../../redux/ducks/users';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
-import { ToastContainer, toast } from 'react-toastify';
 import Page from '../../layout/Page/Page';
 import Card, {
 	CardActions,
@@ -29,7 +30,6 @@ import UserDetails from './userDetails';
 import AddUpdateUser from './addUpdateUser';
 import Spinner from '../../components/bootstrap/Spinner';
 import Toasts, { Toast } from '../../components/bootstrap/Toasts';
-import { useToasts } from 'react-toast-notifications';
 // import { Options } from '../../components/bootstrap/Option';
 import showNotification from '../../components/extras/showNotification';
 
@@ -68,10 +68,10 @@ const Userstbl = () => {
 	const { items, requestSort, getClassNamesFor } = useSortableData(users);
 	/* useEffect(() => {
 		dispatch(loadUsersStart());
-		}, [dispatch]);*/
+		}, [dispatch]); */
 
 	useEffect(() => {
-		console.log("loading???????????", error);
+		console.log('loading???????????', error);
 		// if (error !== '') {
 		// const timeout = setTimeout(() => {
 
@@ -91,16 +91,15 @@ const Userstbl = () => {
 					iconColor='danger'
 					color='danger'
 					time='Now'
-					isDismiss
-				>
+					isDismiss>
 					{`${error}`}
 				</Toasts>,
 				{
 					autoDismiss: true,
 				},
-			)
+			);
 		}
-	}, [error]);
+	}, [addToast, error]);
 	const handleDeleteUser = () => {
 		dispatch(deleteUsersStart(currentUser.id));
 		setDeleteModalOpen(false);
@@ -108,11 +107,11 @@ const Userstbl = () => {
 
 	return (
 		<>
-			{loading ?
-
+			{loading ? (
 				<div className='d-flex align-items-center justify-content-center w-100 h-100'>
-					<Spinner isGrow={false} color={'red'} />
-				</div> :
+					<Spinner isGrow={false} />
+				</div>
+			) : (
 				<PageWrapper title={demoPages.sales.subMenu.dashboard.text}>
 					<Page container='fluid'>
 						<div className='row'>
@@ -170,7 +169,9 @@ const Userstbl = () => {
 														Email
 														<Icon
 															size='lg'
-															className={getClassNamesFor('phone_number')}
+															className={getClassNamesFor(
+																'phone_number',
+															)}
 															icon='FilterList'
 														/>
 													</th>
@@ -262,8 +263,13 @@ const Userstbl = () => {
 						</div>
 					</Page>
 				</PageWrapper>
-			}
-			<Modal isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} size='lg' isScrollable isCentered={true}>
+			)}
+			<Modal
+				isOpen={deleteModalOpen}
+				setIsOpen={setDeleteModalOpen}
+				size='lg'
+				isScrollable
+				isCentered>
 				<ModalHeader>
 					<ModalTitle>
 						<div>
@@ -276,13 +282,17 @@ const Userstbl = () => {
 									marginLeft: '10px',
 								}}
 							/>
-							<span style={{ color: 'OrangeRed', fontSize: 25, marginLeft: "10px" }}><b>User delete</b></span>
+							<span style={{ color: 'OrangeRed', fontSize: 25, marginLeft: '10px' }}>
+								<b>User delete</b>
+							</span>
 						</div>
 					</ModalTitle>
 				</ModalHeader>
 
 				<ModalBody>
-					<h4 style={{ marginLeft: "20px" }}><b>Do you really want to delete {currentUser?.username} ?</b></h4>
+					<h4 style={{ marginLeft: '20px' }}>
+						<b>Do you really want to delete {currentUser?.username} ?</b>
+					</h4>
 				</ModalBody>
 
 				<ModalFooter>

@@ -26,9 +26,8 @@ export function* handleGetAgents({ payload }) {
 		if (response.status === 200) {
 			yield put(loadAgentsSuccess(response.data.data));
 		}
-	} catch (error) {		
+	} catch (error) {
 		yield put(loadAgentsError(error));
-		
 	}
 }
 

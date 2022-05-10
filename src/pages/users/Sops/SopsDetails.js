@@ -23,6 +23,7 @@ import Button from '../../../components/bootstrap/Button';
 import Label from '../../../components/bootstrap/forms/Label';
 import Select from '../../../components/bootstrap/forms/Select';
 import Option from '../../../components/bootstrap/Option';
+import DeleteModeal from '../../DeleteModeal';
 
 const SopsDetails = () => {
 	const dispatch = useDispatch();
@@ -31,6 +32,8 @@ const SopsDetails = () => {
 	const [tagId, setTagId] = useState();
 	const { subSops } = useSelector((state) => state.subSops);
 	console.log('sub sops::', subSops);
+	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+	const [currentSubSops, setCurrentSubSops] = useState();
 	const {
 		register,
 		handleSubmit,
@@ -46,6 +49,16 @@ const SopsDetails = () => {
 		dispatch(loadSubSopsStart({ id: id.id, slug: formData }));
 	}, [dispatch, id.id, id.id1]);
 	console.log('sub sops::', subSops);
+
+	const handleDeleteSubSops = () => {
+		console.log('currentSubSops?._id,', currentSubSops?._id);
+		dispatch(
+			deleteSubSopsStart({
+				id: currentSubSops?._id,
+			}),
+		);
+		setDeleteModalOpen(false);
+	};
 
 	const taggingData = () => {
 		console.log('lng', subSops.length);
@@ -152,370 +165,390 @@ const SopsDetails = () => {
 	const onError = (errors) => console.log('Errors Occurred !! :', errors);
 
 	return (
-		<PageWrapper>
-			<Page className='p-0'>
-				{(() => {
-					switch (id.id1) {
-						case 'tagging_found':
-							return (
-								<form
-									className='row g-4'
-									onSubmit={handleSubmit(onSubmit, onError)}
-									onReset={reset}>
-									<div className='col-12'>
-										<Button
-											color='success'
-											className='mb-2'
-											style={{ display: 'flex', marginLeft: 'auto' }}
-											type='submit'>
-											Save
-										</Button>
-									</div>
-									<div className='col-12'>
-										<FormGroup id='tag_list' isFloating label='Your tag_list'>
-											<Input
-												autoComplete='off'
-												{...register('tag_list')}
-												onKeyPress={(ev) => {
-													if (ev.key === 'Enter') {
-														ev.preventDefault();
-														console.log(ev.target.value);
-														setTagList([...tagList, ev.target.value]);
-													}
-												}}
-											/>
-										</FormGroup>
-										{errors.tag_list?.message}
-									</div>
-									<div className='d-flex align-items-center'>
-										{tagList &&
-											tagList?.map((tag) => {
-												return (
-													<div
-														key={tag}
+		<>
+			<PageWrapper>
+				<Page className='p-0'>
+					{(() => {
+						switch (id.id1) {
+							case 'tagging_found':
+								return (
+									<form
+										className='row g-4'
+										onSubmit={handleSubmit(onSubmit, onError)}
+										onReset={reset}>
+										<div className='col-12'>
+											<Button
+												color='success'
+												className='mb-2'
+												style={{ display: 'flex', marginLeft: 'auto' }}
+												type='submit'>
+												Save
+											</Button>
+										</div>
+										<div className='col-12'>
+											<FormGroup
+												id='tag_list'
+												isFloating
+												label='Your tag_list'>
+												<Input
+													autoComplete='off'
+													{...register('tag_list')}
+													onKeyPress={(ev) => {
+														if (ev.key === 'Enter') {
+															ev.preventDefault();
+															console.log(ev.target.value);
+															setTagList([
+																...tagList,
+																ev.target.value,
+															]);
+														}
+													}}
+												/>
+											</FormGroup>
+											{errors.tag_list?.message}
+										</div>
+										<div className='d-flex align-items-center'>
+											{tagList &&
+												tagList?.map((tag) => {
+													return (
+														<div
+															key={tag}
+															style={{
+																display: 'flex',
+																alignItems: 'center',
+																justifyContent: 'space-between',
+																padding: '5px',
+																border: '1px solid gray',
+																borderRadius: '12px',
+																width: '140px',
+																margin: '8px',
+															}}>
+															<span className='fw-bold'>{tag}</span>
+															<Icon
+																size='lg'
+																icon='Cancel'
+																color='danger'
+																style={{
+																	cursor: 'pointer',
+																}}
+																onClick={() =>
+																	setTagList((tags) =>
+																		tags.filter(
+																			(tg) => tg !== tag,
+																		),
+																	)
+																}
+															/>
+														</div>
+													);
+												})}
+										</div>
+									</form>
+								);
+
+							case 'customer_call_end_sentiment_found':
+							case 'customer_overall_call_sentiment_found':
+							case 'customer_overtalk_incidents_found':
+							case 'customer_call_start_sentiment_found':
+							case 'overall_call_sentiment_found':
+							case 'call_start_sentiment_found':
+							case 'call_end_sentiment_found':
+							case 'overtalk_incidents_found':
+								return (
+									<div>
+										{subSops.length ? (
+											<form
+												className='row g-4'
+												onSubmit={handleSubmit(onSubmit, onError)}
+												onReset={reset}>
+												<div className='col-12'>
+													<Button
+														color='success'
+														className='mb-2'
 														style={{
 															display: 'flex',
-															alignItems: 'center',
-															justifyContent: 'space-between',
-															padding: '5px',
-															border: '1px solid gray',
-															borderRadius: '12px',
-															width: '140px',
-															margin: '8px',
-														}}>
-														<span className='fw-bold'>{tag}</span>
+															marginLeft: 'auto',
+														}}
+														type='submit'>
+														Save
+													</Button>
+												</div>
+												<div className='col-12'>
+													<FormGroup
+														id='min'
+														isFloating
+														label='Your min value'>
+														<Input
+															autoComplete='off'
+															type='number'
+															{...register('min', {
+																required: 'min is required',
+															})}
+														/>
+													</FormGroup>
+													{errors.min?.message}
+												</div>
+												<div className='col-12'>
+													<FormGroup
+														id='max'
+														isFloating
+														label='Your max value'>
+														<Input
+															autoComplete='off'
+															type='number'
+															{...register('max', {
+																required: 'max is required',
+															})}
+														/>
+													</FormGroup>
+													{errors.max?.message}
+												</div>
+												<div className='col-12'>
+													<Label>Select Sentiment Type</Label>
+													<FormGroup>
+														<Select
+															size='sm'
+															ariaLabel='Select sentiment_type'
+															{...register('sentiment_type', {
+																required:
+																	'sentiment_type is required',
+															})}>
+															<Option value=''>
+																Select sentiment_type
+															</Option>
+															<Option value='True'>True</Option>
+															<Option value='False'>False</Option>
+														</Select>
+														{errors.sentiment_type?.message}
+													</FormGroup>
+												</div>
+											</form>
+										) : (
+											''
+										)}
+									</div>
+								);
+
+							case 'customer_silence_incidents_found':
+							case 'silence_incidents_found':
+								return (
+									<div>
+										{subSops.length ? (
+											<form
+												className='row g-4'
+												onSubmit={handleSubmit(onSubmit, onError)}
+												onReset={reset}>
+												<div className='col-12'>
+													<Button
+														color='success'
+														className='mb-2'
+														style={{
+															display: 'flex',
+															marginLeft: 'auto',
+														}}
+														type='submit'>
+														Save
+													</Button>
+												</div>
+												<div className='col-12'>
+													<FormGroup
+														id='min'
+														isFloating
+														label='Your min value'>
+														<Input
+															autoComplete='off'
+															type='number'
+															{...register('min', {
+																required: 'min is required',
+															})}
+														/>
+													</FormGroup>
+													{errors.min?.message}
+												</div>
+												<div className='col-12'>
+													<FormGroup
+														id='max'
+														isFloating
+														label='Your max value'>
+														<Input
+															autoComplete='off'
+															type='number'
+															{...register('max', {
+																required: 'max is required',
+															})}
+														/>
+													</FormGroup>
+													{errors.max?.message}
+												</div>
+												<div className='col-12'>
+													<Label>Select incident Type</Label>
+													<FormGroup>
+														<Select
+															size='sm'
+															ariaLabel='Select incidents_type'
+															{...register('incidents_type', {
+																required:
+																	'incidents_type is required',
+															})}>
+															<Option value=''>
+																Select incidents_type
+															</Option>
+															<Option value='True'>True</Option>
+															<Option value='False'>False</Option>
+														</Select>
+														{errors.incidents_type?.message}
+													</FormGroup>
+												</div>
+											</form>
+										) : (
+											''
+										)}
+									</div>
+								);
+
+							case 'rate_of_speech_found':
+							case 'responsiveness_found':
+							case 'customer_rate_of_speech_found':
+							case 'customer_responsiveness_found':
+							case 'customer_clarity_found':
+								return (
+									<div>
+										{subSops.length ? (
+											<form
+												className='row g-4'
+												onSubmit={handleSubmit(onSubmit, onError)}
+												onReset={reset}>
+												<div className='col-12'>
+													<Button
+														color='success'
+														className='mb-2'
+														style={{
+															display: 'flex',
+															marginLeft: 'auto',
+														}}
+														type='submit'>
+														Save
+													</Button>
+												</div>
+												<div className='col-12'>
+													<FormGroup
+														id='min'
+														isFloating
+														label='Your min value'>
+														<Input
+															autoComplete='off'
+															type='number'
+															{...register('min', {
+																required: 'min is required',
+															})}
+														/>
+													</FormGroup>
+													{errors.min?.message}
+												</div>
+												<div className='col-12'>
+													<FormGroup
+														id='max'
+														isFloating
+														label='Your max value'>
+														<Input
+															autoComplete='off'
+															type='number'
+															{...register('max', {
+																required: 'max is required',
+															})}
+														/>
+													</FormGroup>
+													{errors.max?.message}
+												</div>
+												<div className='col-12'>
+													<Label>Select Type</Label>
+													<FormGroup>
+														<Select
+															size='sm'
+															ariaLabel='Select incidents_type'
+															{...register('type', {
+																required: 'type is required',
+															})}>
+															<Option value=''>Select type</Option>
+															<Option value='True'>True</Option>
+															<Option value='False'>False</Option>
+														</Select>
+														{errors.type?.message}
+													</FormGroup>
+												</div>
+											</form>
+										) : (
+											''
+										)}
+									</div>
+								);
+
+							case 'call_refreshment_found':
+							case 'on_hold_found':
+							case 'customer_verification_found':
+							case 'call_closure_found':
+							case 'call_opening_found':
+							case 'call_additional_info_found':
+							case 'call_alternate_channel_found':
+								return (
+									subSops.length &&
+									subSops?.map((subSop) => {
+										return (
+											<Card key={subSop?._id}>
+												<CardBody className='d-flex align-items-center justify-content-between'>
+													<div>
+														<h1>{subSop?._source?.text}</h1>
+													</div>
+													<div>
 														<Icon
 															size='lg'
-															icon='Cancel'
+															icon='Edit'
+															color='info'
+															style={{ cursor: 'pointer' }}
+															onClick={() => {
+																navigate(
+																	`/users/${id.id}/sops/${id.id1}/sub/update`,
+																	{
+																		state: {
+																			id: subSop?._id,
+																		},
+																	},
+																);
+															}}
+														/>
+														<Icon
+															size='lg'
+															icon='Delete'
 															color='danger'
 															style={{
 																cursor: 'pointer',
+																marginLeft: '25px',
 															}}
-															onClick={() =>
-																setTagList((tags) =>
-																	tags.filter((tg) => tg !== tag),
-																)
-															}
+															onClick={() => {
+																setCurrentSubSops(subSop);
+																setDeleteModalOpen(true);
+															}}
 														/>
 													</div>
-												);
-											})}
-									</div>
-								</form>
-							);
-
-						case 'customer_call_end_sentiment_found':
-						case 'customer_overall_call_sentiment_found':
-						case 'customer_overtalk_incidents_found':
-						case 'customer_call_start_sentiment_found':
-						case 'overall_call_sentiment_found':
-						case 'call_start_sentiment_found':
-						case 'call_end_sentiment_found':
-						case 'overtalk_incidents_found':
-							return (
-								<div>
-									{subSops.length ? (
-										<form
-											className='row g-4'
-											onSubmit={handleSubmit(onSubmit, onError)}
-											onReset={reset}>
-											<div className='col-12'>
-												<Button
-													color='success'
-													className='mb-2'
-													style={{ display: 'flex', marginLeft: 'auto' }}
-													type='submit'>
-													Save
-												</Button>
-											</div>
-											<div className='col-12'>
-												<FormGroup
-													id='min'
-													isFloating
-													label='Your min value'>
-													<Input
-														autoComplete='off'
-														type='number'
-														{...register('min', {
-															required: 'min is required',
-														})}
-													/>
-												</FormGroup>
-												{errors.min?.message}
-											</div>
-											<div className='col-12'>
-												<FormGroup
-													id='max'
-													isFloating
-													label='Your max value'>
-													<Input
-														autoComplete='off'
-														type='number'
-														{...register('max', {
-															required: 'max is required',
-														})}
-													/>
-												</FormGroup>
-												{errors.max?.message}
-											</div>
-											<div className='col-12'>
-												<Label>Select Sentiment Type</Label>
-												<FormGroup>
-													<Select
-														size='sm'
-														ariaLabel='Select sentiment_type'
-														{...register('sentiment_type', {
-															required: 'sentiment_type is required',
-														})}>
-														<Option value=''>
-															Select sentiment_type
-														</Option>
-														<Option value='True'>True</Option>
-														<Option value='False'>False</Option>
-													</Select>
-													{errors.sentiment_type?.message}
-												</FormGroup>
-											</div>
-										</form>
-									) : (
-										''
-									)}
-								</div>
-							);
-
-						case 'customer_silence_incidents_found':
-						case 'silence_incidents_found':
-							return (
-								<div>
-									{subSops.length ? (
-										<form
-											className='row g-4'
-											onSubmit={handleSubmit(onSubmit, onError)}
-											onReset={reset}>
-											<div className='col-12'>
-												<Button
-													color='success'
-													className='mb-2'
-													style={{ display: 'flex', marginLeft: 'auto' }}
-													type='submit'>
-													Save
-												</Button>
-											</div>
-											<div className='col-12'>
-												<FormGroup
-													id='min'
-													isFloating
-													label='Your min value'>
-													<Input
-														autoComplete='off'
-														type='number'
-														{...register('min', {
-															required: 'min is required',
-														})}
-													/>
-												</FormGroup>
-												{errors.min?.message}
-											</div>
-											<div className='col-12'>
-												<FormGroup
-													id='max'
-													isFloating
-													label='Your max value'>
-													<Input
-														autoComplete='off'
-														type='number'
-														{...register('max', {
-															required: 'max is required',
-														})}
-													/>
-												</FormGroup>
-												{errors.max?.message}
-											</div>
-											<div className='col-12'>
-												<Label>Select incident Type</Label>
-												<FormGroup>
-													<Select
-														size='sm'
-														ariaLabel='Select incidents_type'
-														{...register('incidents_type', {
-															required: 'incidents_type is required',
-														})}>
-														<Option value=''>
-															Select incidents_type
-														</Option>
-														<Option value='True'>True</Option>
-														<Option value='False'>False</Option>
-													</Select>
-													{errors.incidents_type?.message}
-												</FormGroup>
-											</div>
-										</form>
-									) : (
-										''
-									)}
-								</div>
-							);
-
-						case 'rate_of_speech_found':
-						case 'responsiveness_found':
-						case 'customer_rate_of_speech_found':
-						case 'customer_responsiveness_found':
-						case 'customer_clarity_found':
-							return (
-								<div>
-									{subSops.length ? (
-										<form
-											className='row g-4'
-											onSubmit={handleSubmit(onSubmit, onError)}
-											onReset={reset}>
-											<div className='col-12'>
-												<Button
-													color='success'
-													className='mb-2'
-													style={{ display: 'flex', marginLeft: 'auto' }}
-													type='submit'>
-													Save
-												</Button>
-											</div>
-											<div className='col-12'>
-												<FormGroup
-													id='min'
-													isFloating
-													label='Your min value'>
-													<Input
-														autoComplete='off'
-														type='number'
-														{...register('min', {
-															required: 'min is required',
-														})}
-													/>
-												</FormGroup>
-												{errors.min?.message}
-											</div>
-											<div className='col-12'>
-												<FormGroup
-													id='max'
-													isFloating
-													label='Your max value'>
-													<Input
-														autoComplete='off'
-														type='number'
-														{...register('max', {
-															required: 'max is required',
-														})}
-													/>
-												</FormGroup>
-												{errors.max?.message}
-											</div>
-											<div className='col-12'>
-												<Label>Select Type</Label>
-												<FormGroup>
-													<Select
-														size='sm'
-														ariaLabel='Select incidents_type'
-														{...register('type', {
-															required: 'type is required',
-														})}>
-														<Option value=''>Select type</Option>
-														<Option value='True'>True</Option>
-														<Option value='False'>False</Option>
-													</Select>
-													{errors.type?.message}
-												</FormGroup>
-											</div>
-										</form>
-									) : (
-										''
-									)}
-								</div>
-							);
-
-						case 'call_refreshment_found':
-						case 'on_hold_found':
-						case 'customer_verification_found':
-						case 'call_closure_found':
-						case 'call_opening_found':
-						case 'call_additional_info_found':
-						case 'call_alternate_channel_found':
-							return (
-								subSops.length &&
-								subSops?.map((subSop) => {
-									return (
-										<Card key={subSop?._id}>
-											<CardBody className='d-flex align-items-center justify-content-between'>
-												<div>
-													<h1>{subSop?._source?.text}</h1>
-												</div>
-												<div>
-													<Icon
-														size='lg'
-														icon='Edit'
-														color='info'
-														style={{ cursor: 'pointer' }}
-														onClick={() => {
-															navigate(
-																`/users/${id.id}/sops/${id.id1}/sub/update`,
-																{
-																	state: {
-																		id: subSop?._id,
-																	},
-																},
-															);
-														}}
-													/>
-													<Icon
-														size='lg'
-														icon='Delete'
-														color='danger'
-														style={{
-															cursor: 'pointer',
-															marginLeft: '25px',
-														}}
-														onClick={() => {
-															if (
-																// eslint-disable-next-line no-alert
-																window.confirm('Are you sure??')
-															) {
-																dispatch(
-																	deleteSubSopsStart({
-																		id: subSop._id,
-																	}),
-																);
-															}
-														}}
-													/>
-												</div>
-											</CardBody>
-										</Card>
-									);
-								})
-							);
-						default:
-							return null;
-					}
-				})()}
-			</Page>
-		</PageWrapper>
+												</CardBody>
+											</Card>
+										);
+									})
+								);
+							default:
+								return null;
+						}
+					})()}
+				</Page>
+			</PageWrapper>
+			<DeleteModeal
+				setdeleteModalOpen={deleteModalOpen}
+				issetDeleteModalOpen={setDeleteModalOpen}
+				sethandleDeleteOpration={handleDeleteSubSops}
+				// agentName={currentTeam?.Team_name}
+				alertLable='Delete SubSops'
+			/>
+		</>
 	);
 };
 

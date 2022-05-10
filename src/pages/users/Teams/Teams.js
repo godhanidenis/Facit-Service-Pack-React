@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, Route, Routes, useNavigate, useParams } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
 import Button from '../../../components/bootstrap/Button';
 import Card, {
 	CardActions,
@@ -23,12 +24,10 @@ import TeamsPage from './TeamDetail';
 import Spinner from '../../../components/bootstrap/Spinner';
 import DeleteModeal from '../../DeleteModeal';
 import Toasts from '../../../components/bootstrap/Toasts';
-import { useToasts } from 'react-toast-notifications';
 
 const Teams = () => {
 	return (
 		<div className='w-100 h-100'>
-
 			<Routes>
 				<Route exact path='' element={<UsersTeams />} />
 				<Route exact path='create' element={<AddEditTeam />} />
@@ -41,7 +40,7 @@ const Teams = () => {
 
 const UsersTeams = () => {
 	const id = useParams();
-	console.log("id.......", id);
+	console.log('id.......', id);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const { teams, loading, error } = useSelector((state) => state.teams);
@@ -62,10 +61,10 @@ const UsersTeams = () => {
 		dispatch(deleteTeamsStart(currentTeam.id));
 		setDeleteModalOpen(false);
 	};
-	
+
 	useEffect(() => {
-		console.log("loading???????????", error);
-		if (error!=='') {
+		console.log('loading???????????', error);
+		if (error !== '') {
 			addToast(
 				<Toasts
 					title='Error in Teams'
@@ -79,17 +78,17 @@ const UsersTeams = () => {
 				{
 					autoDismiss: true,
 				},
-			)
+			);
 		}
-	}, [error]);
+	}, [addToast, error]);
 
 	return (
 		<>
-			{loading ?
-
+			{loading ? (
 				<div className='d-flex align-items-center justify-content-center w-100 h-100'>
-					<Spinner isGrow={false} color={'red'} />
-				</div> :
+					<Spinner isGrow={false} />
+				</div>
+			) : (
 				<PageWrapper>
 					<Page className='p-0'>
 						<div className='row'>
@@ -123,7 +122,9 @@ const UsersTeams = () => {
 														Teams
 														<Icon
 															size='lg'
-															className={getClassNamesFor('Team_name')}
+															className={getClassNamesFor(
+																'Team_name',
+															)}
 															icon='FilterList'
 														/>
 													</th>
@@ -135,7 +136,9 @@ const UsersTeams = () => {
 														No of Agents
 														<Icon
 															size='lg'
-															className={getClassNamesFor('No_agentns')}
+															className={getClassNamesFor(
+																'No_agentns',
+															)}
 															icon='FilterList'
 														/>
 													</th>
@@ -259,8 +262,14 @@ const UsersTeams = () => {
 						</div>
 					</Page>
 				</PageWrapper>
-			}
-			<DeleteModeal setdeleteModalOpen={deleteModalOpen} issetDeleteModalOpen={setDeleteModalOpen} sethandleDeleteOpration={handleDeleteTeam} agentName={currentTeam?.Team_name} alertLable='Delete Team' />
+			)}
+			<DeleteModeal
+				setdeleteModalOpen={deleteModalOpen}
+				issetDeleteModalOpen={setDeleteModalOpen}
+				sethandleDeleteOpration={handleDeleteTeam}
+				agentName={currentTeam?.Team_name}
+				alertLable='Delete Team'
+			/>
 			{/* <Modal isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} size='lg' isScrollable isCentered={true}>
 				<ModalHeader>
 					<ModalTitle>

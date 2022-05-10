@@ -19,18 +19,17 @@ import {
 	requestUpdateUsers,
 } from '../requests/users';
 
-export function* handleGetUsers() {	
+export function* handleGetUsers() {
 	try {
 		const response = yield call(requestGetUsers);
 
 		if (response.status === 200) {
-			console.log("success....????????////////200",response.data.data);
+			console.log('success....????????////////200', response.data.data);
 			yield put(loadUsersSuccess(response.data.data));
-			
 		}
 	} catch (error) {
-		console.log("error....????????////////",error);
-		yield put(loadUsersError(error));										
+		console.log('error....????????////////', error);
+		yield put(loadUsersError(error));
 	}
 }
 

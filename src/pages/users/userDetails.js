@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import Page from '../../layout/Page/Page';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import Sops from './Sops/Sops';
-import Teams from './Teams/Teams';
 import User1Img from '../../assets/img/wanna/wanna2.png';
 import User1Webp from '../../assets/img/wanna/wanna2.webp';
 
@@ -87,7 +86,6 @@ const UserDetail = () => {
 		}
 	}, [id, users, dispatch]);
 	return (
-
 		// <Card>
 		// 		<CardBody>
 		// 			<div className='row g-4 align-items-center'>
@@ -140,7 +138,6 @@ const UserDetail = () => {
 		// 							</div>
 		// 						</div>
 
-
 		// 						<div className='col-md-6'>
 		// 							<div className='row'>
 		// 								<div className='col-3'>
@@ -165,7 +162,6 @@ const UserDetail = () => {
 		// 			</Card>
 		// 		</div>
 		// 	</div>
-
 
 		// 	<div className='row d-flex align-items-center justify-content-center'>
 		// 		<div className='col-md-6'>
@@ -218,7 +214,7 @@ const UserDetail = () => {
 		// 				</CardBody>
 		// 			</Card>
 		// 		</div>
-		// 	</div> 
+		// 	</div>
 		<PageWrapper>
 			<Page className='p-0'>
 				<div className='row h-100 align-items-center justify-content-center'>
@@ -296,8 +292,6 @@ const UserDetail = () => {
 				</div>
 			</Page>
 		</PageWrapper>
-
-
 	);
 };
 
