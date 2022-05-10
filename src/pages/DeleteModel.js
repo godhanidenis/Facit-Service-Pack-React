@@ -1,6 +1,4 @@
-// eslint-disable-next-line eslint-comments/disable-enable-pair
-/* eslint-disable react/destructuring-assignment */
-import React, { useState } from 'react';
+import React from 'react';
 import Button from '../components/bootstrap/Button';
 import Modal, {
 	ModalBody,
@@ -10,13 +8,13 @@ import Modal, {
 } from '../components/bootstrap/Modal';
 import Icon from '../components/icon/Icon';
 
-const DeleteModeal = (props) => {
-	// const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-	console.log('modeal?????', props);
+const DeleteModel = (props) => {
+	const { deleteModalOpen, setDeleteModalOpen, handleDeleteOpration, name, alertLable } = props;
+
 	return (
 		<Modal
-			isOpen={props?.setdeleteModalOpen}
-			setIsOpen={props?.issetDeleteModalOpen}
+			isOpen={deleteModalOpen}
+			setIsOpen={setDeleteModalOpen}
 			size='lg'
 			isScrollable
 			isCentered>
@@ -33,7 +31,7 @@ const DeleteModeal = (props) => {
 							}}
 						/>
 						<span style={{ color: 'OrangeRed', fontSize: 25, marginLeft: '10px' }}>
-							<b>{props?.alertLable || 'Alert'} </b>
+							<b>{alertLable || 'Alert'} </b>
 						</span>
 					</div>
 				</ModalTitle>
@@ -41,15 +39,15 @@ const DeleteModeal = (props) => {
 
 			<ModalBody>
 				<h4 style={{ marginLeft: '20px' }}>
-					Do you really want to delete <b>{props?.agentName}</b>?
+					Do you really want to delete <b>{name}</b>?
 				</h4>
 			</ModalBody>
 
 			<ModalFooter>
-				<Button color='dark' onClick={() => props?.issetDeleteModalOpen(false)}>
+				<Button color='dark' onClick={() => setDeleteModalOpen(false)}>
 					cancle
 				</Button>
-				<Button color='danger' onClick={props?.sethandleDeleteOpration}>
+				<Button color='danger' onClick={handleDeleteOpration}>
 					Delete
 				</Button>
 			</ModalFooter>
@@ -57,4 +55,4 @@ const DeleteModeal = (props) => {
 	);
 };
 
-export default DeleteModeal;
+export default DeleteModel;

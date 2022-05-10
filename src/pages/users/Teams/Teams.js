@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, Route, Routes, useNavigate, useParams } from 'react-router-dom';
+import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 import Button from '../../../components/bootstrap/Button';
 import Card, {
@@ -22,8 +22,8 @@ import PaginationButtons, {
 import AddEditTeam from './AddEditTeam';
 import TeamsPage from './TeamDetail';
 import Spinner from '../../../components/bootstrap/Spinner';
-import DeleteModeal from '../../DeleteModeal';
 import Toasts from '../../../components/bootstrap/Toasts';
+import DeleteModel from '../../DeleteModel';
 
 const Teams = () => {
 	return (
@@ -40,11 +40,11 @@ const Teams = () => {
 
 const UsersTeams = () => {
 	const id = useParams();
-	console.log('id.......', id);
+
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const { teams, loading, error } = useSelector((state) => state.teams);
-	console.log('teams::::', teams);
+
 	const [currentTeam, setCurrentTeam] = useState(null);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
@@ -54,9 +54,9 @@ const UsersTeams = () => {
 	const { addToast } = useToasts();
 
 	useEffect(() => {
-		// setcurrentLoadPage(true);
 		dispatch(loadTeamsStart(id.id));
 	}, [dispatch, id.id]);
+
 	const handleDeleteTeam = () => {
 		dispatch(deleteTeamsStart(currentTeam.id));
 		setDeleteModalOpen(false);
@@ -263,44 +263,13 @@ const UsersTeams = () => {
 					</Page>
 				</PageWrapper>
 			)}
-			<DeleteModeal
-				setdeleteModalOpen={deleteModalOpen}
-				issetDeleteModalOpen={setDeleteModalOpen}
-				sethandleDeleteOpration={handleDeleteTeam}
-				agentName={currentTeam?.Team_name}
+			<DeleteModel
+				deleteModalOpen={deleteModalOpen}
+				setDeleteModalOpen={setDeleteModalOpen}
+				handleDeleteOpration={handleDeleteTeam}
+				name={currentTeam?.Team_name}
 				alertLable='Delete Team'
 			/>
-			{/* <Modal isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} size='lg' isScrollable isCentered={true}>
-				<ModalHeader>
-					<ModalTitle>
-					<div>
-					<Icon
-							size='3x'
-							icon='WarningAmber'
-							color='danger'
-							style={{
-								cursor: 'pointer',
-								marginLeft: '10px',
-							}}
-						/>
-						<span style={{color:'OrangeRed' , fontSize:25 , marginLeft:"10px"}}><b>Team delete</b></span>
-					</div>
-					</ModalTitle>
-				</ModalHeader>
-
-				<ModalBody>
-					<h4 style={{marginLeft:"20px"}}>Do you really want to delete {currentTeam?.Team_name}?</h4>
-				</ModalBody>
-
-				<ModalFooter>
-				<Button color='dark' onClick={() => setDeleteModalOpen(false)}>
-						cancle
-					</Button>
-					<Button color='danger' onClick={() => handleDeleteTeam()}>
-						ok
-					</Button>										
-				</ModalFooter>
-			</Modal> */}
 		</>
 	);
 };

@@ -15,7 +15,6 @@ import Spinner from '../../../components/bootstrap/Spinner';
 import Toasts from '../../../components/bootstrap/Toasts';
 import Page from '../../../layout/Page/Page';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
-import AddEditAgent from './Agents/AddEditAgent';
 import AgentPage from './Agents/Agents';
 
 const TeamsPage = () => {
@@ -28,7 +27,6 @@ const TeamsPage = () => {
 				<NavItem>
 					<NavLink
 						to='./'
-						exact
 						className={AgentdetaillinkActie}
 						onClick={() => {
 							setAgentdetaillinkActie('active');
@@ -52,10 +50,8 @@ const TeamsPage = () => {
 			<div className='w-100 h-100'>
 				<Routes>
 					<Route exact path='/' element={<TeamDetail />} />
-					{/* <Route exact path='details/:teamId' element={<TeamDetail />} /> */}
+
 					<Route path='agents/*' element={<AgentPage />} />
-					{/* <Route exact path='agents/create' element={<AddEditAgent />} />
-				<Route exact path='agents/edit/:id1' element={<AddEditAgent />} /> */}
 				</Routes>
 			</div>
 		</div>
@@ -63,9 +59,7 @@ const TeamsPage = () => {
 };
 
 const TeamDetail = () => {
-	// const dispatch = useDispatch();
 	const id = useParams();
-	// const [selectedImage, setSelectedImage] = useState();
 	const [teamInfoData, setTeamInfoData] = useState();
 	const { teams, loading, error } = useSelector((state) => state.teams);
 	const { addToast } = useToasts();
@@ -90,15 +84,10 @@ const TeamDetail = () => {
 	}, [addToast, error]);
 	useEffect(() => {
 		if (id) {
-			// const singleTeam = await axios.get(`http://3.215.147.147/admin_panel/teams/${id}`);
-
 			if (teams) {
 				const singleTeam = teams.find((team) => team.id === Number(id.teamId));
 
-				// console.log('singleTeam', singleTeam?.profile_picture);
 				setTeamInfoData(singleTeam);
-
-				// setSelectedImage(`${singleTeam?.profile_picture}`);
 			}
 		}
 	}, [id, teams]);
@@ -106,7 +95,7 @@ const TeamDetail = () => {
 		<div>
 			{loading ? (
 				<div className='d-flex align-items-center justify-content-center w-100 h-100'>
-					<Spinner isGrow={false} isCentered />
+					<Spinner isGrow={false} />
 				</div>
 			) : (
 				<PageWrapper>

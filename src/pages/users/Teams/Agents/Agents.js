@@ -10,12 +10,7 @@ import Card, {
 	CardLabel,
 	CardTitle,
 } from '../../../../components/bootstrap/Card';
-import Modal, {
-	ModalBody,
-	ModalFooter,
-	ModalHeader,
-	ModalTitle,
-} from '../../../../components/bootstrap/Modal';
+
 import Spinner from '../../../../components/bootstrap/Spinner';
 import Toasts from '../../../../components/bootstrap/Toasts';
 import Icon from '../../../../components/icon/Icon';
@@ -27,6 +22,7 @@ import useSortableData from '../../../../hooks/useSortableData';
 import Page from '../../../../layout/Page/Page';
 import PageWrapper from '../../../../layout/PageWrapper/PageWrapper';
 import { deleteAgentsStart, loadAgentsStart } from '../../../../redux/ducks/agents';
+import DeleteModel from '../../../DeleteModel';
 import AddEditAgent from './AddEditAgent';
 
 const AgentPage = () => {
@@ -42,17 +38,15 @@ const AgentPage = () => {
 };
 const Agents = () => {
 	const id = useParams();
-	console.log(id);
+
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const { addToast } = useToasts();
 	const { agents, loading, error } = useSelector((state) => state.agents);
-	console.log('agents::::', agents);
 
 	const { items, requestSort, getClassNamesFor } = useSortableData(agents);
 	const [currentPage, setCurrentPage] = useState(1);
-	// const [currentTeam, setCurrentTeam] = useState(null);
-	// const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const [currentAgent, setCurrentAgent] = useState(null);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -88,7 +82,7 @@ const Agents = () => {
 		<>
 			{loading ? (
 				<div className='d-flex align-items-center justify-content-center w-100 h-100'>
-					<Spinner isGrow={false} isCentered />
+					<Spinner isGrow={false} />
 				</div>
 			) : (
 				<PageWrapper>
@@ -222,46 +216,14 @@ const Agents = () => {
 					</Page>
 				</PageWrapper>
 			)}
-			<Modal
-				isOpen={deleteModalOpen}
-				setIsOpen={setDeleteModalOpen}
-				size='sm'
-				isScrollable
-				isCentered>
-				<ModalHeader>
-					<ModalTitle>
-						<div>
-							<Icon
-								size='3x'
-								icon='Cancel'
-								color='danger'
-								style={{
-									cursor: 'pointer',
-									marginLeft: '10px',
-								}}
-							/>
-							<span style={{ color: 'OrangeRed', fontSize: 25, marginLeft: '10px' }}>
-								<b>Agent </b>
-							</span>
-						</div>
-					</ModalTitle>
-				</ModalHeader>
 
-				<ModalBody>
-					<h4 style={{ marginLeft: '20px' }}>
-						Do you really want to delete <b>{currentAgent?.Agent_name}</b>?
-					</h4>
-				</ModalBody>
-
-				<ModalFooter>
-					<Button color='dark' onClick={() => setDeleteModalOpen(false)}>
-						cancle
-					</Button>
-					<Button color='danger' onClick={() => handleDeleteTeam()}>
-						Delete
-					</Button>
-				</ModalFooter>
-			</Modal>
+			<DeleteModel
+				deleteModalOpen={deleteModalOpen}
+				setDeleteModalOpen={setDeleteModalOpen}
+				handleDeleteOpration={handleDeleteTeam}
+				name={currentAgent?.Agent_name}
+				alertLable='Delete Agent'
+			/>
 		</>
 	);
 };

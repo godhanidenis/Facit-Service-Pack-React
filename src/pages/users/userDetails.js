@@ -78,7 +78,6 @@ const UserDetail = () => {
 			if (users) {
 				const singleUser = users.find((user) => user.id === Number(id));
 
-				console.log('singleUser', singleUser?.profile_picture);
 				setUserInfoData(singleUser);
 
 				setSelectedImage(`${singleUser?.profile_picture}`);

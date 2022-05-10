@@ -21,9 +21,9 @@ import PaginationButtons, {
 	PER_COUNT,
 } from '../../../components/PaginationButtons';
 import AddUpdateLob from './AddUpdateLob';
-import DeleteModeal from '../../DeleteModeal';
 import Spinner from '../../../components/bootstrap/Spinner';
 import Toasts from '../../../components/bootstrap/Toasts';
+import DeleteModel from '../../DeleteModel';
 
 const Lobs = () => {
 	return (
@@ -206,44 +206,14 @@ const Lobstbl = () => {
 					</Page>
 				</PageWrapper>
 			)}
-			<DeleteModeal
-				setdeleteModalOpen={deleteModalOpen}
-				issetDeleteModalOpen={setDeleteModalOpen}
-				sethandleDeleteOpration={handleDeleteLob}
-				agentName={currentLob?.Lob_name}
+
+			<DeleteModel
+				deleteModalOpen={deleteModalOpen}
+				setDeleteModalOpen={setDeleteModalOpen}
+				handleDeleteOpration={handleDeleteLob}
+				name={currentLob?.Lob_name}
 				alertLable='LOB will delete'
 			/>
-			{/* <Modal isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} size='lg' isScrollable isCentered={true}>
-				<ModalHeader>
-					<ModalTitle>
-					<div>
-					<Icon
-							size='3x'
-							icon='WarningAmber'
-							color='danger'
-							style={{
-								cursor: 'pointer',
-								marginLeft: '10px',
-							}}
-						/>
-						<span style={{color:'OrangeRed' , fontSize:25 , marginLeft:"10px"}}><b>Lob delete</b></span>
-					</div>
-					</ModalTitle>
-				</ModalHeader>
-
-				<ModalBody>
-					<h4 style={{marginLeft:"20px"}}>Do you really want to delete {currentLob?.Lob_name}?</h4>
-				</ModalBody>
-
-				<ModalFooter>
-				<Button color='dark' onClick={() => setDeleteModalOpen(false)}>
-						cancle
-					</Button>
-					<Button color='danger' onClick={() => handleDeleteLob()}>
-						ok
-					</Button>
-				</ModalFooter>
-			</Modal> */}
 		</>
 	);
 };

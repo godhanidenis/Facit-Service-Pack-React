@@ -7,23 +7,17 @@ import {
 	loadSubSopsStart,
 	updateSubSopsStart,
 } from '../../../redux/ducks/subSops';
-import Card, {
-	CardHeader,
-	CardBody,
-	CardLabel,
-	CardTitle,
-} from '../../../components/bootstrap/Card';
+import Card, { CardBody } from '../../../components/bootstrap/Card';
 import Icon from '../../../components/icon/Icon';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Page from '../../../layout/Page/Page';
-import { loadTeamsStart } from '../../../redux/ducks/teams';
 import FormGroup from '../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../components/bootstrap/forms/Input';
 import Button from '../../../components/bootstrap/Button';
 import Label from '../../../components/bootstrap/forms/Label';
 import Select from '../../../components/bootstrap/forms/Select';
 import Option from '../../../components/bootstrap/Option';
-import DeleteModeal from '../../DeleteModeal';
+import DeleteModel from '../../DeleteModel';
 
 const SopsDetails = () => {
 	const dispatch = useDispatch();
@@ -541,11 +535,11 @@ const SopsDetails = () => {
 					})()}
 				</Page>
 			</PageWrapper>
-			<DeleteModeal
-				setdeleteModalOpen={deleteModalOpen}
-				issetDeleteModalOpen={setDeleteModalOpen}
-				sethandleDeleteOpration={handleDeleteSubSops}
-				// agentName={currentTeam?.Team_name}
+
+			<DeleteModel
+				deleteModalOpen={deleteModalOpen}
+				setDeleteModalOpen={setDeleteModalOpen}
+				handleDeleteOpration={handleDeleteSubSops}
 				alertLable='Delete SubSops'
 			/>
 		</>

@@ -38,7 +38,6 @@ import { createLobsStart, deleteLobsStart, updateLobsStart } from '../../../redu
 const AddEditTeam = () => {
 	const id = useParams();
 
-	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const initialLocation = {
 		Location_name: '',
 		User: Number(id.id),

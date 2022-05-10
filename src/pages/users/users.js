@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Routes, Route, useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
-import { ToastContainer, toast } from 'react-toastify';
 import { deleteUsersStart, loadUsersStart } from '../../redux/ducks/users';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import Page from '../../layout/Page/Page';
@@ -14,24 +13,16 @@ import Card, {
 	CardTitle,
 } from '../../components/bootstrap/Card';
 
-import Modal, {
-	ModalBody,
-	ModalFooter,
-	ModalHeader,
-	ModalTitle,
-} from '../../components/bootstrap/Modal';
 import Icon from '../../components/icon/Icon';
 
-import { demoPages } from '../../menu';
 import PaginationButtons, { dataPagination, PER_COUNT } from '../../components/PaginationButtons';
 import useSortableData from '../../hooks/useSortableData';
 import Button from '../../components/bootstrap/Button';
 import UserDetails from './userDetails';
 import AddUpdateUser from './addUpdateUser';
 import Spinner from '../../components/bootstrap/Spinner';
-import Toasts, { Toast } from '../../components/bootstrap/Toasts';
-// import { Options } from '../../components/bootstrap/Option';
-import showNotification from '../../components/extras/showNotification';
+import Toasts from '../../components/bootstrap/Toasts';
+import DeleteModel from '../DeleteModel';
 
 const UsersPage = () => {
 	const dispatch = useDispatch();
@@ -59,30 +50,13 @@ const Userstbl = () => {
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [currentUser, setCurrentUser] = useState(null);
-	// const [currentLoadPage, setcurrentLoadPage] = useState(true);
 	const { addToast } = useToasts();
 
 	const { users, loading, error } = useSelector((state) => state.users);
-	console.log('users::', users);
 
 	const { items, requestSort, getClassNamesFor } = useSortableData(users);
-	/* useEffect(() => {
-		dispatch(loadUsersStart());
-		}, [dispatch]); */
 
 	useEffect(() => {
-		console.log('loading???????????', error);
-		// if (error !== '') {
-		// const timeout = setTimeout(() => {
-
-		// showNotification(
-		// 	"hello"
-		// );
-		// }, 3000);
-		// return () => {
-		// 	clearTimeout(timeout);
-		// };
-		// }
 		if (error !== '') {
 			addToast(
 				<Toasts
@@ -100,6 +74,7 @@ const Userstbl = () => {
 			);
 		}
 	}, [addToast, error]);
+
 	const handleDeleteUser = () => {
 		dispatch(deleteUsersStart(currentUser.id));
 		setDeleteModalOpen(false);
@@ -112,7 +87,7 @@ const Userstbl = () => {
 					<Spinner isGrow={false} />
 				</div>
 			) : (
-				<PageWrapper title={demoPages.sales.subMenu.dashboard.text}>
+				<PageWrapper>
 					<Page container='fluid'>
 						<div className='row'>
 							<div className='col-xxl-12'>
@@ -264,46 +239,14 @@ const Userstbl = () => {
 					</Page>
 				</PageWrapper>
 			)}
-			<Modal
-				isOpen={deleteModalOpen}
-				setIsOpen={setDeleteModalOpen}
-				size='lg'
-				isScrollable
-				isCentered>
-				<ModalHeader>
-					<ModalTitle>
-						<div>
-							<Icon
-								size='3x'
-								icon='WarningAmber'
-								color='danger'
-								style={{
-									cursor: 'pointer',
-									marginLeft: '10px',
-								}}
-							/>
-							<span style={{ color: 'OrangeRed', fontSize: 25, marginLeft: '10px' }}>
-								<b>User delete</b>
-							</span>
-						</div>
-					</ModalTitle>
-				</ModalHeader>
 
-				<ModalBody>
-					<h4 style={{ marginLeft: '20px' }}>
-						<b>Do you really want to delete {currentUser?.username} ?</b>
-					</h4>
-				</ModalBody>
-
-				<ModalFooter>
-					<Button color='dark' onClick={() => setDeleteModalOpen(false)}>
-						cancle
-					</Button>
-					<Button color='danger' onClick={() => handleDeleteUser()}>
-						delete
-					</Button>
-				</ModalFooter>
-			</Modal>
+			<DeleteModel
+				deleteModalOpen={deleteModalOpen}
+				setDeleteModalOpen={setDeleteModalOpen}
+				handleDeleteOpration={handleDeleteUser}
+				name={currentUser?.username}
+				alertLable='Delete User'
+			/>
 		</>
 	);
 };

@@ -37,7 +37,6 @@ const AddUpdateUser = () => {
 	} = useForm();
 
 	const { users } = useSelector((state) => state.users);
-	console.log('users::', users);
 
 	useEffect(() => {
 		if (id) {
@@ -46,7 +45,6 @@ const AddUpdateUser = () => {
 			if (users.length) {
 				const singleUser = users.find((user) => user.id === Number(id));
 
-				console.log('singleUser', singleUser);
 				const fields = [
 					'username',
 					'email',
@@ -61,7 +59,6 @@ const AddUpdateUser = () => {
 
 				srcToFile(`${singleUser?.profile_picture}`, 'profile.png', 'image/png').then(
 					function (file) {
-						console.log('file', file);
 						setUpdateProfilePictureFile(file);
 					},
 				);
@@ -200,9 +197,9 @@ const AddUpdateUser = () => {
 																	'Password must be more than 4 characters',
 															},
 															maxLength: {
-																value: 10,
+																value: 15,
 																message:
-																	'Password cannot exceed more than 10 characters',
+																	'Password cannot exceed more than 15 characters',
 															},
 														})}
 													/>
