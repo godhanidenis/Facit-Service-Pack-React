@@ -114,6 +114,7 @@ const teamReducer = (state = initialState, action) => {
 		}
 
 		case UPDATE_TEAM_SUCCESS:
+			console.log('actions', action);
 			const index = state.teams.findIndex((team) => team.id === action.payload.id);
 
 			const newArray = [...state.teams];

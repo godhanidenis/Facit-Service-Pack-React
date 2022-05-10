@@ -93,32 +93,38 @@ const subSopReducer = (state = initialState, action) => {
 			};
 
 		case LOAD_SUBSOPS_SUCCESS:
+			console.log('load ppp', action);
 			return {
 				...state,
 				loading: false,
 				subSops: action.payload,
 			};
 		case CREATE_SUBSOPS_SUCCESS:
+			console.log('actions', action.payload);
+
+			// eslint-disable-next-line no-return-assign
 			return {
 				...state,
 				loading: false,
-				subSops: [...state.subSops.concat(action.payload)],
+				subSops: (state.subSops = action.payload),
 			};
 
 		case DELETE_SUBSOPS_SUCCESS: {
 			return {
 				...state,
 				loading: false,
-				subSops: state.subSops.filter((subSop) => subSop.id !== action.payload),
+				subSops: state.subSops.filter((subSop) => subSop._id !== action.payload.id),
 			};
 		}
 
 		case UPDATE_SUBSOPS_SUCCESS:
-			const index = state.subSops.findIndex((subSop) => subSop.id === action.payload.id);
+			console.log('actions', action.payload[0]);
+			const index = state.subSops.findIndex((subSop) => subSop._id === action.payload[0]._id);
 
 			const newArray = [...state.subSops];
 
-			newArray[index] = action.payload;
+			// eslint-disable-next-line prefer-destructuring
+			newArray[index] = action.payload[0];
 			return {
 				...state,
 				loading: false,

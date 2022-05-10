@@ -43,7 +43,7 @@ export function* handleCreateSubSop({ payload }) {
 }
 
 export function* handleDeleteSubSop({ payload }) {
-	console.log('pay..', payload);
+	console.log('pay..', payload.id);
 	try {
 		const response = yield call(requestDeleteSubSops, payload);
 
@@ -58,6 +58,7 @@ export function* handleDeleteSubSop({ payload }) {
 export function* handleUpdateSubSop({ payload: { id, record } }) {
 	try {
 		const response = yield call(requestUpdateSubSops, id, record);
+		console.log('response..', response);
 
 		if (response.status === 200) {
 			yield put(updateSubSopsSuccess(response.data.data));

@@ -44,7 +44,6 @@ const SopsDetails = () => {
 			doctype: id.id1,
 		};
 		dispatch(loadSubSopsStart({ id: id.id, slug: formData }));
-		dispatch(loadTeamsStart(id.id));
 	}, [dispatch, id.id, id.id1]);
 	console.log('sub sops::', subSops);
 

@@ -50,37 +50,65 @@ const AddUpdateSubSops = () => {
 		reset,
 	} = useForm();
 
+	// useEffect(() => {
+	// 	if (id.id1 === 'call_additional_info_found' || id.id1 === 'call_alternate_channel_found') {
+	// 		console.log('hiii');
+	// 		const formDataTagging = {
+	// 			doctype: 'tagging_found',
+	// 		};
+	// 		dispatch(loadSubSopsStart({ id: id.id, slug: formDataTagging }));
+	// 	}
+
+	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, []);
+	const getTegging = async (taggingdata) => {
+		let result = {};
+		try {
+			const res = await axios.post(
+				`${process.env.REACT_APP_DOMAIN}/admin_panel/getsopelasticsearch/?user_id=${taggingdata.id}`,
+				taggingdata.slug,
+			);
+			result = res.data || {};
+			result.data[0]?._source?.tag_list?.map((str, index) => ({ value: str, id: str }));
+			console.log('::::', result);
+			setTagList(result.data[0]._source.tag_list);
+			return { success: true, data: result };
+		} catch (err) {
+			return {
+				success: false,
+				message: err || 'something went wrong',
+			};
+		}
+	};
+
+	// const taggingData = () => {
+	// 	console.log('lng', subSops.length);
+	// 	if (subSops.length) {
+	// 		subSops?.map((sub) => {
+	// 			console.log('sub', sub);
+
+	// 			// eslint-disable-next-line no-sequences
+	// 			return setTagList(sub?._source?.tag_list);
+	// 		});
+	// 	}
+	// };
+	// useEffect(() => {
+	// 	if (subSops) {
+	// 		taggingData();
+	// 	}
+	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, [subSops]);
+
 	useEffect(() => {
 		if (id.id1 === 'call_additional_info_found' || id.id1 === 'call_alternate_channel_found') {
 			console.log('hiii');
 			const formDataTagging = {
 				doctype: 'tagging_found',
 			};
-			dispatch(loadSubSopsStart({ id: id.id, slug: formDataTagging }));
+			getTegging({ id: id.id, slug: formDataTagging });
+			// axios.post("http://127.0.0.1:8000/admin_panel/getsopelasticsearch/")
+			// dispatch(loadSubSopsStart({ id: id.id, slug: formDataTagging }));
 		}
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-	const taggingData = () => {
-		console.log('lng', subSops.length);
-		if (subSops.length) {
-			subSops?.map((sub) => {
-				console.log('sub', sub);
-
-				// eslint-disable-next-line no-sequences
-				return setTagList(sub?._source?.tag_list);
-			});
-		}
-	};
-	useEffect(() => {
-		if (subSops) {
-			taggingData();
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [subSops]);
-
-	useEffect(() => {
 		if (!location?.state?.id) {
 			setEditMode(false);
 		} else {
@@ -102,6 +130,8 @@ const AddUpdateSubSops = () => {
 				setKeywordsList(singleSubSop?._source?.keywords);
 				setTagList(singleSubSop?._source?.tag_list);
 
+				console.log('singleSubSop?._source?.tag_type', singleSubSop?._source?.tag_type);
+
 				const arr1 = singleSubSop?._source?.team_list;
 				const arry1 = [];
 				// eslint-disable-next-line array-callback-return
@@ -111,8 +141,7 @@ const AddUpdateSubSops = () => {
 				setValue('team_list', arry1);
 			}
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [subSops]);
+	}, [id.id, id.id1, location?.state?.id, setValue, subSops]);
 
 	const onSubmit = (data) => {
 		console.log('AddEdit FormData', data);
@@ -525,6 +554,7 @@ const AddUpdateSubSops = () => {
 										})}
 									/>
 								</FormGroup>
+
 								{errors.min?.message}
 							</div>
 							<div className='col-12'>

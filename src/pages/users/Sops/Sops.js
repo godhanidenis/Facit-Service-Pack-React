@@ -8,9 +8,19 @@ import { loadSopsStart } from '../../../redux/ducks/sops';
 import UpdateSopDetails from './UpdateSopDetails';
 import SopsDetails from './SopsDetails';
 import AddUpdateSubSops from './AddUpdateSubSops';
+import { loadTeamsStart } from '../../../redux/ducks/teams';
 
 const Sops = () => {
 	const id = useParams();
+	// console.log('id///...', id);
+	// console.log('path...', window.location.pathname);
+	// console.log('hrewf ....', window.location.href);
+
+	// const url = window.location.pathname;
+
+	// const lastSegment = url.split('/').pop();
+
+	// console.log('last seg...', lastSegment);
 	const dispatch = useDispatch();
 	const { sops } = useSelector((state) => state.sops);
 
@@ -21,6 +31,12 @@ const Sops = () => {
 
 	useEffect(() => {
 		dispatch(loadSopsStart(id.id));
+		dispatch(loadTeamsStart(id.id));
+		// setActiveListTab(lastSegment.replace('_found', ''));
+
+		// const singleSop = sops.find((sop) => sop.slug === lastSegment);
+		// console.log('single sop', singleSop);
+		// setSelectListTab(singleSop);
 	}, [dispatch, id.id]);
 
 	const handleActiveListTab = (tabName, id) => {
