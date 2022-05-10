@@ -15,7 +15,6 @@ import Page from '../../../layout/Page/Page';
 
 const UpdateSopDetails = () => {
 	const id = useParams();
-	console.log('id', id);
 	const navigate = useNavigate();
 	const [selectedSop, setSelectedSop] = useState();
 	const dispatch = useDispatch();

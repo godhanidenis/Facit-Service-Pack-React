@@ -17,7 +17,6 @@ import {
 } from '../requests/subSops';
 
 export function* handleGetSubSops({ payload: { id, slug } }) {
-	console.log('sub sops payload');
 	try {
 		const response = yield call(requestGetSubSops, id, slug);
 
@@ -30,11 +29,13 @@ export function* handleGetSubSops({ payload: { id, slug } }) {
 }
 
 export function* handleCreateSubSop({ payload }) {
+	console.log('payload....', payload);
+
 	try {
 		const response = yield call(requestCreateSubSops, payload);
 		console.log('res....', response);
 		if (response.status === 200) {
-			yield put(createSubSopsSuccess(response.data.data));
+			yield put(createSubSopsSuccess(response?.data?.data));
 		}
 	} catch (error) {
 		yield put(createSubSopsError(error));
@@ -42,6 +43,7 @@ export function* handleCreateSubSop({ payload }) {
 }
 
 export function* handleDeleteSubSop({ payload }) {
+	console.log('pay..', payload);
 	try {
 		const response = yield call(requestDeleteSubSops, payload);
 

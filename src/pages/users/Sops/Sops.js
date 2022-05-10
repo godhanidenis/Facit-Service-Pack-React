@@ -17,6 +17,8 @@ const Sops = () => {
 	const [activeListTab, setActiveListTab] = useState();
 	const [selectListTab, setSelectListTab] = useState();
 
+	const { subSops } = useSelector((state) => state.subSops);
+
 	useEffect(() => {
 		dispatch(loadSopsStart(id.id));
 	}, [dispatch, id.id]);
@@ -27,7 +29,7 @@ const Sops = () => {
 		setActiveListTab(tabName);
 
 		const singleSop = sops.find((sop) => sop.id === Number(id));
-		console.log('sinle sop', singleSop);
+		console.log('single sop', singleSop);
 		setSelectListTab(singleSop);
 	};
 	const getStatusActiveListTabColor = (tabName) => {
@@ -42,10 +44,9 @@ const Sops = () => {
 					<CardBody isScrollable>
 						<div className='row g-5 rounded-3'>
 							{sops?.map((i) => (
-								<div className='col-12'>
+								<div className='col-12' key={i?.id}>
 									<Button
 										className='w-100'
-										key={i?.id}
 										color={getStatusActiveListTabColor(i?.Sub_category)}
 										onClick={() => handleActiveListTab(i?.Sub_category, i?.id)}
 										tag='a'
@@ -61,53 +62,79 @@ const Sops = () => {
 			<div className='col-9'>
 				<Card stretch>
 					<CardBody isScrollable>
-						<div className='d-flex align-items-center justify-content-between'>
-							<div className='d-flex align-items-center'>
-								<h1>{selectListTab?.Sub_category}</h1>
-								{selectListTab?.Sub_category && (
-									<Button
-										icon='Edit'
-										color='info'
-										tag='a'
-										isLight
-										style={{ cursor: 'pointer', marginLeft: '25px' }}
-										to={`${selectListTab?.slug}/update`}
-									/>
-								)}
-							</div>
-							{selectListTab?.Sub_category && (
-								<Button
-									color='info'
-									isLight
-									tag='a'
-									to={`${selectListTab?.slug}/sub/create`}>
-									Add
-								</Button>
-							)}
-						</div>
-						<br />
-						<br />
-						{selectListTab && (
-							<div>
-								<Routes>
-									<Route exact path=':id1' element={<SopsDetails />} />
-									<Route
-										exact
-										path=':id1/update'
-										element={<UpdateSopDetails />}
-									/>
-									<Route
-										exact
-										path=':id1/sub/create'
-										element={<AddUpdateSubSops />}
-									/>
-									<Route
-										exact
-										path=':id1/sub/update'
-										element={<AddUpdateSubSops />}
-									/>
-								</Routes>
-							</div>
+						{activeListTab && (
+							<>
+								<div className='d-flex align-items-center justify-content-between'>
+									<div className='d-flex align-items-center'>
+										<h1>{selectListTab?.Sub_category}</h1>
+
+										<Button
+											icon='Edit'
+											color='info'
+											tag='a'
+											isLight
+											style={{ cursor: 'pointer', marginLeft: '25px' }}
+											to={`${selectListTab?.slug}/update`}
+										/>
+									</div>
+									{(selectListTab?.slug === 'tagging_found' ||
+										selectListTab?.slug ===
+											'customer_call_end_sentiment_found' ||
+										selectListTab?.slug ===
+											'customer_overall_call_sentiment_found' ||
+										selectListTab?.slug ===
+											'customer_call_start_sentiment_found' ||
+										selectListTab?.slug ===
+											'customer_overtalk_incidents_found' ||
+										selectListTab?.slug === 'overall_call_sentiment_found' ||
+										selectListTab?.slug === 'call_start_sentiment_found' ||
+										selectListTab?.slug === 'call_end_sentiment_found' ||
+										selectListTab?.slug === 'overtalk_incidents_found' ||
+										selectListTab?.slug === 'silence_incidents_found' ||
+										selectListTab?.slug ===
+											'customer_silence_incidents_found' ||
+										selectListTab?.slug === 'rate_of_speech_found' ||
+										selectListTab?.slug === 'responsiveness_found' ||
+										selectListTab?.slug === 'customer_rate_of_speech_found' ||
+										selectListTab?.slug === 'customer_responsiveness_found' ||
+										selectListTab?.slug === 'customer_clarity_found') &&
+									subSops.length ? (
+										''
+									) : (
+										<Button
+											color='info'
+											isLight
+											tag='a'
+											to={`${selectListTab?.slug}/sub/create`}>
+											Add
+										</Button>
+									)}
+								</div>
+
+								<br />
+								<br />
+
+								<div>
+									<Routes>
+										<Route exact path=':id1' element={<SopsDetails />} />
+										<Route
+											exact
+											path=':id1/update'
+											element={<UpdateSopDetails />}
+										/>
+										<Route
+											exact
+											path=':id1/sub/create'
+											element={<AddUpdateSubSops />}
+										/>
+										<Route
+											exact
+											path=':id1/sub/update'
+											element={<AddUpdateSubSops />}
+										/>
+									</Routes>
+								</div>
+							</>
 						)}
 					</CardBody>
 				</Card>
