@@ -24,7 +24,7 @@ export function* handleGetTeamLeads({ payload }) {
 			yield put(loadTeamLeadsSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(loadTeamLeadsError(error.response.data.data));
+		yield put(loadTeamLeadsError(error));
 	}
 }
 
@@ -36,7 +36,7 @@ export function* handleCreateTeamLead({ payload }) {
 			yield put(createTeamLeadsSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(createTeamLeadsError(error.response.data));
+		yield put(createTeamLeadsError(error));
 	}
 }
 
@@ -48,7 +48,7 @@ export function* handleDeleteTeamLead({ payload }) {
 			yield put(deleteTeamLeadsSuccess(payload));
 		}
 	} catch (error) {
-		yield put(deleteTeamLeadsError(error.response.data));
+		yield put(deleteTeamLeadsError(error));
 	}
 }
 export function* handleUpdateTeamLead({ payload: { id, toBeUpdatedTeamLead } }) {
@@ -59,6 +59,6 @@ export function* handleUpdateTeamLead({ payload: { id, toBeUpdatedTeamLead } }) 
 			yield put(updateTeamLeadsSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(updateTeamLeadsError(error.response.data));
+		yield put(updateTeamLeadsError(error));
 	}
 }

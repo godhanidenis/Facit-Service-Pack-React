@@ -39,7 +39,7 @@ export const updateSopsError = (error) => ({
 const initialState = {
 	sops: [],
 	loading: false,
-	error: null,
+	error: '',
 };
 
 // eslint-disable-next-line default-param-last

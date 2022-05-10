@@ -24,7 +24,7 @@ export function* handleGetLobs({ payload }) {
 			yield put(loadLobsSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(loadLobsError(error.response.data.data));
+		yield put(loadLobsError(error));
 	}
 }
 
@@ -36,7 +36,7 @@ export function* handleCreateLob({ payload }) {
 			yield put(createLobsSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(createLobsError(error.response.data));
+		yield put(createLobsError(error));
 	}
 }
 
@@ -48,7 +48,7 @@ export function* handleDeleteLob({ payload }) {
 			yield put(deleteLobsSuccess(payload));
 		}
 	} catch (error) {
-		yield put(deleteLobsError(error.response.data));
+		yield put(deleteLobsError(error));
 	}
 }
 export function* handleUpdateLob({ payload: { id, toBeUpdatedLob } }) {
@@ -59,6 +59,6 @@ export function* handleUpdateLob({ payload: { id, toBeUpdatedLob } }) {
 			yield put(updateLobsSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(updateLobsError(error.response.data));
+		yield put(updateLobsError(error));
 	}
 }

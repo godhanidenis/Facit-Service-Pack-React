@@ -75,7 +75,7 @@ export const updateLobsError = (error) => ({
 const initialState = {
 	lobs: [],
 	loading: false,
-	error: null,
+	error: '',
 };
 
 // eslint-disable-next-line default-param-last

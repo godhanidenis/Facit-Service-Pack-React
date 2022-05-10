@@ -76,7 +76,7 @@ export const updateUsersError = (error) => ({
 const initialState = {
 	users: [],
 	loading: false,
-	error: null,
+	error: '',
 };
 
 // eslint-disable-next-line default-param-last

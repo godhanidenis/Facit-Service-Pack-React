@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
 import Button from '../../../../components/bootstrap/Button';
 import Card, {
 	CardActions,
@@ -15,6 +16,8 @@ import Modal, {
 	ModalHeader,
 	ModalTitle,
 } from '../../../../components/bootstrap/Modal';
+import Spinner from '../../../../components/bootstrap/Spinner';
+import Toasts from '../../../../components/bootstrap/Toasts';
 import Icon from '../../../../components/icon/Icon';
 import PaginationButtons, {
 	dataPagination,
@@ -24,14 +27,26 @@ import useSortableData from '../../../../hooks/useSortableData';
 import Page from '../../../../layout/Page/Page';
 import PageWrapper from '../../../../layout/PageWrapper/PageWrapper';
 import { deleteAgentsStart, loadAgentsStart } from '../../../../redux/ducks/agents';
+import AddEditAgent from './AddEditAgent';
 
+const AgentPage=()=>{
+ return (	 
+	 <div className='w-100 h-100'>
+			<Routes>
+			<Route exact path='' element={<Agents />} />
+				<Route exact path='create' element={<AddEditAgent />} />
+				<Route exact path='edit/:id1' element={<AddEditAgent />} />				
+			</Routes>
+		</div>	 
+ );
+};
 const Agents = () => {
 	const id = useParams();
 	console.log(id);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-
-	const { agents } = useSelector((state) => state.agents);
+	const { addToast } = useToasts();	
+	const { agents ,loading , error} = useSelector((state) => state.agents);
 	console.log('agents::::', agents);
 
 	const { items, requestSort, getClassNamesFor } = useSortableData(agents);
@@ -45,12 +60,38 @@ const Agents = () => {
 		dispatch(loadAgentsStart(Number(id.id)));
 	}, [dispatch, id.id]);
 
+	
+	useEffect(() => {
+		console.log("loading???????????", error);		
+		if(error!==''){
+		addToast(
+			<Toasts
+				title='Error in Agents'
+				icon='warning'
+				iconColor='danger'
+				color='red'
+				time='Now'
+				isDismiss>
+				{`${error}`}
+			</Toasts>,
+			{
+				autoDismiss: true,
+			},
+		)
+		}
+	}, [error]);
+
 	const handleDeleteTeam = () => {
 		dispatch(deleteAgentsStart(currentAgent.id));
 		setDeleteModalOpen(false);
 	};
 	return (
 		<>
+		{loading ?
+
+<div className='d-flex align-items-center justify-content-center w-100 h-100'>
+	<Spinner isGrow={false} color={'red'} isCentered={true} />
+</div>:
 			<PageWrapper>
 				<Page className='p-0'>
 					<div className='row'>
@@ -68,7 +109,7 @@ const Agents = () => {
 											color='info'
 											isLight
 											tag='a'
-											to={`/users/${id.id}/teams/agents/create`}>
+											to={`/users/${id.id}/teams/${id.teamId}/agents/create`}>
 											New Agent
 										</Button>
 									</CardActions>
@@ -142,7 +183,7 @@ const Agents = () => {
 																style={{ cursor: 'pointer' }}
 																onClick={() => {
 																	navigate(
-																		`/users/${id.id}/teams/agents/edit/${item.id}`,
+																		`/users/${id.id}/teams/${id.teamId}/agents/edit/${item.id}`,
 																	);
 																}}
 															/>
@@ -179,18 +220,35 @@ const Agents = () => {
 					</div>
 				</Page>
 			</PageWrapper>
-			<Modal isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} size='lg' isScrollable>
+}
+			<Modal isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} size='sm' isScrollable isCentered={true}>
 				<ModalHeader>
-					<ModalTitle>Confirmation Modal</ModalTitle>
+					<ModalTitle>
+					<div>
+					<Icon
+							size='3x'
+							icon='Cancel'
+							color='danger'
+							style={{
+								cursor: 'pointer',
+								marginLeft: '10px',
+							}}
+						/>
+						<span style={{color:'OrangeRed' , fontSize:25 , marginLeft:"10px"}}><b>Agent </b></span>
+					</div>
+					</ModalTitle>
 				</ModalHeader>
 
 				<ModalBody>
-					<h1>Do you really want to delete {currentAgent?.Agent_name}</h1>
+					<h4 style={{marginLeft:"20px"}}>Do you really want to delete <b>{currentAgent?.Agent_name}</b>?</h4>
 				</ModalBody>
 
 				<ModalFooter>
-					<Button color='info' onClick={() => handleDeleteTeam()}>
-						ok
+				<Button color='dark' onClick={() => setDeleteModalOpen(false)}>
+						cancle
+					</Button>
+					<Button color='danger' onClick={() => handleDeleteTeam()}>
+						Delete
 					</Button>
 				</ModalFooter>
 			</Modal>
@@ -198,4 +256,4 @@ const Agents = () => {
 	);
 };
 
-export default Agents;
+export default AgentPage;

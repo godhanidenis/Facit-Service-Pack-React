@@ -77,7 +77,7 @@ export const updateTeamLeadsError = (error) => ({
 const initialState = {
 	teamLeads: [],
 	loading: false,
-	error: null,
+	error: '',
 };
 
 // eslint-disable-next-line default-param-last
