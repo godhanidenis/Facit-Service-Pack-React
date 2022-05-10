@@ -77,7 +77,7 @@ export const updateSubSopsError = (error) => ({
 const initialState = {
 	subSops: [],
 	loading: false,
-	error: null,
+	error: '',
 };
 
 // eslint-disable-next-line default-param-last

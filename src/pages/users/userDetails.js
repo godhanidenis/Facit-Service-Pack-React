@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Routes, Route, NavLink, useParams } from 'react-router-dom';
+import { Routes, Route, NavLink, useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Page from '../../layout/Page/Page';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import Sops from './Sops/Sops';
 import Teams from './Teams/Teams';
+import User1Img from '../../assets/img/wanna/wanna2.png';
+import User1Webp from '../../assets/img/wanna/wanna2.webp';
+
 import Nav, { NavItem } from '../../components/bootstrap/Nav';
 import Card, {
 	CardActions,
@@ -18,8 +21,10 @@ import Avatar from '../../components/Avatar';
 import { loadLocationsStart } from '../../redux/ducks/locations';
 import { loadTeamLeadsStart } from '../../redux/ducks/teamLeads';
 import { loadLobsStart } from '../../redux/ducks/lobs';
-// import { loadTeamsStart } from '../../redux/ducks/teams';
 import Lobs from './Lobs/Lobs';
+import UsersTeams from './Teams/Teams';
+import { Input } from '../../components/icon/material-icons';
+import Icon from '../../components/icon/Icon';
 
 const UserDetails = () => {
 	const { id } = useParams();
@@ -37,7 +42,7 @@ const UserDetails = () => {
 		<>
 			<Nav design='pills' tag='nav' isJustified style={{ marginBottom: '20px' }}>
 				<NavItem>
-					<NavLink to=''>Details</NavLink>
+					<NavLink to={`../${id}/`}>Details</NavLink>
 				</NavItem>
 				<NavItem>
 					<NavLink to='teams'>Teams</NavLink>
@@ -51,8 +56,8 @@ const UserDetails = () => {
 			</Nav>
 
 			<Routes>
-				<Route exact path='' element={<UserDetail />} />
-				<Route exact path='teams/*' element={<Teams />} />
+				<Route exact path='/' element={<UserDetail />} />
+				<Route exact path='teams/*' element={<UsersTeams />} />
 				<Route exact path='lobs/*' element={<Lobs />} />
 				<Route exact path='sops/*' element={<Sops />} />
 			</Routes>
@@ -82,6 +87,138 @@ const UserDetail = () => {
 		}
 	}, [id, users, dispatch]);
 	return (
+
+		// <Card>
+		// 		<CardBody>
+		// 			<div className='row g-4 align-items-center'>
+		// 				<div className='col-md-auto' style={{ borderRadius: "20%" }} >
+		// 					<Avatar src={User1Img} rounded={3} />
+		// 				</div>
+		// 				<div className='col-md'>
+		// 					<div className='row g-4'>
+		// 						<div className='col-auto'>
+		// 							<h3><b>UserName :</b> {userInfoData?.username}</h3>
+		// 						</div>
+
+		// 						<div className='col-12'>
+		// 							<p>{userInfoData?.first_name}  {userInfoData?.last_name}</p>
+
+		// 						</div>
+		// 						<div className='col-12'>
+		// 							<p>Joined at <b>{userInfoData?.date_joined}</b></p>
+		// 						</div>
+		// 					</div>
+		// 				</div>
+		// 			</div>
+		// 		</CardBody>
+		// 	</Card>
+
+		// 	<div className='row d-flex align-items-center justify-content-center'>
+		// 		<div className='col-md-6'>
+
+		// 			<Card>
+		// 				<CardBody>
+		// 					<div className='row g-4 align-items-center'>
+
+		// 						<div className='row'>
+		// 							<div className='col-3'>
+
+		// 								<Icon
+		// 									size='3x'
+		// 									icon='Email'
+		// 									color='success'
+		// 									style={{
+		// 										cursor: 'pointer',
+		// 										marginLeft: '10px',
+		// 									}}
+		// 								/>
+
+		// 							</div>
+		// 							<div className='col-auto'>
+		// 								<p className='mt-3'>{userInfoData?.email}</p>
+
+		// 							</div>
+		// 						</div>
+
+
+		// 						<div className='col-md-6'>
+		// 							<div className='row'>
+		// 								<div className='col-3'>
+		// 									<Icon
+		// 										size='3x'
+		// 										icon='Phone'
+		// 										color='success'
+		// 										style={{
+		// 											cursor: 'pointer',
+		// 											marginLeft: '10px',
+		// 										}}
+		// 									/>
+
+		// 								</div>
+		// 								<div className='col-auto'>
+		// 									<p className='mt-3'>{userInfoData?.phone_number}</p>
+		// 								</div>
+		// 							</div>
+		// 						</div>
+		// 					</div>
+		// 				</CardBody>
+		// 			</Card>
+		// 		</div>
+		// 	</div>
+
+
+		// 	<div className='row d-flex align-items-center justify-content-center'>
+		// 		<div className='col-md-6'>
+
+		// 			<Card>
+		// 				<CardBody>
+		// 					<div className='row g-4 align-items-center'>
+		// 						<div className='col-md-6'>
+		// 							<div className='row'>
+		// 								<div className='col-3'>
+
+		// 									<Icon
+		// 										size='3x'
+		// 										icon='Email'
+		// 										color='success'
+		// 										style={{
+		// 											cursor: 'pointer',
+		// 											marginLeft: '10px',
+		// 										}}
+		// 									/>
+
+		// 								</div>
+		// 								<div className='col-auto'>
+		// 									<p className='mt-3'>{userInfoData?.email}</p>
+
+		// 								</div>
+		// 							</div>
+		// 						</div>
+
+		// 						<div className='col-md-6'>
+		// 							<div className='row'>
+		// 								<div className='col-3'>
+		// 									<Icon
+		// 										size='3x'
+		// 										icon='Phone'
+		// 										color='success'
+		// 										style={{
+		// 											cursor: 'pointer',
+		// 											marginLeft: '10px',
+		// 										}}
+		// 									/>
+
+		// 								</div>
+		// 								<div className='col-auto'>
+		// 									<p className='mt-3'>{userInfoData?.phone_number}</p>
+		// 								</div>
+		// 							</div>
+		// 						</div>
+		// 					</div>
+		// 				</CardBody>
+		// 			</Card>
+		// 		</div>
+		// 	</div> 
 		<PageWrapper>
 			<Page className='p-0'>
 				<div className='row h-100 align-items-center justify-content-center'>
@@ -159,6 +296,8 @@ const UserDetail = () => {
 				</div>
 			</Page>
 		</PageWrapper>
+
+
 	);
 };
 

@@ -77,7 +77,7 @@ export const updateLocationError = (error) => ({
 const initialState = {
 	locations: [],
 	loading: false,
-	error: null,
+	error: '',
 };
 
 // eslint-disable-next-line default-param-last

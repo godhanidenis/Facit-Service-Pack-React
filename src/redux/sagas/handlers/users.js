@@ -1,4 +1,7 @@
+import { Children } from 'react';
+import { useToasts } from 'react-toast-notifications';
 import { call, put } from 'redux-saga/effects';
+import Toasts, { Toast } from '../../../components/bootstrap/Toasts';
 import {
 	createUsersError,
 	createUsersSuccess,
@@ -16,15 +19,18 @@ import {
 	requestUpdateUsers,
 } from '../requests/users';
 
-export function* handleGetUsers() {
+export function* handleGetUsers() {	
 	try {
 		const response = yield call(requestGetUsers);
 
 		if (response.status === 200) {
+			console.log("success....????????////////200",response.data.data);
 			yield put(loadUsersSuccess(response.data.data));
+			
 		}
 	} catch (error) {
-		yield put(loadUsersError(error.response.data.data));
+		console.log("error....????????////////",error);
+		yield put(loadUsersError(error));										
 	}
 }
 
@@ -36,7 +42,7 @@ export function* handleCreateUser({ payload }) {
 			yield put(createUsersSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(createUsersError(error.response.data));
+		yield put(createUsersError(error));
 	}
 }
 
@@ -48,7 +54,7 @@ export function* handleDeleteUser({ payload }) {
 			yield put(deleteUsersSuccess(payload));
 		}
 	} catch (error) {
-		yield put(deleteUsersError(error.response.data));
+		yield put(deleteUsersError(error));
 	}
 }
 
@@ -60,6 +66,6 @@ export function* handleUpdateUser({ payload: { id, toBeUpdatedUser } }) {
 			yield put(updateUsersSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(updateUsersError(error.response.data));
+		yield put(updateUsersError(error));
 	}
 }

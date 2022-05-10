@@ -24,7 +24,7 @@ export function* handleGetSubSops({ payload: { id, slug } }) {
 			yield put(loadSubSopsSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(loadSubSopsError(error.response.data.data));
+		yield put(loadSubSopsError(error));
 	}
 }
 
@@ -38,7 +38,7 @@ export function* handleCreateSubSop({ payload }) {
 			yield put(createSubSopsSuccess(response?.data?.data));
 		}
 	} catch (error) {
-		yield put(createSubSopsError(error.response.data));
+		yield put(createSubSopsError(error));
 	}
 }
 
@@ -51,7 +51,7 @@ export function* handleDeleteSubSop({ payload }) {
 			yield put(deleteSubSopsSuccess(payload));
 		}
 	} catch (error) {
-		yield put(deleteSubSopsError(error.response.data));
+		yield put(deleteSubSopsError(error));
 	}
 }
 
@@ -64,6 +64,6 @@ export function* handleUpdateSubSop({ payload: { id, record } }) {
 			yield put(updateSubSopsSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(updateSubSopsError(error.response.data));
+		yield put(updateSubSopsError(error));
 	}
 }

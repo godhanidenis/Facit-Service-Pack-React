@@ -24,7 +24,7 @@ export function* handleGetLocations({ payload }) {
 			yield put(loadLocationsSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(loadLocationsError(error.response.data.data));
+		yield put(loadLocationsError(error));
 	}
 }
 
@@ -36,7 +36,7 @@ export function* handleCreateLocation({ payload }) {
 			yield put(createLocationsSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(createLocationsError(error.response.data));
+		yield put(createLocationsError(error));
 	}
 }
 
@@ -48,7 +48,7 @@ export function* handleDeleteLocation({ payload }) {
 			yield put(deleteLocationsSuccess(payload));
 		}
 	} catch (error) {
-		yield put(deleteLocationsError(error.response.data));
+		yield put(deleteLocationsError(error));
 	}
 }
 
@@ -60,6 +60,6 @@ export function* handleUpdateLocation({ payload: { id, toBeUpdatedLocation } }) 
 			yield put(updateLocationSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(updateLocationError(error.response.data));
+		yield put(updateLocationError(error));
 	}
 }

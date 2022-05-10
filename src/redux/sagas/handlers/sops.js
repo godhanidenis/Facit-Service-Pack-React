@@ -15,7 +15,7 @@ export function* handleGetSops({ payload }) {
 			yield put(loadSopsSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(loadSopsError(error.response.data.data));
+		yield put(loadSopsError(error));
 	}
 }
 
@@ -27,6 +27,6 @@ export function* handleUpdateSop({ payload: { id, toBeUpdatedSop } }) {
 			yield put(updateSopsSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(updateSopsError(error.response.data));
+		yield put(updateSopsError(error));
 	}
 }

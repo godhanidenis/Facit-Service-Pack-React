@@ -11,6 +11,6 @@ export function* handleGetCategory() {
 			yield put(loadCategorySuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(loadCategoryError(error.response.data.data));
+		yield put(loadCategoryError(error));
 	}
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { useToasts } from 'react-toast-notifications';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Page from '../../../layout/Page/Page';
 import { demoPages } from '../../../menu';
@@ -19,17 +20,14 @@ import PaginationButtons, {
 	dataPagination,
 	PER_COUNT,
 } from '../../../components/PaginationButtons';
-import Modal, {
-	ModalBody,
-	ModalFooter,
-	ModalHeader,
-	ModalTitle,
-} from '../../../components/bootstrap/Modal';
 import AddUpdateLob from './AddUpdateLob';
+import DeleteModeal from '../../DeleteModeal';
+import Spinner from '../../../components/bootstrap/Spinner';
+import Toasts from '../../../components/bootstrap/Toasts';
 
 const Lobs = () => {
 	return (
-		<div className='w-100'>
+		<div className='w-100 h-100'>
 			<Routes>
 				<Route exact path='' element={<Lobstbl />} />
 				<Route exact path='create' element={<AddUpdateLob />} />
@@ -49,14 +47,33 @@ const Lobstbl = () => {
 	const [currentLob, setcurrentLob] = useState(null);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
-	const { lobs } = useSelector((state) => state.lobs);
-	console.log('lobs:::', lobs);
+	const { lobs,loading ,error } = useSelector((state) => state.lobs);
+	const { addToast } = useToasts();	
 
 	useEffect(() => {
 		console.log('first');
 		dispatch(loadLobsStart(Id.id));
 	}, [dispatch, Id.id]);
-
+	
+	useEffect(() => {
+		console.log("loading???????????", error);		
+		if(error!==''){
+		addToast(
+			<Toasts
+				title='Error in Lobs'
+				icon='warning'
+				iconColor='danger'
+				color='red'
+				time='Now'
+				isDismiss>
+				{`${error}`}
+			</Toasts>,
+			{
+				autoDismiss: true,
+			},
+		)
+		}
+	}, [error]);
 	const { items, requestSort, getClassNamesFor } = useSortableData(lobs);
 
 	const handleDeleteLob = () => {
@@ -66,6 +83,10 @@ const Lobstbl = () => {
 
 	return (
 		<>
+		{loading ?
+<div className='d-flex align-items-center justify-content-center w-100 h-100'>
+	<Spinner isGrow={false} color={'red'} />
+</div>:
 			<PageWrapper title={demoPages.sales.subMenu.dashboard.text}>
 				<Page container='fluid'>
 					<div className='row'>
@@ -181,22 +202,39 @@ const Lobstbl = () => {
 					</div>
 				</Page>
 			</PageWrapper>
-
-			<Modal isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} size='lg' isScrollable>
+}
+			<DeleteModeal setdeleteModalOpen={deleteModalOpen} issetDeleteModalOpen={setDeleteModalOpen} sethandleDeleteOpration={handleDeleteLob} agentName={currentLob?.Lob_name} alertLable='LOB will delete'/>
+			{/* <Modal isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} size='lg' isScrollable isCentered={true}>
 				<ModalHeader>
-					<ModalTitle>Confirmation Modal</ModalTitle>
+					<ModalTitle>
+					<div>
+					<Icon
+							size='3x'
+							icon='WarningAmber'
+							color='danger'
+							style={{
+								cursor: 'pointer',
+								marginLeft: '10px',
+							}}
+						/>
+						<span style={{color:'OrangeRed' , fontSize:25 , marginLeft:"10px"}}><b>Lob delete</b></span>
+					</div>
+					</ModalTitle>
 				</ModalHeader>
 
 				<ModalBody>
-					<h1>Do you really want to delete {currentLob?.Lob_name}</h1>
+					<h4 style={{marginLeft:"20px"}}>Do you really want to delete {currentLob?.Lob_name}?</h4>
 				</ModalBody>
 
 				<ModalFooter>
-					<Button color='info' onClick={() => handleDeleteLob()}>
+				<Button color='dark' onClick={() => setDeleteModalOpen(false)}>
+						cancle
+					</Button>
+					<Button color='danger' onClick={() => handleDeleteLob()}>
 						ok
 					</Button>
 				</ModalFooter>
-			</Modal>
+			</Modal> */}
 		</>
 	);
 };

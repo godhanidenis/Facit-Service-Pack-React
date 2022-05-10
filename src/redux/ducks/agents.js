@@ -77,7 +77,7 @@ export const updateAgentsError = (error) => ({
 const initialState = {
 	agents: [],
 	loading: false,
-	error: null,
+	error: '',
 };
 
 // eslint-disable-next-line default-param-last

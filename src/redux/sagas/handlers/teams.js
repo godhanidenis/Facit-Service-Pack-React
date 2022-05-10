@@ -24,7 +24,7 @@ export function* handleGetTeams({ payload }) {
 			yield put(loadTeamsSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(loadTeamsError(error.response.data.data));
+		yield put(loadTeamsError(error));
 	}
 }
 
@@ -36,7 +36,7 @@ export function* handleCreateTeam({ payload }) {
 			yield put(createTeamsSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(createTeamsError(error.response.data));
+		yield put(createTeamsError(error));
 	}
 }
 
@@ -48,7 +48,7 @@ export function* handleDeleteTeam({ payload }) {
 			yield put(deleteTeamsSuccess(payload));
 		}
 	} catch (error) {
-		yield put(deleteTeamsError(error.response.data));
+		yield put(deleteTeamsError(error));
 	}
 }
 
@@ -60,6 +60,6 @@ export function* handleUpdateTeam({ payload: { id, toBeUpdatedTeam } }) {
 			yield put(updateTeamsSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(updateTeamsError(error.response.data));
+		yield put(updateTeamsError(error));
 	}
 }

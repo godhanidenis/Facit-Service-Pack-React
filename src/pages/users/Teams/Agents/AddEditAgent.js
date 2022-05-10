@@ -33,7 +33,7 @@ const AddEditAgent = () => {
 		reset,
 	} = useForm();
 	const { teams } = useSelector((state) => state.teams);
-	const { agents } = useSelector((state) => state.agents);
+	const { agents } = useSelector((state) => state.agents);	
 	useEffect(() => {
 		if (id.id1) {
 			setEditMode(true);
@@ -62,10 +62,10 @@ const AddEditAgent = () => {
 		};
 		if (editMode) {
 			dispatch(updateAgentsStart({ id: id.id1, toBeUpdatedAgent: formData }));
-			navigate(`/users/${id.id}/teams/agents`);
+			navigate(`/users/${id.id}/teams/${id.teamId}/agents`);
 		} else {
 			dispatch(createAgentsStart(formData));
-			navigate(`/users/${id.id}/teams/agents`);
+			navigate(`/users/${id.id}/teams/${id.teamId}/agents`);
 		}
 	};
 	const onError = (errors) => console.log('Errors Occurred !! :', errors);
@@ -88,7 +88,8 @@ const AddEditAgent = () => {
 										color='info'
 										isLight
 										tag='a'
-										to={`/users/${id.id}/teams/agents`}>
+										// to={`/users/${id.id}/teams/${id.agentId}/agents`}>
+										to='../../agents'>
 										Back to Agents
 									</Button>
 								</CardActions>

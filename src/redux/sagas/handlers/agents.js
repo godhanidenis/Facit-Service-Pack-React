@@ -1,4 +1,6 @@
+import { useToasts } from 'react-toast-notifications';
 import { call, put } from 'redux-saga/effects';
+import Toasts from '../../../components/bootstrap/Toasts';
 import {
 	loadAgentsSuccess,
 	loadAgentsError,
@@ -24,8 +26,9 @@ export function* handleGetAgents({ payload }) {
 		if (response.status === 200) {
 			yield put(loadAgentsSuccess(response.data.data));
 		}
-	} catch (error) {
-		yield put(loadAgentsError(error.response.data.data));
+	} catch (error) {		
+		yield put(loadAgentsError(error));
+		
 	}
 }
 
@@ -37,7 +40,7 @@ export function* handleCreateAgent({ payload }) {
 			yield put(createAgentsSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(createAgentsError(error.response.data));
+		yield put(createAgentsError(error));
 	}
 }
 
@@ -49,7 +52,7 @@ export function* handleDeleteAgent({ payload }) {
 			yield put(deleteAgentsSuccess(payload));
 		}
 	} catch (error) {
-		yield put(deleteAgentsError(error.response.data));
+		yield put(deleteAgentsError(error));
 	}
 }
 
@@ -61,6 +64,6 @@ export function* handleUpdateAgent({ payload: { id, toBeUpdatedAgent } }) {
 			yield put(updateAgentsSuccess(response.data.data));
 		}
 	} catch (error) {
-		yield put(updateAgentsError(error.response.data));
+		yield put(updateAgentsError(error));
 	}
 }
