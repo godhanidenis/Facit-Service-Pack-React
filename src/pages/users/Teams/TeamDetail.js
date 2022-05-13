@@ -20,10 +20,6 @@ import AgentPage from './Agents/Agents';
 const TeamsPage = () => {
 	const [AgentlinkActie, setAgentlinkActie] = useState('');
 	const [AgentdetaillinkActie, setAgentdetaillinkActie] = useState('active');
-<<<<<<< HEAD
-
-=======
->>>>>>> eb8bf1437f10b4e12a3ea96881ee3364bddb4a02
 	const id = useParams();
 	// const LIST_TEAM_TAB = {
 	// 	TEAMDETAIL: ['Team Details', './', <TeamDetail />],
@@ -48,10 +44,6 @@ const TeamsPage = () => {
 			setAgentdetaillinkActie('active');
 			setAgentlinkActie('');
 		}
-<<<<<<< HEAD
-=======
-		// <Redirect push to={`${LIST_TEAM_TAB[window.location.pathname]}`} />;
->>>>>>> eb8bf1437f10b4e12a3ea96881ee3364bddb4a02
 	}, [id.id, id.teamId]);
 
 	return (

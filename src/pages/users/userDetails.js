@@ -38,11 +38,6 @@ const UserDetails = () => {
 		dispatch(loadSopsStart(id));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-	// const LIST_TAB = {
-	// 	EMPLOYEES: 'Employees',
-	// 	SERVICE: 'Services',
-	// 	PACKAGE: 'Packages',
-	// };
 	const LIST_ACTIVATE_TAB = {
 		USERS: ['Users Details', `../${id}/`],
 		TEAMS: ['Teams', 'teams'],
@@ -50,17 +45,9 @@ const UserDetails = () => {
 		SOPS: ['Sops', 'sops'],
 	};
 	const [activeListTab, setActiveListTab] = useState(LIST_ACTIVATE_TAB.USERS[0]);
-	const handleActiveListTab = (tabName) => {
-		setActiveListTab(tabName);
-	};
-	const getStatusActiveListTabColor = (tabName) => {
-		if (activeListTab === tabName) return 'success';
-		return 'light';
-	};
 
 	return (
 		<>
-			{/* <Nav design='pills' tag='nav' isJustified style={{ marginBottom: '20px' }}> */}
 			<div className='p-10 d-flex align-items-center justify-content-center mb-2'>
 				<div className='row d-flex align-items-center justify-content-center'>
 					<div className='bg-light p-2 rounded-3 d-flex align-items-center justify-content-center'>
@@ -101,12 +88,6 @@ const UserDetails = () => {
 				<Route exact path='lobs/*' element={<Lobs />} />
 				<Route exact path='sops/*' element={<Sops />} />
 			</Routes>
-			{/* <CardBody className='table-responsive'> */}
-			{/* {activeListTab === LIST_ACTIVATE_TAB.USERS[0] && <UserDetail />}
-			{activeListTab === LIST_ACTIVATE_TAB.TEAMS[0] && <UsersTeams />}
-			{activeListTab === LIST_ACTIVATE_TAB.LOBS[0] && <Lobs />}
-			{activeListTab === LIST_ACTIVATE_TAB.SOPS[0] && <Sops />} */}
-			{/* </CardBody> */}
 		</>
 	);
 };
@@ -128,19 +109,6 @@ const UserDetail = () => {
 
 				setSelectedImage(`${singleUser?.profile_picture}`);
 			}
-			// else {
-<<<<<<< HEAD
-			// 	dispatch(loadTeamsStart(id));
-			// 	dispatch(loadLobsStart(id));
-			// 	dispatch(loadSopsStart(id));
-			// 	dispatch(loadAgentsStart(Number(id)));
-=======
-			// dispatch(loadTeamsStart(id));
-			// dispatch(loadLobsStart(id));
-			// dispatch(loadSopsStart(id));
-			// dispatch(loadAgentsStart(id));
->>>>>>> eb8bf1437f10b4e12a3ea96881ee3364bddb4a02
-			// }
 		}
 	}, [id, users, dispatch]);
 	return (

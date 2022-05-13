@@ -31,7 +31,6 @@ const Sops = () => {
 	const { subSops } = useSelector((state) => state.subSops);
 	console.log('sops .??', sops.length);
 	// useEffect(() => {
-<<<<<<< HEAD
 	// 	if (!sops.length) {
 	// 		dispatch(loadSopsStart(id.id));
 	// 		dispatch(loadTeamsStart(id.id));
@@ -41,17 +40,6 @@ const Sops = () => {
 	// 	// console.log('single sop', singleSop);
 	// 	// setSelectListTab(singleSop);
 	// }, [dispatch, id.id, sops]);
-=======
-	// 	// if (!sops.length && loading !== true) {
-	// 	// 	dispatch(loadSopsStart(id.id));
-	// 	// 	dispatch(loadTeamsStart(id.id));
-	// 	// 	// setActiveListTab(lastSegment.replace('_found', ''));
-	// 	// }
-	// 	// const singleSop = sops.find((sop) => sop.slug === lastSegment);
-	// 	// console.log('single sop', singleSop);
-	// 	// setSelectListTab(singleSop);
-	// }, [dispatch, id.id, loading, sops]);
->>>>>>> eb8bf1437f10b4e12a3ea96881ee3364bddb4a02
 
 	const handleActiveListTab = (tabName, id) => {
 		console.log('id', id);
