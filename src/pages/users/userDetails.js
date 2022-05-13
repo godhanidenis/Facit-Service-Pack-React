@@ -34,7 +34,8 @@ const UserDetails = () => {
 		dispatch(loadLocationsStart(id));
 		dispatch(loadTeamLeadsStart(id));
 		dispatch(loadLobsStart(id));
-		// dispatch(loadTeamsStart(id));
+		dispatch(loadTeamsStart(id));
+		dispatch(loadSopsStart(id));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	// const LIST_TAB = {
@@ -116,23 +117,23 @@ const UserDetail = () => {
 	const [selectedImage, setSelectedImage] = useState();
 	const [userInfoData, setUserInfoData] = useState();
 	const { users } = useSelector((state) => state.users);
+	// const { teams } = useSelector((state) => state.teams);F
 
 	useEffect(() => {
 		if (id) {
-			// const singleUser = await axios.get(`http://3.215.147.147/admin_panel/users/${id}`);
-			// console.log('teqams/?????????', state.teams);
 			if (users) {
 				const singleUser = users.find((user) => user.id === Number(id));
 
 				setUserInfoData(singleUser);
 
 				setSelectedImage(`${singleUser?.profile_picture}`);
-			} else {
-				dispatch(loadTeamsStart(id));
-				dispatch(loadLobsStart(id));
-				dispatch(loadSopsStart(id));
-				dispatch(loadAgentsStart(Number(id)));
 			}
+			// else {
+			// dispatch(loadTeamsStart(id));
+			// dispatch(loadLobsStart(id));
+			// dispatch(loadSopsStart(id));
+			// dispatch(loadAgentsStart(id));
+			// }
 		}
 	}, [id, users, dispatch]);
 	return (

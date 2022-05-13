@@ -53,11 +53,11 @@ const UsersTeams = () => {
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { addToast } = useToasts();
 
-	useEffect(() => {
-		if (!teams.length) {
-			dispatch(loadTeamsStart(id.id));
-		}
-	}, [dispatch, id.id, teams.length]);
+	// useEffect(() => {
+	// 	if (!teams.length && loading !== true) {
+	// 		dispatch(loadTeamsStart(id.id));
+	// 	}
+	// }, [dispatch, id.id, loading, teams.length]);
 
 	const handleDeleteTeam = () => {
 		dispatch(deleteTeamsStart(currentTeam.id));

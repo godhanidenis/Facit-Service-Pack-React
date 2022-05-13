@@ -51,9 +51,10 @@ const Lobstbl = () => {
 	const { addToast } = useToasts();
 
 	// useEffect(() => {
-	// 	console.log('first');
-	// 	dispatch(loadLobsStart(Id.id));
-	// }, [dispatch, Id.id]);
+	// 	if (!lobs.length && loading !== true) {
+	// 		dispatch(loadLobsStart(Id.id));
+	// 	}
+	// }, [dispatch, Id.id, lobs.length, loading]);
 
 	useEffect(() => {
 		console.log('loading???????????', error);

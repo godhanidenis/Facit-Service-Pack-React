@@ -20,7 +20,7 @@ import AgentPage from './Agents/Agents';
 const TeamsPage = () => {
 	const [AgentlinkActie, setAgentlinkActie] = useState('');
 	const [AgentdetaillinkActie, setAgentdetaillinkActie] = useState('active');
-	// const id = useParams();
+	const id = useParams();
 	// const LIST_TEAM_TAB = {
 	// 	TEAMDETAIL: ['Team Details', './', <TeamDetail />],
 	// 	AGENTS: ['Agents', 'agents', <AgentPage />],
@@ -37,7 +37,7 @@ const TeamsPage = () => {
 	useEffect(() => {
 		console.log(window.location.href);
 		console.log(window.location.pathname); // /users/164/teams/179/agents
-		if (window.location.pathname === '/users/164/teams/179/agents') {
+		if (window.location.pathname === `/users/${id.id}/teams/${id.teamId}/agents`) {
 			setAgentdetaillinkActie('');
 			setAgentlinkActie('active');
 		} else {
@@ -45,7 +45,7 @@ const TeamsPage = () => {
 			setAgentlinkActie('');
 		}
 		// <Redirect push to={`${LIST_TEAM_TAB[window.location.pathname]}`} />;
-	}, []);
+	}, [id.id, id.teamId]);
 
 	return (
 		<div className='w-100 h-100' style={{ margin: 10 }}>

@@ -120,43 +120,6 @@ const AddUpdateUser = () => {
 					className='row g-4'
 					onSubmit={handleSubmit(onSubmit, onError)}
 					onReset={reset}>
-					<div className='row'>
-						<div className='col-12'>
-							<Card>
-								<CardHeader>
-									<CardLabel icon='People' iconColor='info'>
-										<CardTitle tag='h4' className='h5'>
-											{!editMode ? 'Add User Details' : `Update User Details`}
-										</CardTitle>
-									</CardLabel>
-									<CardActions>
-										<div className='row align-items-right'>
-											<div className='col'>
-												<Button
-													color='success'
-													// className='w-100 py-3'
-													isLight
-													type='submit'>
-													{!editMode ? 'Create' : 'Update'}
-												</Button>
-											</div>
-											<div className='col'>
-												<Button color='info' isLight tag='a' to='/users'>
-													cancle
-												</Button>
-												{/* <Button
-													color='info'
-													to='/users'
-													className='w-100 py-3'>
-													cancle
-												</Button> */}
-											</div>
-										</div>
-									</CardActions>
-								</CardHeader>
-							</Card>
-						</div>
-					</div>
 					<div className='row pt-5 '>
 						<div className='col-4 d-flex align-items-center justify-content-center'>
 							<div className='row g-4 d-flex align-items-right justify-content-right p-0'>
@@ -402,6 +365,31 @@ const AddUpdateUser = () => {
 									<span>''</span>
 								</div>
 							</div> */}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className='row'>
+						<div className='col-12' style={{ marginTop: 50 }}>
+							<div className='row d-flex'>
+								<div className='col'>
+									<Button
+										isLight
+										color='success'
+										// className='w-100 py-3 float-right'
+										className='float-end mx-2'
+										type='submit'>
+										{!editMode ? 'Create' : 'Update'}
+									</Button>
+
+									<Button
+										color='info'
+										isLight
+										className='float-end'
+										tag='a'
+										to='/users'>
+										cancle
+									</Button>
 								</div>
 							</div>
 						</div>
