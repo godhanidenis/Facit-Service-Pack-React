@@ -51,8 +51,10 @@ const Agents = () => {
 	const [currentAgent, setCurrentAgent] = useState(null);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 	useEffect(() => {
-		dispatch(loadAgentsStart(Number(id.id)));
-	}, [dispatch, id.id]);
+		if (!agents.length) {
+			dispatch(loadAgentsStart(Number(id.id)));
+		}
+	}, [agents.length, dispatch, id.id]);
 
 	useEffect(() => {
 		console.log('loading???????????', error);

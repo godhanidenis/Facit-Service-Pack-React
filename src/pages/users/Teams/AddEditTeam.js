@@ -220,7 +220,245 @@ const AddEditTeam = () => {
 	const onError = (errors) => console.log('Errors Occurred !! :', errors);
 	return (
 		<>
-			<PageWrapper className='mt-3'>
+			<div
+				className='row d-flex align-items-center justify-content-center'
+				style={{ margin: 30 }}>
+				<div
+					className='row d-flex align-items-center justify-content-center'
+					style={{ margin: 20 }}>
+					<div className='col-md-4'>
+						{/* <h3> */}
+						<b>{!editMode ? 'Add Team Details' : 'Update Team Details'}</b>
+						{/* </h3> */}
+					</div>
+				</div>
+				<div className='row d-flex align-items-center justify-content-center'>
+					<div className='col-md-7'>
+						<form
+							className='row g-4'
+							onSubmit={handleSubmit(onSubmit, onError)}
+							onReset={reset}>
+							<div className='col-12'>
+								<FormGroup id='Team_name' isFloating label='Your Team Name'>
+									<Input
+										autoComplete='off'
+										{...register('Team_name', {
+											required: 'Team Name is required',
+										})}
+									/>
+								</FormGroup>
+								{errors.Team_name?.message}
+							</div>
+
+							<div className='col-12'>
+								<div className='row'>
+									<Label>Select Location</Label>
+									<div className='col-4'>
+										<FormGroup>
+											<Select
+												size='sm'
+												ariaLabel='Select Location'
+												{...register('Location', {
+													required: 'Location is required',
+												})}>
+												<Option value=''>Select Location</Option>
+												{locations?.map((loc) => {
+													return (
+														<Option key={loc?.id} value={loc?.id}>
+															{loc?.Location_name}
+														</Option>
+													);
+												})}
+											</Select>
+											{errors.Location?.message}
+										</FormGroup>
+									</div>
+									<div className='col-auto'>
+										<Button
+											isLight
+											icon='edit'
+											color={darkModeStatus ? 'dark' : 'info'}
+											onClick={() => {
+												setAddLocationModalOpen(true);
+												setLocationId(getValues('Location'));
+											}}
+											style={{ margin: 5 }}
+										/>
+										<Button
+											icon='delete'
+											isLight
+											color={darkModeStatus ? 'dark' : 'danger'}
+											onClick={handleLocationDelete}
+											// style={{ margin: 5 }}
+										/>
+									</div>
+									<div className='col-4'>
+										<Button
+											icon='add'
+											isLight
+											color={darkModeStatus ? 'dark' : 'info'}
+											onClick={() => {
+												setAddLocationModalOpen(true);
+												setLocationId();
+											}}>
+											Location
+										</Button>
+									</div>
+								</div>
+							</div>
+
+							<div className='col-12'>
+								<div className='row'>
+									<Label>Select Team Lead</Label>
+									<div className='col-4'>
+										<FormGroup>
+											<Select
+												size='sm'
+												ariaLabel='Select Team Lead'
+												{...register('Team_lead', {
+													required: 'Team Lead is required',
+												})}>
+												<Option value=''>Select Team Lead</Option>
+												{teamLeads?.map((lead) => {
+													return (
+														<Option key={lead?.id} value={lead?.id}>
+															{lead?.TeamLead_name}
+														</Option>
+													);
+												})}
+											</Select>
+											{errors.Team_lead?.message}
+										</FormGroup>
+									</div>
+									<div className='col-auto'>
+										<Button
+											icon='edit'
+											color={darkModeStatus ? 'dark' : 'info'}
+											isLight
+											style={{ margin: 5 }}
+											onClick={() => {
+												setTeamLeadModalOpen(true);
+												setLobId(getValues('Team_lead'));
+											}}
+										/>
+										<Button
+											icon='delete'
+											isLight
+											style={{ margin: 5 }}
+											color={darkModeStatus ? 'dark' : 'danger'}
+											onClick={handleTeamLeadDelete}
+										/>
+									</div>
+									<div className='col-4'>
+										<Button
+											icon='add'
+											isLight
+											style={{ margin: 5 }}
+											color={darkModeStatus ? 'dark' : 'info'}
+											onClick={() => {
+												setTeamLeadModalOpen(true);
+											}}>
+											Team Lead
+										</Button>
+									</div>
+								</div>
+							</div>
+
+							<div className='col-12'>
+								<div className='row'>
+									<Label>Select LOB</Label>
+									<div className='col-4'>
+										<FormGroup>
+											<Select
+												size='sm'
+												ariaLabel='Select LOB'
+												{...register('LOB', {
+													required: 'LOB is required',
+												})}>
+												<Option value=''>Select LOB</Option>
+												{lobs?.map((lob) => {
+													return (
+														<Option key={lob?.id} value={lob?.id}>
+															{lob?.Lob_name}
+														</Option>
+													);
+												})}
+											</Select>
+											{errors.LOB?.message}
+										</FormGroup>
+									</div>
+									<div className='col-auto'>
+										<Button
+											icon='edit'
+											color={darkModeStatus ? 'dark' : 'info'}
+											onClick={() => {
+												setLobModalOpen(true);
+												setLobId(getValues('LOB'));
+											}}
+											isLight
+											style={{ margin: 5 }}
+										/>
+										<Button
+											icon='delete'
+											color={darkModeStatus ? 'dark' : 'danger'}
+											onClick={handleLobDelete}
+											isLight
+											style={{ margin: 5 }}
+										/>
+									</div>
+									<div className='col-4'>
+										<Button
+											icon='add'
+											isLight
+											color={darkModeStatus ? 'dark' : 'info'}
+											onClick={() => {
+												setLobModalOpen(true);
+												setLobId();
+											}}>
+											Lob
+										</Button>
+									</div>
+								</div>
+							</div>
+
+							{/* <div className='col-12'>
+							<div className='row d-flex'>
+								<div className='col'> */}
+							<div className='col-12' style={{ marginTop: 50 }}>
+								<div className='row d-flex'>
+									<div className='col'>
+										<Button
+											isLight
+											color='success'
+											// className='w-100 py-3 float-right'
+											className='float-end mx-2'
+											type='submit'>
+											{!editMode ? 'Create' : 'Update'}
+										</Button>
+
+										<Button
+											color='info'
+											isLight
+											className='float-end'
+											tag='a'
+											to={`/users/${id.id}/teams`}>
+											cancle
+										</Button>
+										{/* <Button
+											isLight
+											color='info'
+											className='w-100 py-3'
+											type='submit'>
+											cancle
+										</Button> */}
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			{/* <PageWrapper className='mt-3'>
 				<Page className='p-0'>
 					<div className='row h-100 align-items-center justify-content-center'>
 						<div className='col-xl-4 col-lg-6 col-md-8 shadow-3d-container'>
@@ -440,9 +678,10 @@ const AddEditTeam = () => {
 						</div>
 					</div>
 				</Page>
-			</PageWrapper>
+			</PageWrapper> */}
 
 			<Modal
+				isCentered
 				isOpen={addLocationModalOpen}
 				setIsOpen={setAddLocationModalOpen}
 				size='lg'
@@ -469,14 +708,21 @@ const AddEditTeam = () => {
 
 				<ModalFooter>
 					<Button
-						color={locationEditMode ? 'success' : 'info'}
-						onClick={() => handleAddLocation()}>
+						color='info'
+						isLight
+						className='float-end'
+						tag='a'
+						onClick={() => setAddLocationModalOpen(false)}>
+						cancle
+					</Button>
+					<Button isLight color='success' onClick={() => handleAddLocation()}>
 						{!locationEditMode ? 'Create' : 'Update'}
 					</Button>
 				</ModalFooter>
 			</Modal>
 
 			<Modal
+				isCentered
 				isOpen={teamLeadModalOpen}
 				setIsOpen={setTeamLeadModalOpen}
 				size='lg'
@@ -500,13 +746,26 @@ const AddEditTeam = () => {
 				</ModalBody>
 
 				<ModalFooter>
-					<Button color='info' onClick={() => handleAddTeamLead()}>
-						Submit
+					<Button
+						color='info'
+						isLight
+						className='float-end'
+						tag='a'
+						onClick={() => setTeamLeadModalOpen(false)}>
+						cancle
+					</Button>
+					<Button color='success' onClick={() => handleAddTeamLead()}>
+						create
 					</Button>
 				</ModalFooter>
 			</Modal>
 
-			<Modal isOpen={lobModalOpen} setIsOpen={setLobModalOpen} size='lg' isScrollable>
+			<Modal
+				isCentered
+				isOpen={lobModalOpen}
+				setIsOpen={setLobModalOpen}
+				size='lg'
+				isScrollable>
 				<ModalHeader>
 					<ModalTitle>{!lobEditMode ? 'Add Lob Modal' : 'Edit Lob Modal'}</ModalTitle>
 				</ModalHeader>
@@ -526,7 +785,15 @@ const AddEditTeam = () => {
 				</ModalBody>
 
 				<ModalFooter>
-					<Button color={lobEditMode ? 'success' : 'info'} onClick={() => handleAddLob()}>
+					<Button
+						color='info'
+						isLight
+						className='float-end'
+						tag='a'
+						onClick={() => setLobModalOpen(false)}>
+						cancle
+					</Button>
+					<Button color='success' onClick={() => handleAddLob()}>
 						{!lobEditMode ? 'Create' : 'Update'}
 					</Button>
 				</ModalFooter>

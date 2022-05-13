@@ -54,8 +54,10 @@ const UsersTeams = () => {
 	const { addToast } = useToasts();
 
 	useEffect(() => {
-		dispatch(loadTeamsStart(id.id));
-	}, [dispatch, id.id]);
+		if (!teams.length) {
+			dispatch(loadTeamsStart(id.id));
+		}
+	}, [dispatch, id.id, teams.length]);
 
 	const handleDeleteTeam = () => {
 		dispatch(deleteTeamsStart(currentTeam.id));

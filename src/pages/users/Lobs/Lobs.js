@@ -50,10 +50,10 @@ const Lobstbl = () => {
 	const { lobs, loading, error } = useSelector((state) => state.lobs);
 	const { addToast } = useToasts();
 
-	useEffect(() => {
-		console.log('first');
-		dispatch(loadLobsStart(Id.id));
-	}, [dispatch, Id.id]);
+	// useEffect(() => {
+	// 	console.log('first');
+	// 	dispatch(loadLobsStart(Id.id));
+	// }, [dispatch, Id.id]);
 
 	useEffect(() => {
 		console.log('loading???????????', error);
