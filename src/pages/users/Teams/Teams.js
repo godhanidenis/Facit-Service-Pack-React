@@ -23,7 +23,7 @@ import AddEditTeam from './AddEditTeam';
 import TeamsPage from './TeamDetail';
 import Spinner from '../../../components/bootstrap/Spinner';
 import Toasts from '../../../components/bootstrap/Toasts';
-import DeleteModel from '../../DeleteModel';
+import DeleteModel from '../../../common/ConfirmationModal';
 
 const Teams = () => {
 	return (
@@ -53,11 +53,11 @@ const UsersTeams = () => {
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { addToast } = useToasts();
 
-	useEffect(() => {
-		if (!teams.length) {
-			dispatch(loadTeamsStart(id.id));
-		}
-	}, [dispatch, id.id, teams.length]);
+	// useEffect(() => {
+	// 	if (!teams.length) {
+	// 		dispatch(loadTeamsStart(id.id));
+	// 	}
+	// }, [dispatch, id.id, teams.length]);
 
 	const handleDeleteTeam = () => {
 		dispatch(deleteTeamsStart(currentTeam.id));

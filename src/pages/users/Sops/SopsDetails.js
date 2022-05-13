@@ -17,7 +17,7 @@ import Button from '../../../components/bootstrap/Button';
 import Label from '../../../components/bootstrap/forms/Label';
 import Select from '../../../components/bootstrap/forms/Select';
 import Option from '../../../components/bootstrap/Option';
-import DeleteModel from '../../DeleteModel';
+import DeleteModel from '../../../common/ConfirmationModal';
 
 const SopsDetails = () => {
 	const dispatch = useDispatch();

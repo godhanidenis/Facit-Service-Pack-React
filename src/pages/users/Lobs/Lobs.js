@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Page from '../../../layout/Page/Page';
-import { demoPages } from '../../../menu';
 import Card, {
 	CardActions,
 	CardBody,
@@ -23,7 +22,7 @@ import PaginationButtons, {
 import AddUpdateLob from './AddUpdateLob';
 import Spinner from '../../../components/bootstrap/Spinner';
 import Toasts from '../../../components/bootstrap/Toasts';
-import DeleteModel from '../../DeleteModel';
+import DeleteModel from '../../../common/ConfirmationModal';
 
 const Lobs = () => {
 	return (
@@ -88,8 +87,8 @@ const Lobstbl = () => {
 					<Spinner isGrow={false} />
 				</div>
 			) : (
-				<PageWrapper title={demoPages.sales.subMenu.dashboard.text}>
-					<Page container='fluid'>
+				<PageWrapper>
+					<Page className='p-0'>
 						<div className='row'>
 							<div className='col-xxl-12'>
 								<Card>

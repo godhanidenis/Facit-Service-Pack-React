@@ -34,7 +34,8 @@ const UserDetails = () => {
 		dispatch(loadLocationsStart(id));
 		dispatch(loadTeamLeadsStart(id));
 		dispatch(loadLobsStart(id));
-		// dispatch(loadTeamsStart(id));
+		dispatch(loadTeamsStart(id));
+		dispatch(loadSopsStart(id));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	// const LIST_TAB = {
@@ -60,7 +61,7 @@ const UserDetails = () => {
 	return (
 		<>
 			{/* <Nav design='pills' tag='nav' isJustified style={{ marginBottom: '20px' }}> */}
-			<div className='p-10 d-flex align-items-center justify-content-center'>
+			<div className='p-10 d-flex align-items-center justify-content-center mb-2'>
 				<div className='row d-flex align-items-center justify-content-center'>
 					<div className='bg-light p-2 rounded-3 d-flex align-items-center justify-content-center'>
 						<Nav design='pills' tag='nav'>
@@ -127,12 +128,13 @@ const UserDetail = () => {
 				setUserInfoData(singleUser);
 
 				setSelectedImage(`${singleUser?.profile_picture}`);
-			} else {
-				dispatch(loadTeamsStart(id));
-				dispatch(loadLobsStart(id));
-				dispatch(loadSopsStart(id));
-				dispatch(loadAgentsStart(Number(id)));
 			}
+			// else {
+			// 	dispatch(loadTeamsStart(id));
+			// 	dispatch(loadLobsStart(id));
+			// 	dispatch(loadSopsStart(id));
+			// 	dispatch(loadAgentsStart(Number(id)));
+			// }
 		}
 	}, [id, users, dispatch]);
 	return (

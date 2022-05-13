@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { NavLink, Route, Routes, useParams, Redirect } from 'react-router-dom';
+import { NavLink, Route, Routes, useParams } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 import Button from '../../../components/bootstrap/Button';
 import Card, {
@@ -20,7 +20,8 @@ import AgentPage from './Agents/Agents';
 const TeamsPage = () => {
 	const [AgentlinkActie, setAgentlinkActie] = useState('');
 	const [AgentdetaillinkActie, setAgentdetaillinkActie] = useState('active');
-	// const id = useParams();
+
+	const id = useParams();
 	// const LIST_TEAM_TAB = {
 	// 	TEAMDETAIL: ['Team Details', './', <TeamDetail />],
 	// 	AGENTS: ['Agents', 'agents', <AgentPage />],
@@ -37,15 +38,14 @@ const TeamsPage = () => {
 	useEffect(() => {
 		console.log(window.location.href);
 		console.log(window.location.pathname); // /users/164/teams/179/agents
-		if (window.location.pathname === '/users/164/teams/179/agents') {
+		if (window.location.pathname === `/users/${id.id}/teams/${id.teamId}/agents`) {
 			setAgentdetaillinkActie('');
 			setAgentlinkActie('active');
 		} else {
 			setAgentdetaillinkActie('active');
 			setAgentlinkActie('');
 		}
-		// <Redirect push to={`${LIST_TEAM_TAB[window.location.pathname]}`} />;
-	}, []);
+	}, [id.id, id.teamId]);
 
 	return (
 		<div className='w-100 h-100' style={{ margin: 10 }}>

@@ -22,7 +22,7 @@ import useSortableData from '../../../../hooks/useSortableData';
 import Page from '../../../../layout/Page/Page';
 import PageWrapper from '../../../../layout/PageWrapper/PageWrapper';
 import { deleteAgentsStart, loadAgentsStart } from '../../../../redux/ducks/agents';
-import DeleteModel from '../../../DeleteModel';
+import DeleteModel from '../../../../common/ConfirmationModal';
 import AddEditAgent from './AddEditAgent';
 
 const AgentPage = () => {
@@ -50,6 +50,7 @@ const Agents = () => {
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const [currentAgent, setCurrentAgent] = useState(null);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
 	useEffect(() => {
 		if (!agents.length) {
 			dispatch(loadAgentsStart(Number(id.id)));

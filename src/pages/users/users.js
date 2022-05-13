@@ -22,7 +22,7 @@ import UserDetails from './userDetails';
 import AddUpdateUser from './addUpdateUser';
 import Spinner from '../../components/bootstrap/Spinner';
 import Toasts from '../../components/bootstrap/Toasts';
-import DeleteModel from '../DeleteModel';
+import DeleteModel from '../../common/ConfirmationModal';
 
 const UsersPage = () => {
 	const dispatch = useDispatch();
