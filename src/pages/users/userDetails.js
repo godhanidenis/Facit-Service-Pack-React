@@ -117,11 +117,10 @@ const UserDetail = () => {
 	const [selectedImage, setSelectedImage] = useState();
 	const [userInfoData, setUserInfoData] = useState();
 	const { users } = useSelector((state) => state.users);
+	// const { teams } = useSelector((state) => state.teams);F
 
 	useEffect(() => {
 		if (id) {
-			// const singleUser = await axios.get(`http://3.215.147.147/admin_panel/users/${id}`);
-			// console.log('teqams/?????????', state.teams);
 			if (users) {
 				const singleUser = users.find((user) => user.id === Number(id));
 
@@ -130,10 +129,17 @@ const UserDetail = () => {
 				setSelectedImage(`${singleUser?.profile_picture}`);
 			}
 			// else {
+<<<<<<< HEAD
 			// 	dispatch(loadTeamsStart(id));
 			// 	dispatch(loadLobsStart(id));
 			// 	dispatch(loadSopsStart(id));
 			// 	dispatch(loadAgentsStart(Number(id)));
+=======
+			// dispatch(loadTeamsStart(id));
+			// dispatch(loadLobsStart(id));
+			// dispatch(loadSopsStart(id));
+			// dispatch(loadAgentsStart(id));
+>>>>>>> eb8bf1437f10b4e12a3ea96881ee3364bddb4a02
 			// }
 		}
 	}, [id, users, dispatch]);
