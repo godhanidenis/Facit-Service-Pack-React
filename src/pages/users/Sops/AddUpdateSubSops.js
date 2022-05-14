@@ -50,17 +50,6 @@ const AddUpdateSubSops = () => {
 		reset,
 	} = useForm();
 
-	// useEffect(() => {
-	// 	if (id.id1 === 'call_additional_info_found' || id.id1 === 'call_alternate_channel_found') {
-	// 		console.log('hiii');
-	// 		const formDataTagging = {
-	// 			doctype: 'tagging_found',
-	// 		};
-	// 		dispatch(loadSubSopsStart({ id: id.id, slug: formDataTagging }));
-	// 	}
-
-	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// }, []);
 	const getTegging = async (taggingdata) => {
 		let result = {};
 		try {
@@ -68,7 +57,7 @@ const AddUpdateSubSops = () => {
 				`${process.env.REACT_APP_DOMAIN}/admin_panel/getsopelasticsearch/?user_id=${taggingdata.id}`,
 				taggingdata.slug,
 			);
-			result = res.data || {};
+			result = res.data || [];
 			result.data[0]?._source?.tag_list?.map((str, index) => ({ value: str, id: str }));
 			console.log('::::', result);
 			setTagList(result.data[0]._source.tag_list);
@@ -81,24 +70,6 @@ const AddUpdateSubSops = () => {
 		}
 	};
 
-	// const taggingData = () => {
-	// 	console.log('lng', subSops.length);
-	// 	if (subSops.length) {
-	// 		subSops?.map((sub) => {
-	// 			console.log('sub', sub);
-
-	// 			// eslint-disable-next-line no-sequences
-	// 			return setTagList(sub?._source?.tag_list);
-	// 		});
-	// 	}
-	// };
-	// useEffect(() => {
-	// 	if (subSops) {
-	// 		taggingData();
-	// 	}
-	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// }, [subSops]);
-
 	useEffect(() => {
 		if (id.id1 === 'call_additional_info_found' || id.id1 === 'call_alternate_channel_found') {
 			console.log('hiii');
@@ -106,8 +77,6 @@ const AddUpdateSubSops = () => {
 				doctype: 'tagging_found',
 			};
 			getTegging({ id: id.id, slug: formDataTagging });
-			// axios.post("http://127.0.0.1:8000/admin_panel/getsopelasticsearch/")
-			// dispatch(loadSubSopsStart({ id: id.id, slug: formDataTagging }));
 		}
 		if (!location?.state?.id) {
 			setEditMode(false);
@@ -125,12 +94,14 @@ const AddUpdateSubSops = () => {
 				setValue('sentiment_type', singleSubSop?._source?.sentiment_type);
 				setValue('incidents_type', singleSubSop?._source?.incidents_type);
 				setValue('type', singleSubSop?._source?.type);
+
 				setValue('tag_type', singleSubSop?._source?.tag_type);
 
 				setKeywordsList(singleSubSop?._source?.keywords);
 				setTagList(singleSubSop?._source?.tag_list);
 
 				console.log('singleSubSop?._source?.tag_type', singleSubSop?._source?.tag_type);
+				// console.log('singleSubSop?._source?.team_list', singleSubSop?._source?.team_list);
 
 				const arr1 = singleSubSop?._source?.team_list;
 				const arry1 = [];
@@ -139,6 +110,16 @@ const AddUpdateSubSops = () => {
 					arry1.push(String(ar));
 				});
 				setValue('team_list', arry1);
+
+				// const arr2 = singleSubSop?._source?.tag_type;
+				// const arry2 = [];
+				// // eslint-disable-next-line array-callback-return
+				// arr2?.map((ar2) => {
+				// 	console.log('::::', typeof ar2);
+				// 	arry2.push(String(ar2));
+				// });
+				// console.log('ddd', arry2);
+				// setValue('tag_type', arry2);
 			}
 		}
 	}, [id.id, id.id1, location?.state?.id, setValue, subSops]);
@@ -513,15 +494,13 @@ const AddUpdateSubSops = () => {
 										required: 'tag_type is required',
 									})}>
 									<Option value=''>Select tag_type</Option>
-									{tagList &&
-										tagList?.map((tag) => {
-											console.log('tag', tag);
-											return (
-												<Option key={tag} value={tag}>
-													{tag}
-												</Option>
-											);
-										})}
+									{tagList?.map((tag) => {
+										return (
+											<Option key={tag} value={tag}>
+												{tag}
+											</Option>
+										);
+									})}
 								</Select>
 								{errors.tag_type?.message}
 							</FormGroup>

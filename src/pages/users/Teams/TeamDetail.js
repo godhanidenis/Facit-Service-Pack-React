@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { NavLink, Route, Routes, useParams, Redirect } from 'react-router-dom';
+import { NavLink, Route, Routes, useParams } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 import Button from '../../../components/bootstrap/Button';
 import Card, {
@@ -44,7 +44,6 @@ const TeamsPage = () => {
 			setAgentdetaillinkActie('active');
 			setAgentlinkActie('');
 		}
-		// <Redirect push to={`${LIST_TEAM_TAB[window.location.pathname]}`} />;
 	}, [id.id, id.teamId]);
 
 	return (
