@@ -7,6 +7,7 @@ import FormGroup from '../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../components/bootstrap/forms/Input';
 
 import { createLobsStart, updateLobsStart } from '../../../redux/ducks/lobs';
+import Spinner from '../../../components/bootstrap/Spinner';
 
 const AddUpdateLob = () => {
 	const dispatch = useDispatch();
@@ -14,6 +15,7 @@ const AddUpdateLob = () => {
 	const id = useParams();
 
 	const [editMode, setEditMode] = useState(false);
+	const [dataSubmited, setDataSubmited] = useState(false);
 
 	const {
 		register,
@@ -23,9 +25,13 @@ const AddUpdateLob = () => {
 		reset,
 	} = useForm();
 
-	const { lobs } = useSelector((state) => state.lobs);
+	const { lobs, loading } = useSelector((state) => state.lobs);
 	console.log('lobs::', lobs);
 
+	useEffect(() => {
+		console.log('useefect laodinh', loading);
+		if (!loading && dataSubmited) navigate(`/users/${id.id}/lobs`);
+	}, [loading, dataSubmited, navigate, id.id]);
 	useEffect(() => {
 		if (id.lobid) {
 			setEditMode(true);
@@ -51,57 +57,77 @@ const AddUpdateLob = () => {
 
 		if (editMode) {
 			dispatch(updateLobsStart({ id: id.lobid, toBeUpdatedLob: formData }));
-			navigate(`/users/${id.id}/lobs`);
+			setDataSubmited(true);
 		} else {
 			dispatch(createLobsStart(formData));
-			navigate(`/users/${id.id}/lobs`);
+			setDataSubmited(true);
 		}
 	};
 
 	const onError = (errors) => console.log('Errors Occurred !! :', errors);
 
 	return (
-		<div
-			className='row d-flex align-items-center justify-content-center'
-			style={{ marginTop: 30 }}>
-			<div className='col-md-4'>
-				<form
-					className='row g-4'
-					onSubmit={handleSubmit(onSubmit, onError)}
-					onReset={reset}>
+		<>
+			<div
+				className={
+					loading
+						? 'd-flex align-items-center justify-content-center w-100 h-100'
+						: 'visually-hidden'
+				}
+				style={{ position: 'absolute', top: 50, left: 50 }}>
+				<Spinner isGrow={false} />
+			</div>
+			<div
+				className='row d-flex align-items-center justify-content-center'
+				style={{ marginTop: 30, opacity: loading ? 0.5 : 1 }}>
+				<div className='col-md-4'>
 					<div className='col-12'>
-						<FormGroup id='Lob_name' isFloating label='Your Lob name'>
-							<Input
-								autoComplete='off'
-								{...register('Lob_name', {
-									required: 'Lob_name is required',
-								})}
-							/>
-						</FormGroup>
-						{errors.Lob_name?.message}
+						<h3>
+							<b>{!editMode ? 'Add Lob Details' : 'Update Lob Details'}</b>
+						</h3>
 					</div>
+					<form
+						className='row g-4'
+						onSubmit={handleSubmit(onSubmit, onError)}
+						onReset={reset}>
+						<div className='col-12 mt-5'>
+							<FormGroup id='Lob_name' isFloating label='Your Lob name'>
+								<Input
+									autoComplete='off'
+									{...register('Lob_name', {
+										required: 'Lob_name is required',
+									})}
+								/>
+							</FormGroup>
+							{errors.Lob_name?.message}
+						</div>
 
-					<div className='col-12'>
-						<div className='row d-flex'>
-							<div className='col'>
-								<Button isLight className='float-end' color='success' type='submit'>
-									{!editMode ? 'Create' : 'Update'}
-								</Button>
+						<div className='col-12'>
+							<div className='row d-flex'>
+								<div className='col'>
+									<Button
+										isLight
+										className='float-end'
+										color='success'
+										type='submit'>
+										{!editMode ? 'Create' : 'Update'}
+									</Button>
 
-								<Button
-									color='info'
-									className='float-end'
-									isLight
-									tag='a'
-									to={`/users/${id.id}/lobs`}>
-									cancle
-								</Button>
+									<Button
+										color='info'
+										className='float-end'
+										isLight
+										tag='a'
+										to={`/users/${id.id}/lobs`}>
+										cancle
+									</Button>
+								</div>
 							</div>
 						</div>
-					</div>
-				</form>
+					</form>
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

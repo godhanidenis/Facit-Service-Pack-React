@@ -77,13 +77,19 @@ const Lobstbl = () => {
 
 	return (
 		<>
-			{loading ? (
-				<div className='d-flex align-items-center justify-content-center w-100 h-100'>
-					<Spinner isGrow={false} />
-				</div>
-			) : (
+			<div
+				className={
+					loading
+						? 'd-flex align-items-center justify-content-center w-100 h-100'
+						: 'visually-hidden'
+				}
+				style={{ position: 'absolute', top: 50, left: 50 }}>
+				<Spinner isGrow={false} />
+			</div>
+
+			<div style={{ opacity: loading ? 0.5 : 1 }}>
 				<PageWrapper>
-					<Page className='p-0'>
+					<Page container='fluid'>
 						<div className='row'>
 							<div className='col-xxl-12'>
 								<Card>
@@ -199,7 +205,7 @@ const Lobstbl = () => {
 						</div>
 					</Page>
 				</PageWrapper>
-			)}
+			</div>
 
 			<DeleteModel
 				deleteModalOpen={deleteModalOpen}

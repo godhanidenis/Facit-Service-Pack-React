@@ -25,6 +25,7 @@ import {
 } from '../../../redux/ducks/locations';
 import { createTeamLeadsStart, deleteTeamLeadsStart } from '../../../redux/ducks/teamLeads';
 import { createLobsStart, deleteLobsStart, updateLobsStart } from '../../../redux/ducks/lobs';
+import Spinner from '../../../components/bootstrap/Spinner';
 
 const AddEditTeam = () => {
 	const id = useParams();
@@ -56,6 +57,7 @@ const AddEditTeam = () => {
 
 	const [teamLeadModalOpen, setTeamLeadModalOpen] = useState(false);
 	const [formTeamLeadValue, setFormTeamLeadValue] = useState(initialTeamLead);
+	const [dataSubmited, setDataSubmited] = useState(false);
 
 	const [lobModalOpen, setLobModalOpen] = useState(false);
 	const [formLobValue, setFormLobValue] = useState(initialLob);
@@ -74,13 +76,17 @@ const AddEditTeam = () => {
 		getValues,
 	} = useForm();
 
-	const { teams } = useSelector((state) => state.teams);
+	const { teams, loading } = useSelector((state) => state.teams);
 
 	const { locations } = useSelector((state) => state.locations);
 
 	const { teamLeads } = useSelector((state) => state.teamLeads);
 
 	const { lobs } = useSelector((state) => state.lobs);
+
+	useEffect(() => {
+		if (!loading && dataSubmited) navigate(`/users/${id.id}/teams`);
+	}, [loading, dataSubmited, navigate, id.id]);
 
 	const onChangeLocationValue = (e) => {
 		const { name, value } = e.target;
@@ -202,32 +208,45 @@ const AddEditTeam = () => {
 
 		if (editMode) {
 			dispatch(updateTeamsStart({ id: id.id1, toBeUpdatedTeam: formData }));
-			navigate(`/users/${id.id}/teams`);
+			setDataSubmited(true);
+			// navigate(`/users/${id.id}/teams`);
 		} else {
 			dispatch(createTeamsStart(formData));
-			navigate(`/users/${id.id}/teams`);
+			setDataSubmited(true);
 		}
 	};
 	const onError = (errors) => console.log('Errors Occurred !! :', errors);
 	return (
 		<>
 			<div
+				className={
+					loading
+						? 'd-flex align-items-center justify-content-center w-100 h-100'
+						: 'visually-hidden'
+				}
+				style={{ position: 'absolute', top: 50, left: 50 }}>
+				<Spinner isGrow={false} />
+			</div>
+			<div
 				className='row d-flex align-items-center justify-content-center'
-				style={{ margin: 30 }}>
-				<div
-					className='row d-flex align-items-center justify-content-center'
-					style={{ margin: 20 }}>
-					<div className='col-md-4'>
-						<b>{!editMode ? 'Add Team Details' : 'Update Team Details'}</b>
+				style={{ margin: 30, opacity: loading ? 0.5 : 1 }}>
+				<div className='col-md-7'>
+					<div
+						className='row d-flex align-items-center justify-content-center'
+						style={{ margin: 20 }}>
+						<div className='col'>
+							<h1>
+								<b>{!editMode ? 'Add Team Details' : 'Update Team Details'}</b>
+							</h1>
+						</div>
 					</div>
-				</div>
-				<div className='row d-flex align-items-center justify-content-center'>
-					<div className='col-md-7'>
+					<div className='row d-flex align-items-center justify-content-center'>
+						{/* <div className='col-12'> */}
 						<form
 							className='row g-4'
 							onSubmit={handleSubmit(onSubmit, onError)}
 							onReset={reset}>
-							<div className='col-12'>
+							<div className='col-7'>
 								<FormGroup id='Team_name' isFloating label='Your Team Name'>
 									<Input
 										autoComplete='off'
@@ -236,7 +255,7 @@ const AddEditTeam = () => {
 										})}
 									/>
 								</FormGroup>
-								{errors.Team_name?.message}
+								<span style={{ color: 'red' }}>{errors.Team_name?.message}</span>
 							</div>
 
 							<div className='col-12'>
@@ -259,10 +278,12 @@ const AddEditTeam = () => {
 													);
 												})}
 											</Select>
-											{errors.Location?.message}
+											<span style={{ color: 'red' }}>
+												{errors.Location?.message}
+											</span>
 										</FormGroup>
 									</div>
-									<div className='col-auto'>
+									<div className='col-3'>
 										<Button
 											isLight
 											icon='edit'
@@ -315,10 +336,12 @@ const AddEditTeam = () => {
 													);
 												})}
 											</Select>
-											{errors.Team_lead?.message}
+											<span style={{ color: 'red' }}>
+												{errors.Team_lead?.message}
+											</span>
 										</FormGroup>
 									</div>
-									<div className='col-auto'>
+									<div className='col-3'>
 										<Button
 											icon='edit'
 											color={darkModeStatus ? 'dark' : 'info'}
@@ -341,7 +364,7 @@ const AddEditTeam = () => {
 										<Button
 											icon='add'
 											isLight
-											style={{ margin: 5 }}
+											// style={{ margin: 5 }}
 											color={darkModeStatus ? 'dark' : 'info'}
 											onClick={() => {
 												setTeamLeadModalOpen(true);
@@ -372,10 +395,12 @@ const AddEditTeam = () => {
 													);
 												})}
 											</Select>
-											{errors.LOB?.message}
+											<span style={{ color: 'red' }}>
+												{errors.LOB?.message}
+											</span>
 										</FormGroup>
 									</div>
-									<div className='col-auto'>
+									<div className='col-3'>
 										<Button
 											icon='edit'
 											color={darkModeStatus ? 'dark' : 'info'}
@@ -411,7 +436,7 @@ const AddEditTeam = () => {
 
 							<div className='col-12' style={{ marginTop: 50 }}>
 								<div className='row d-flex'>
-									<div className='col'>
+									<div className='col-9'>
 										<Button
 											isLight
 											color='success'
@@ -432,6 +457,7 @@ const AddEditTeam = () => {
 								</div>
 							</div>
 						</form>
+						{/* </div> */}
 					</div>
 				</div>
 			</div>
@@ -440,7 +466,7 @@ const AddEditTeam = () => {
 				isCentered
 				isOpen={addLocationModalOpen}
 				setIsOpen={setAddLocationModalOpen}
-				size='lg'
+				size='sm'
 				isScrollable>
 				<ModalHeader>
 					<ModalTitle>
@@ -481,7 +507,7 @@ const AddEditTeam = () => {
 				isCentered
 				isOpen={teamLeadModalOpen}
 				setIsOpen={setTeamLeadModalOpen}
-				size='lg'
+				size='sm'
 				isScrollable>
 				<ModalHeader>
 					<ModalTitle>Add Team Lead Modal</ModalTitle>
@@ -520,7 +546,7 @@ const AddEditTeam = () => {
 				isCentered
 				isOpen={lobModalOpen}
 				setIsOpen={setLobModalOpen}
-				size='lg'
+				size='sm'
 				isScrollable>
 				<ModalHeader>
 					<ModalTitle>{!lobEditMode ? 'Add Lob Modal' : 'Edit Lob Modal'}</ModalTitle>

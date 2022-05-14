@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Sops from './Sops/Sops';
 import User1Img from '../../assets/img/wanna/wanna2.png';
 import Nav, { NavItem } from '../../components/bootstrap/Nav';
-import { CardActions } from '../../components/bootstrap/Card';
+import Card, { CardActions } from '../../components/bootstrap/Card';
 import Button from '../../components/bootstrap/Button';
 import Avatar from '../../components/Avatar';
 import { loadLocationsStart } from '../../redux/ducks/locations';
@@ -68,7 +68,9 @@ const UserDetail = () => {
 	const [selectedImage, setSelectedImage] = useState();
 	const [userInfoData, setUserInfoData] = useState();
 	const { users } = useSelector((state) => state.users);
-
+	// const { teams } = useSelector((state) => state.teams);F
+	const [joinedDate, setjoinedDate] = useState();
+	// const current = new Date();
 	useEffect(() => {
 		if (id) {
 			if (users) {
@@ -77,107 +79,295 @@ const UserDetail = () => {
 				setUserInfoData(singleUser);
 
 				setSelectedImage(`${singleUser?.profile_picture}`);
+				const current = new Date(singleUser?.date_joined);
+				setjoinedDate(current.toDateString());
+				console.log('date???????????', current.toDateString());
 			}
 		}
-	}, [id, users, dispatch]);
+	}, [id, users, dispatch, userInfoData?.date_joined]);
 	return (
-		<div className='col align-items-center justify-content-center p-3'>
-			<div className='row'>
-				<div className='col-10'>
-					<div className='row g-4 align-items-center'>
-						<div className='col-md-auto'>
-							<Avatar src={User1Img} />
-							{/* <Avatar src={selectedImage || ''} /> */}
-							<div
-								className='bg-success rounded-circle'
-								style={{
-									position: 'relative',
-									left: 100,
-									bottom: 30,
-									height: 20,
-									width: 20,
-									color: '#5cb85c',
-								}}
-							/>
+		<>
+			<div className='row align-items-center justify-content-center'>
+				<div className='col-md-7 mt-4'>
+					{/* <div className='col-12'>
+						<h1>hello</h1>
+					</div> */}
+					<div className='row g-4'>
+						<div className='col-12'>
+							<div className='row align-items-center'>
+								<div className='col-auto'>
+									<Avatar src={User1Img} />
+									{/* <Avatar src={selectedImage || ''} /> */}
+									<div
+										className='bg-success rounded-circle'
+										style={{
+											position: 'relative',
+											left: 100,
+											bottom: 30,
+											height: 20,
+											width: 20,
+											color: '#5cb85c',
+										}}
+									/>
+									{/* <Icon
+							size='lg'
+							icon='Circle'
+							color='danger'
+							style={{
+								position: 'relative',
+								right: 30,
+								top: 50,
+							}}
+						/> */}
+								</div>
+								<div className='col-md-auto'>
+									<h1>
+										{userInfoData?.first_name} {userInfoData?.last_name}
+									</h1>
+									<h6>{userInfoData?.username}</h6>
+									<h6>
+										Joined at{' '}
+										<b>
+											{/* {userInfoData?.date_joined} zshud */}
+											{/* {current.toDateString()} */}
+											{joinedDate}
+										</b>
+									</h6>
+								</div>
+							</div>
 						</div>
-						<div className='col-md-auto'>
-							<h1>
-								{userInfoData?.first_name} {userInfoData?.last_name}
-							</h1>
-							<h6>{userInfoData?.username}</h6>
-							<h6>
-								Joined at <b>{userInfoData?.date_joined}</b>
-							</h6>
+						<div className='col-12'>
+							<div className='row'>
+								<div className='col'>
+									<p className='mb-1 mt-4'>
+										<b>First Name</b>
+									</p>
+									<div className='row border rounded m-2'>
+										<div className='col-auto mt-2'>
+											<Icon
+												size='lg'
+												icon='Person'
+												color='success'
+												style={{
+													cursor: 'pointer',
+													marginLeft: '10px',
+												}}
+											/>
+										</div>
+										<div className='col-3 mt-2 mb-2'>
+											{userInfoData?.first_name}
+										</div>
+									</div>
+								</div>
+								<div className='col'>
+									<p className='mb-1 mt-4'>
+										<b>Last Name</b>
+									</p>
+									<div className='row border rounded m-2'>
+										<div className='col-auto mt-2'>
+											<Icon
+												size='lg'
+												icon='Person'
+												color='success'
+												style={{
+													cursor: 'pointer',
+													marginLeft: '10px',
+												}}
+											/>
+										</div>
+										<div className='col-3 mt-2 mb-2'>
+											{userInfoData?.last_name}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div className='col-12'>
+							<div className='row'>
+								<div className='col'>
+									<p className='mb-1 mt-4'>
+										<b>Email</b>
+									</p>
+									<div className='row border rounded m-2'>
+										<div className='col-auto mt-2'>
+											<Icon
+												size='lg'
+												icon='Email'
+												color='success'
+												style={{
+													cursor: 'pointer',
+													marginLeft: '10px',
+												}}
+											/>
+										</div>
+										<div className='col-3 mt-2 mb-2'>{userInfoData?.email}</div>
+									</div>
+								</div>
+								<div className='col'>
+									<p className='mb-1 mt-4'>
+										<b>Mobile</b>
+									</p>
+									<div className='row border rounded m-2'>
+										<div className='col-auto mt-2'>
+											<Icon
+												size='lg'
+												icon='LocalPhone'
+												color='success'
+												style={{
+													cursor: 'pointer',
+													marginLeft: '10px',
+												}}
+											/>
+										</div>
+										<div className='col-3 mt-2 mb-2'>
+											{userInfoData?.phone_number}
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
+			</div>
+
+			{/* <div className='row align-items-center justify-content-center p-3'>
 				<div className='col'>
-					<CardActions>
-						<Button icon='Backspace' color='info' isLight tag='a' to='/users'>
-							Back to Users
-						</Button>
-					</CardActions>
-				</div>
-			</div>
-			<div className='row d-flex align-items-center justify-content-center'>
-				<div className='col-md-3'>
-					<p className='mb-1'>
-						<b>First Name</b>
-					</p>
-					<div className=' border rounded p-2'>{userInfoData?.first_name}</div>
-				</div>
-				<div className='col-md-3'>
-					<p className='mb-1'>
-						<b>Last Name</b>
-					</p>
-					<div className=' border rounded p-2'>{userInfoData?.last_name}</div>
-				</div>
-			</div>
-			<div className='row d-flex align-items-center justify-content-center'>
-				<div className='col-md-3'>
-					<p className='mb-1 mt-4'>
-						<b>Email</b>
-					</p>
-					<div className='row border rounded m-2'>
-						<div className='col-auto mt-2'>
-							<Icon
-								size='lg'
-								icon='Email'
-								color='success'
-								style={{
-									cursor: 'pointer',
-									marginLeft: '10px',
-								}}
-							/>
+					<div className='row'>
+						<div className='col-9'>
+							<CardActions>
+								<Button
+									className='float-end'
+									icon='Backspace'
+									color='info'
+									isLight
+									tag='a'
+									to='/users'>
+									Back to Users
+								</Button>
+							</CardActions>
 						</div>
-						<div className='col-3 mt-2 mb-2'>
-							<span>{userInfoData?.email}</span>
+					</div>
+					<div className='col-md-7'>
+						<div className='row'>
+							<div className='col-8'>
+								<div className='row g-4 align-items-center justify-content-center'>
+									<div className='col-md-auto'>
+										<Avatar src={User1Img} />
+										<div
+											className='bg-success rounded-circle'
+											style={{
+												position: 'relative',
+												left: 100,
+												bottom: 30,
+												height: 20,
+												width: 20,
+												color: '#5cb85c',
+											}}
+										/>
+									</div>
+									<div className='col-md-auto'>
+										<h1>
+											{userInfoData?.first_name} {userInfoData?.last_name}
+										</h1>
+										<h6>{userInfoData?.username}</h6>
+										<h6>
+											Joined at <b>{joinedDate}</b>
+										</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div className='row d-flex align-items-center justify-content-center'>
+							<div className='col-md-3'>
+								<p className='mb-1 mt-4'>
+									<b>First Name</b>
+								</p>
+								<div className='row border rounded m-2'>
+									<div className='col-auto mt-2'>
+										<Icon
+											size='lg'
+											icon='Person'
+											color='success'
+											style={{
+												cursor: 'pointer',
+												marginLeft: '10px',
+											}}
+										/>
+									</div>
+									<div className='col-3 mt-2 mb-2'>
+										{userInfoData?.first_name}
+									</div>
+								</div>
+							</div>
+							<div className='col-md-3'>
+								<p className='mb-1 mt-4'>
+									<b>Last Name</b>
+								</p>
+								<div className='row border rounded m-2'>
+									<div className='col-auto mt-2'>
+										<Icon
+											size='lg'
+											icon='Person'
+											color='success'
+											style={{
+												cursor: 'pointer',
+												marginLeft: '10px',
+											}}
+										/>
+									</div>
+									<div className='col-3 mt-2 mb-2'>{userInfoData?.last_name}</div>
+								</div>
+							</div>
+						</div>
+						<div className='row d-flex align-items-center justify-content-center'>
+							<div className='col-md-3'>
+								<p className='mb-1 mt-4'>
+									<b>Email</b>
+								</p>
+								<div className='row border rounded m-2'>
+									<div className='col-auto mt-2'>
+										<Icon
+											size='lg'
+											icon='Email'
+											color='success'
+											style={{
+												cursor: 'pointer',
+												marginLeft: '10px',
+											}}
+										/>
+									</div>
+									<div className='col-3 mt-2 mb-2'>
+										<span>{userInfoData?.email}</span>
+									</div>
+								</div>
+							</div>
+							<div className='col-md-3'>
+								<p className='mb-1 mt-3'>
+									<b>Mobile</b>
+								</p>
+								<div className='row border rounded'>
+									<div className='col-auto mt-2'>
+										<Icon
+											size='lg'
+											icon='LocalPhone'
+											color='success'
+											style={{
+												cursor: 'pointer',
+												marginLeft: '10px',
+											}}
+										/>
+									</div>
+									<div className='col-3 mt-2 mb-2'>
+										<span>{userInfoData?.phone_number}</span>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div className='col-md-3'>
-					<p className='mb-1 mt-3'>
-						<b>Mobile</b>
-					</p>
-					<div className='row border rounded'>
-						<div className='col-auto mt-2'>
-							<Icon
-								size='lg'
-								icon='LocalPhone'
-								color='success'
-								style={{
-									cursor: 'pointer',
-									marginLeft: '10px',
-								}}
-							/>
-						</div>
-						<div className='col-3 mt-2 mb-2'>
-							<span>{userInfoData?.phone_number}</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+			</div> */}
+		</>
 	);
 };
 
