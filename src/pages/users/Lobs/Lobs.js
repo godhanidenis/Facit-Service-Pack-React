@@ -89,7 +89,7 @@ const Lobstbl = () => {
 
 			<div style={{ opacity: loading ? 0.5 : 1 }}>
 				<PageWrapper>
-					<Page container='fluid'>
+					<Page className='p-0'>
 						<div className='row'>
 							<div className='col-xxl-12'>
 								<Card>

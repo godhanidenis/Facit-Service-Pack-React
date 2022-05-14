@@ -163,21 +163,12 @@ const AddEditAgent = () => {
 								</div>
 							</div>
 
-							{/* <div className='col-12'>
-							<Button
-								color={editMode ? 'success' : 'info'}
-								className='w-100 py-3'
-								type='submit'>
-								{!editMode ? 'Create' : 'Update'}
-							</Button>
-						</div> */}
 							<div className='col-12' style={{ marginTop: 50 }}>
 								<div className='row d-flex'>
 									<div className='col'>
 										<Button
 											isLight
 											color='success'
-											// className='w-100 py-3 float-right'
 											className='float-end mx-2'
 											type='submit'>
 											{!editMode ? 'Create' : 'Update'}
@@ -191,13 +182,6 @@ const AddEditAgent = () => {
 											to={`/users/${id.id}/teams/${id.teamId}/agents`}>
 											cancle
 										</Button>
-										{/* <Button
-											isLight
-											color='info'
-											className='w-100 py-3'
-											type='submit'>
-											cancle
-										</Button> */}
 									</div>
 								</div>
 							</div>

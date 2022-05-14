@@ -241,7 +241,6 @@ const AddEditTeam = () => {
 						</div>
 					</div>
 					<div className='row d-flex align-items-center justify-content-center'>
-						{/* <div className='col-12'> */}
 						<form
 							className='row g-4'
 							onSubmit={handleSubmit(onSubmit, onError)}
@@ -364,7 +363,6 @@ const AddEditTeam = () => {
 										<Button
 											icon='add'
 											isLight
-											// style={{ margin: 5 }}
 											color={darkModeStatus ? 'dark' : 'info'}
 											onClick={() => {
 												setTeamLeadModalOpen(true);
@@ -457,7 +455,6 @@ const AddEditTeam = () => {
 								</div>
 							</div>
 						</form>
-						{/* </div> */}
 					</div>
 				</div>
 			</div>

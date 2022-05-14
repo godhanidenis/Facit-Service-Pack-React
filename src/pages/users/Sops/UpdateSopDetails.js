@@ -327,10 +327,23 @@ const UpdateSopDetails = () => {
 						</FormGroup>
 						{errors.weightage?.message}
 					</div>
+
 					<div className='col-12'>
-						<Button color='success' className='float-end' type='submit'>
-							Update
-						</Button>
+						<div className='row d-flex'>
+							<div className='col'>
+								<Button color='success' className='float-end mx-2' type='submit'>
+									Update
+								</Button>
+								<Button
+									isLight
+									color='danger'
+									className='float-end'
+									tag='a'
+									to={`/users/${id.id}/sops/${id.id1}`}>
+									Cancel
+								</Button>
+							</div>
+						</div>
 					</div>
 				</form>
 			</Page>

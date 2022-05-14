@@ -57,9 +57,7 @@ const UsersTeams = () => {
 		dispatch(deleteTeamsStart(currentTeam.id));
 		setDeleteModalOpen(false);
 	};
-	// useEffect(() => {
-	// 	console.log('loading..............................................', loading);
-	// });
+
 	useEffect(() => {
 		console.log('loading???????????', error);
 		if (error !== '') {
