@@ -4,15 +4,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../../components/bootstrap/Button';
 import Card, { CardBody } from '../../../components/bootstrap/Card';
 
-import { loadSopsStart } from '../../../redux/ducks/sops';
 import UpdateSopDetails from './UpdateSopDetails';
 import SopsDetails from './SopsDetails';
 import AddUpdateSubSops from './AddUpdateSubSops';
-import { loadTeamsStart } from '../../../redux/ducks/teams';
 import Spinner from '../../../components/bootstrap/Spinner';
+import { loadTagListStart } from '../../../redux/ducks/tagList';
 
 const Sops = () => {
 	const id = useParams();
+	console.log('iddddddddddddd', id);
+	console.log('window.location.pathname', window.location.pathname);
 	// console.log('id///...', id);
 	// console.log('path...', window.location.pathname);
 	// console.log('hrewf ....', window.location.href);
@@ -30,6 +31,12 @@ const Sops = () => {
 
 	const { subSops } = useSelector((state) => state.subSops);
 	console.log('sops .??', sops.length);
+	useEffect(() => {
+		const formData = {
+			doctype: 'tagging_found',
+		};
+		dispatch(loadTagListStart({ id: id.id, slug: formData }));
+	}, [dispatch, id.id]);
 	// useEffect(() => {
 	// 	if (!sops.length) {
 	// 		dispatch(loadSopsStart(id.id));
@@ -67,7 +74,7 @@ const Sops = () => {
 					<div className='col-3'>
 						<Card stretch>
 							<CardBody isScrollable>
-								<div className='row g-5 rounded-3'>
+								<div className='row g-4 rounded-3'>
 									{sops?.map((i) => (
 										<div className='col-12' key={i?.id}>
 											<Button
@@ -93,7 +100,12 @@ const Sops = () => {
 									<>
 										<div className='d-flex align-items-center justify-content-between'>
 											<div className='d-flex align-items-center'>
-												<h1>{selectListTab?.Sub_category}</h1>
+												<h1>
+													{selectListTab?.Sub_category.replaceAll(
+														'_',
+														' ',
+													)}
+												</h1>
 
 												<Button
 													icon='Edit'
@@ -141,7 +153,15 @@ const Sops = () => {
 													color='info'
 													isLight
 													tag='a'
-													to={`${selectListTab?.slug}/sub/create`}>
+													to={`${selectListTab?.slug}/sub/create`}
+													isDisable={
+														window.location.pathname ===
+															`/users/${id.id}/sops/${selectListTab?.slug}/sub/create` ||
+														window.location.pathname ===
+															`/users/${id.id}/sops/${selectListTab?.slug}/sub/update` ||
+														window.location.pathname ===
+															`/users/${id.id}/sops/${selectListTab?.slug}/update`
+													}>
 													Add
 												</Button>
 											)}

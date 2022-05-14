@@ -6,12 +6,6 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Page from '../../../layout/Page/Page';
-import Card, {
-	CardHeader,
-	CardBody,
-	CardLabel,
-	CardTitle,
-} from '../../../components/bootstrap/Card';
 import Button from '../../../components/bootstrap/Button';
 import Icon from '../../../components/icon/Icon';
 
@@ -20,12 +14,8 @@ import Input from '../../../components/bootstrap/forms/Input';
 import Label from '../../../components/bootstrap/forms/Label';
 import Select from '../../../components/bootstrap/forms/Select';
 import Option from '../../../components/bootstrap/Option';
-import { loadTeamsStart } from '../../../redux/ducks/teams';
-import {
-	createSubSopsStart,
-	loadSubSopsStart,
-	updateSubSopsStart,
-} from '../../../redux/ducks/subSops';
+import { createSubSopsStart, updateSubSopsStart } from '../../../redux/ducks/subSops';
+import { loadTagListStart } from '../../../redux/ducks/tagList';
 
 const AddUpdateSubSops = () => {
 	const dispatch = useDispatch();
@@ -34,7 +24,7 @@ const AddUpdateSubSops = () => {
 	const [editMode, setEditMode] = useState(false);
 	// console.log('::::::', location?.state?.id);
 	const id = useParams();
-	// console.log('id::', id);
+	console.log('id::', id);
 	const { teams } = useSelector((state) => state.teams);
 	const { subSops } = useSelector((state) => state.subSops);
 	// console.log('sub sops', subSops);
@@ -50,6 +40,8 @@ const AddUpdateSubSops = () => {
 		reset,
 	} = useForm();
 
+	const { tagLists } = useSelector((state) => state.tagLists);
+	console.log('tagLists..............', tagLists);
 	const getTegging = async (taggingdata) => {
 		let result = {};
 		try {
@@ -69,15 +61,22 @@ const AddUpdateSubSops = () => {
 			};
 		}
 	};
-
 	useEffect(() => {
-		if (id.id1 === 'call_additional_info_found' || id.id1 === 'call_alternate_channel_found') {
-			console.log('hiii');
-			const formDataTagging = {
-				doctype: 'tagging_found',
-			};
-			getTegging({ id: id.id, slug: formDataTagging });
+		if (editMode) {
+			const singleSubSop = subSops.find((subSop) => subSop._id === location?.state?.id);
+			console.log('object', singleSubSop);
+			setValue('tag_type', singleSubSop?._source?.tag_type);
 		}
+	}, [editMode, location?.state?.id, setValue, subSops, tagLists]);
+	useEffect(() => {
+		// if (id.id1 === 'call_additional_info_found' || id.id1 === 'call_alternate_channel_found') {
+		console.log('tagListsssssss', tagLists[0]?._source?.tag_list);
+		setTagList(tagLists[0]?._source?.tag_list);
+		// const formDataTagging = {
+		// 	doctype: 'tagging_found',
+		// };
+		// getTegging({ id: id.id, slug: formDataTagging });
+		// }
 		if (!location?.state?.id) {
 			setEditMode(false);
 		} else {
@@ -95,10 +94,11 @@ const AddUpdateSubSops = () => {
 				setValue('incidents_type', singleSubSop?._source?.incidents_type);
 				setValue('type', singleSubSop?._source?.type);
 
-				setValue('tag_type', singleSubSop?._source?.tag_type);
-
 				setKeywordsList(singleSubSop?._source?.keywords);
-				setTagList(singleSubSop?._source?.tag_list);
+
+				// if (id.id1 === 'tagging_found') {
+				// 	setTagList(singleSubSop?._source?.tag_list);
+				// }
 
 				console.log('singleSubSop?._source?.tag_type', singleSubSop?._source?.tag_type);
 				// console.log('singleSubSop?._source?.team_list', singleSubSop?._source?.team_list);
@@ -122,6 +122,7 @@ const AddUpdateSubSops = () => {
 				// setValue('tag_type', arry2);
 			}
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [id.id, id.id1, location?.state?.id, setValue, subSops]);
 
 	const onSubmit = (data) => {
@@ -293,7 +294,7 @@ const AddUpdateSubSops = () => {
 		<PageWrapper>
 			<Page className='p-0'>
 				<form
-					className='row g-4'
+					className='row g-4 w-75'
 					onSubmit={handleSubmit(onSubmit, onError)}
 					onReset={reset}>
 					{(id.id1 === 'call_opening_found' ||
@@ -494,13 +495,14 @@ const AddUpdateSubSops = () => {
 										required: 'tag_type is required',
 									})}>
 									<Option value=''>Select tag_type</Option>
-									{tagList?.map((tag) => {
-										return (
-											<Option key={tag} value={tag}>
-												{tag}
-											</Option>
-										);
-									})}
+									{tagList &&
+										tagList?.map((tag) => {
+											return (
+												<Option key={tag} value={tag}>
+													{tag}
+												</Option>
+											);
+										})}
 								</Select>
 								{errors.tag_type?.message}
 							</FormGroup>
@@ -618,12 +620,24 @@ const AddUpdateSubSops = () => {
 						</div>
 					)}
 					<div className='col-12'>
-						<Button
-							color={editMode ? 'success' : 'info'}
-							className='w-100 py-3'
-							type='submit'>
-							{editMode ? 'Update' : 'Create'}
-						</Button>
+						<div className='row d-flex'>
+							<div className='col'>
+								<Button
+									color={editMode ? 'success' : 'info'}
+									type='submit'
+									className='float-end mx-2'>
+									{editMode ? 'Update' : 'Create'}
+								</Button>
+								<Button
+									isLight
+									color='danger'
+									className='float-end'
+									tag='a'
+									to={`/users/${id.id}/sops/${id.id1}`}>
+									Cancel
+								</Button>
+							</div>
+						</div>
 					</div>
 				</form>
 			</Page>

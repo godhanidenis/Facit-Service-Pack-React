@@ -8,6 +8,7 @@ import lobReducer from './ducks/lobs';
 import locationReducer from './ducks/locations';
 import sopReducer from './ducks/sops';
 import subSopReducer from './ducks/subSops';
+import tagListReducer from './ducks/tagList';
 import teamLeadReducer from './ducks/teamLeads';
 import teamReducer from './ducks/teams';
 import usersReducer from './ducks/users';
@@ -23,6 +24,7 @@ const reducer = combineReducers({
 	sops: sopReducer,
 	category: categoryReducer,
 	subSops: subSopReducer,
+	tagLists: tagListReducer,
 });
 
 const sagaMiddleWares = createSagaMiddleware();

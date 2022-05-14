@@ -14,7 +14,7 @@ import Card, {
 import Button from '../../../components/bootstrap/Button';
 import Icon from '../../../components/icon/Icon';
 import useSortableData from '../../../hooks/useSortableData';
-import { deleteLobsStart, loadLobsStart } from '../../../redux/ducks/lobs';
+import { deleteLobsStart } from '../../../redux/ducks/lobs';
 import PaginationButtons, {
 	dataPagination,
 	PER_COUNT,
@@ -48,12 +48,6 @@ const Lobstbl = () => {
 
 	const { lobs, loading, error } = useSelector((state) => state.lobs);
 	const { addToast } = useToasts();
-
-	// useEffect(() => {
-	// 	if (!lobs.length && loading !== true) {
-	// 		dispatch(loadLobsStart(Id.id));
-	// 	}
-	// }, [dispatch, Id.id, lobs.length, loading]);
 
 	useEffect(() => {
 		console.log('loading???????????', error);

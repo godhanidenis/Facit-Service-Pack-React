@@ -11,16 +11,16 @@ import CommonHeaderRight from './CommonHeaderRight';
 // import CommonHeaderRight from './CommonHeaderRight';
 
 const DefaultHeader = () => {
-	const deviceScreen = useDeviceScreen();
+	// const deviceScreen = useDeviceScreen();
 	return (
 		<Header>
-			<HeaderLeft>
+			{/* <HeaderLeft>
 				<Navigation
 					menu={{ ...layoutMenu, ...componentsMenu }}
 					id='header-top-menu'
 					horizontal={deviceScreen?.width >= process.env.REACT_APP_MOBILE_BREAKPOINT_SIZE}
 				/>
-			</HeaderLeft>
+			</HeaderLeft> */}
 			<CommonHeaderRight />
 		</Header>
 	);

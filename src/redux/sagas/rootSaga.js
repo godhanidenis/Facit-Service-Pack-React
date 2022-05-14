@@ -78,12 +78,14 @@ import {
 	LOAD_SUBSOPS_START,
 	UPDATE_SUBSOPS_START,
 } from '../ducks/subSops';
+import { LOAD_TAGLIST_START, UPDATE_TAGLIST_START } from '../ducks/tagList';
 import {
 	handleCreateSubSop,
 	handleDeleteSubSop,
 	handleGetSubSops,
 	handleUpdateSubSop,
 } from './handlers/subSops';
+import { handleGetTagList, handleUpdateTagList } from './handlers/tagList';
 
 function* onLoadUsers() {
 	yield takeLatest(LOAD_USERS_START, handleGetUsers);
@@ -199,6 +201,13 @@ function* onDeleteSubSops() {
 function* onUpdateSubSops() {
 	yield takeLatest(UPDATE_SUBSOPS_START, handleUpdateSubSop);
 }
+
+function* onLoadTagList() {
+	yield takeLatest(LOAD_TAGLIST_START, handleGetTagList);
+}
+function* onUpdateTagList() {
+	yield takeLatest(UPDATE_TAGLIST_START, handleUpdateTagList);
+}
 const userSagas = [
 	fork(onLoadUsers),
 	fork(onCreateUsers),
@@ -241,6 +250,8 @@ const subSopSagas = [
 	fork(onUpdateSubSops),
 	fork(onDeleteSubSops),
 ];
+
+const tagListSagas = [fork(onLoadTagList), fork(onUpdateTagList)];
 export default function* watcherSaga() {
 	yield all([
 		...userSagas,
@@ -252,5 +263,6 @@ export default function* watcherSaga() {
 		...sopSagas,
 		...categorySagas,
 		...subSopSagas,
+		...tagListSagas,
 	]);
 }

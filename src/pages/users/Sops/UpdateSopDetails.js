@@ -12,6 +12,7 @@ import { loadCategoryStart } from '../../../redux/ducks/category';
 import { updateSopsStart } from '../../../redux/ducks/sops';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Page from '../../../layout/Page/Page';
+import Checks, { ChecksGroup } from '../../../components/bootstrap/forms/Checks';
 
 const UpdateSopDetails = () => {
 	const id = useParams();
@@ -20,7 +21,8 @@ const UpdateSopDetails = () => {
 	const dispatch = useDispatch();
 	const { sops } = useSelector((state) => state.sops);
 	const { category } = useSelector((state) => state.category);
-
+	const [checked, setChecked] = useState(false);
+	const toggleChecked = () => setChecked((value) => !value);
 	useEffect(() => {
 		dispatch(loadCategoryStart());
 	}, [dispatch, id.id]);
@@ -70,7 +72,7 @@ const UpdateSopDetails = () => {
 		<PageWrapper>
 			<Page className='p-0'>
 				<form
-					className='row g-4'
+					className='row g-4 w-75'
 					onSubmit={handleSubmit(onSubmit, onError)}
 					onReset={reset}>
 					<div className='col-12'>
@@ -250,6 +252,31 @@ const UpdateSopDetails = () => {
 								<Option value='true'>True</Option>
 								<Option value='false'>False</Option>
 							</Select>
+
+							{/* <ChecksGroup>
+							<Checks
+								type='switch'
+								name='sop'
+								checked={selectedSop?.sop}
+								onChange={() => {
+									setSelectedSop({
+										...selectedSop,
+										sop: !selectedSop?.sop,
+									});
+								}}
+								{...register('sop', {
+									required: 'sop is required',
+								})}
+								// key={cat.id}
+								// id={cat.id.toString()}
+								// name='emailNotification'
+								// value={cat.id}
+								// onChange={formik.handleChange}
+								// checked={formik.values.emailNotification.includes(
+								// 	cat.id.toString(),
+								// )}
+							/>
+						</ChecksGroup> */}
 						</FormGroup>
 						{errors.sop?.message}
 					</div>
@@ -301,7 +328,7 @@ const UpdateSopDetails = () => {
 						{errors.weightage?.message}
 					</div>
 					<div className='col-12'>
-						<Button color='success' className='w-100 py-3' type='submit'>
+						<Button color='success' className='float-end' type='submit'>
 							Update
 						</Button>
 					</div>

@@ -12,7 +12,7 @@ import Card, {
 } from '../../../components/bootstrap/Card';
 import Page from '../../../layout/Page/Page';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
-import { deleteTeamsStart, loadTeamsStart } from '../../../redux/ducks/teams';
+import { deleteTeamsStart } from '../../../redux/ducks/teams';
 import Icon from '../../../components/icon/Icon';
 import useSortableData from '../../../hooks/useSortableData';
 import PaginationButtons, {
@@ -52,12 +52,6 @@ const UsersTeams = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { addToast } = useToasts();
-
-	// useEffect(() => {
-	// 	if (!teams.length) {
-	// 		dispatch(loadTeamsStart(id.id));
-	// 	}
-	// }, [dispatch, id.id, teams.length]);
 
 	const handleDeleteTeam = () => {
 		dispatch(deleteTeamsStart(currentTeam.id));

@@ -3,15 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-// import Page from '../../../layout/Page/Page';
-// import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
-// import Card, {
-// 	CardActions,
-// 	CardBody,
-// 	CardHeader,
-// 	CardLabel,
-// 	CardTitle,
-// } from '../../../components/bootstrap/Card';
 import Button from '../../../components/bootstrap/Button';
 import FormGroup from '../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../components/bootstrap/forms/Input';
@@ -227,9 +218,7 @@ const AddEditTeam = () => {
 					className='row d-flex align-items-center justify-content-center'
 					style={{ margin: 20 }}>
 					<div className='col-md-4'>
-						{/* <h3> */}
 						<b>{!editMode ? 'Add Team Details' : 'Update Team Details'}</b>
-						{/* </h3> */}
 					</div>
 				</div>
 				<div className='row d-flex align-items-center justify-content-center'>
@@ -289,7 +278,6 @@ const AddEditTeam = () => {
 											isLight
 											color={darkModeStatus ? 'dark' : 'danger'}
 											onClick={handleLocationDelete}
-											// style={{ margin: 5 }}
 										/>
 									</div>
 									<div className='col-4'>
@@ -421,16 +409,12 @@ const AddEditTeam = () => {
 								</div>
 							</div>
 
-							{/* <div className='col-12'>
-							<div className='row d-flex'>
-								<div className='col'> */}
 							<div className='col-12' style={{ marginTop: 50 }}>
 								<div className='row d-flex'>
 									<div className='col'>
 										<Button
 											isLight
 											color='success'
-											// className='w-100 py-3 float-right'
 											className='float-end mx-2'
 											type='submit'>
 											{!editMode ? 'Create' : 'Update'}
@@ -444,13 +428,6 @@ const AddEditTeam = () => {
 											to={`/users/${id.id}/teams`}>
 											cancle
 										</Button>
-										{/* <Button
-											isLight
-											color='info'
-											className='w-100 py-3'
-											type='submit'>
-											cancle
-										</Button> */}
 									</div>
 								</div>
 							</div>
@@ -458,227 +435,6 @@ const AddEditTeam = () => {
 					</div>
 				</div>
 			</div>
-			{/* <PageWrapper className='mt-3'>
-				<Page className='p-0'>
-					<div className='row h-100 align-items-center justify-content-center'>
-						<div className='col-xl-4 col-lg-6 col-md-8 shadow-3d-container'>
-							<Card className='shadow-3d-dark'>
-								<CardHeader>
-									<CardLabel icon='People' iconColor='info'>
-										<CardTitle tag='h4' className='h5'>
-											{!editMode ? 'Add Team Details' : 'Update Team Details'}
-										</CardTitle>
-									</CardLabel>
-									<CardActions>
-										<Button
-											icon='Backspace'
-											color='info'
-											isLight
-											tag='a'
-											to={`/users/${id.id}/teams`}>
-											Back to Teams
-										</Button>
-									</CardActions>
-								</CardHeader>
-								<CardBody>
-									<form
-										className='row g-4'
-										onSubmit={handleSubmit(onSubmit, onError)}
-										onReset={reset}>
-										<div className='col-12'>
-											<FormGroup
-												id='Team_name'
-												isFloating
-												label='Your Team Name'>
-												<Input
-													autoComplete='off'
-													{...register('Team_name', {
-														required: 'Team Name is required',
-													})}
-												/>
-											</FormGroup>
-											{errors.Team_name?.message}
-										</div>
-
-										<div className='col-12'>
-											<div className='row'>
-												<Label>Select Location</Label>
-												<div className='col-4'>
-													<FormGroup>
-														<Select
-															size='sm'
-															ariaLabel='Select Location'
-															{...register('Location', {
-																required: 'Location is required',
-															})}>
-															<Option value=''>
-																Select Location
-															</Option>
-															{locations?.map((loc) => {
-																return (
-																	<Option
-																		key={loc?.id}
-																		value={loc?.id}>
-																		{loc?.Location_name}
-																	</Option>
-																);
-															})}
-														</Select>
-														{errors.Location?.message}
-													</FormGroup>
-												</div>
-												<div className='col-4'>
-													<Button
-														icon='edit'
-														color={darkModeStatus ? 'dark' : 'info'}
-														onClick={() => {
-															setAddLocationModalOpen(true);
-															setLocationId(getValues('Location'));
-														}}
-													/>
-													<Button
-														icon='delete'
-														color={darkModeStatus ? 'dark' : 'danger'}
-														onClick={handleLocationDelete}
-													/>
-												</div>
-												<div className='col-4'>
-													<Button
-														icon='add'
-														isLight
-														color={darkModeStatus ? 'dark' : 'info'}
-														onClick={() => {
-															setAddLocationModalOpen(true);
-															setLocationId();
-														}}>
-														Add Location
-													</Button>
-												</div>
-											</div>
-										</div>
-
-										<div className='col-12'>
-											<div className='row'>
-												<Label>Select Team Lead</Label>
-												<div className='col-4'>
-													<FormGroup>
-														<Select
-															size='sm'
-															ariaLabel='Select Team Lead'
-															{...register('Team_lead', {
-																required: 'Team Lead is required',
-															})}>
-															<Option value=''>
-																Select Team Lead
-															</Option>
-															{teamLeads?.map((lead) => {
-																return (
-																	<Option
-																		key={lead?.id}
-																		value={lead?.id}>
-																		{lead?.TeamLead_name}
-																	</Option>
-																);
-															})}
-														</Select>
-														{errors.Team_lead?.message}
-													</FormGroup>
-												</div>
-												<div className='col-4'>
-													<Button
-														icon='edit'
-														color={darkModeStatus ? 'dark' : 'info'}
-													/>
-													<Button
-														icon='delete'
-														color={darkModeStatus ? 'dark' : 'danger'}
-														onClick={handleTeamLeadDelete}
-													/>
-												</div>
-												<div className='col-4'>
-													<Button
-														icon='add'
-														isLight
-														color={darkModeStatus ? 'dark' : 'info'}
-														onClick={() => {
-															setTeamLeadModalOpen(true);
-														}}>
-														Add Team Lead
-													</Button>
-												</div>
-											</div>
-										</div>
-
-										<div className='col-12'>
-											<div className='row'>
-												<Label>Select LOB</Label>
-												<div className='col-4'>
-													<FormGroup>
-														<Select
-															size='sm'
-															ariaLabel='Select LOB'
-															{...register('LOB', {
-																required: 'LOB is required',
-															})}>
-															<Option value=''>Select LOB</Option>
-															{lobs?.map((lob) => {
-																return (
-																	<Option
-																		key={lob?.id}
-																		value={lob?.id}>
-																		{lob?.Lob_name}
-																	</Option>
-																);
-															})}
-														</Select>
-														{errors.LOB?.message}
-													</FormGroup>
-												</div>
-												<div className='col-4'>
-													<Button
-														icon='edit'
-														color={darkModeStatus ? 'dark' : 'info'}
-														onClick={() => {
-															setLobModalOpen(true);
-															setLobId(getValues('LOB'));
-														}}
-													/>
-													<Button
-														icon='delete'
-														color={darkModeStatus ? 'dark' : 'danger'}
-														onClick={handleLobDelete}
-													/>
-												</div>
-												<div className='col-4'>
-													<Button
-														icon='add'
-														isLight
-														color={darkModeStatus ? 'dark' : 'info'}
-														onClick={() => {
-															setLobModalOpen(true);
-															setLobId();
-														}}>
-														Add Lob
-													</Button>
-												</div>
-											</div>
-										</div>
-
-										<div className='col-12'>
-											<Button
-												color={editMode ? 'success' : 'info'}
-												className='w-100 py-3'
-												type='submit'>
-												{!editMode ? 'Create' : 'Update'}
-											</Button>
-										</div>
-									</form>
-								</CardBody>
-							</Card>
-						</div>
-					</div>
-				</Page>
-			</PageWrapper> */}
 
 			<Modal
 				isCentered
