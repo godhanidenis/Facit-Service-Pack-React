@@ -131,8 +131,7 @@ const AddUpdateUser = () => {
 						onSubmit={handleSubmit(onSubmit, onError)}
 						onReset={reset}>
 						<div>
-							<h1>Create New User</h1>
-							{/* <h1>{!editMode ? 'Create New User' : 'Update User'}</h1> */}
+							<h1>{!editMode ? 'Create New User' : 'Update User'}</h1>
 						</div>
 						<div className='row pt-5 '>
 							<div className='col-4 d-flex align-items-center justify-content-center flex-column'>
