@@ -13,6 +13,7 @@ import Label from '../../../components/bootstrap/forms/Label';
 import Select from '../../../components/bootstrap/forms/Select';
 import Option from '../../../components/bootstrap/Option';
 import { createSubSopsStart, updateSubSopsStart } from '../../../redux/ducks/subSops';
+import { loadTagListStart } from '../../../redux/ducks/tagList';
 
 const AddUpdateSubSops = () => {
 	const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const AddUpdateSubSops = () => {
 	// Selectors
 	const { teams } = useSelector((state) => state.teams);
 	const { subSops } = useSelector((state) => state.subSops);
-
+	const { tagLists } = useSelector((state) => state.tagLists);
 	const {
 		register,
 		handleSubmit,
@@ -37,6 +38,14 @@ const AddUpdateSubSops = () => {
 	} = useForm();
 
 	useEffect(() => {
+		if (editMode) {
+			const singleSubSop = subSops.find((subSop) => subSop._id === location?.state?.id);
+			setValue('tag_type', singleSubSop?._source?.tag_type);
+		}
+	}, [editMode, location?.state?.id, setValue, subSops, tagLists]);
+
+	useEffect(() => {
+		setTagList(tagLists[0]?._source?.tag_list);
 		if (!location?.state?.id) {
 			setEditMode(false);
 		} else {
@@ -55,7 +64,6 @@ const AddUpdateSubSops = () => {
 				setValue('tag_type', selectedSop?._source?.tag_type);
 				setKeywordsList(selectedSop?._source?.keywords);
 				setTagList(selectedSop?._source?.tag_list);
-
 				const teamList = [];
 				// eslint-disable-next-line array-callback-return
 				selectedSop?._source?.team_list?.map((teamId) => {
@@ -64,7 +72,7 @@ const AddUpdateSubSops = () => {
 				setValue('team_list', teamList);
 			}
 		}
-	}, [perams.id, perams.sop_slug, location?.state?.id, setValue, subSops]);
+	}, [perams.id, perams.sop_slug, location?.state?.id, setValue, subSops, tagLists]);
 
 	const onSubmit = (data) => {
 		console.log('SopAddUpdate FormData', data);
@@ -238,7 +246,7 @@ const AddUpdateSubSops = () => {
 		<PageWrapper>
 			<Page className='p-0'>
 				<form
-					className='row g-4'
+					className='row g-4 w-75'
 					onSubmit={handleSubmit(onSubmit, onError)}
 					onReset={reset}>
 					{(perams.sop_slug === 'call_opening_found' ||
@@ -257,7 +265,7 @@ const AddUpdateSubSops = () => {
 									})}
 								/>
 							</FormGroup>
-							{errors.text?.message}
+							<span style={{ color: 'red' }}>{errors.text?.message}</span>
 						</div>
 					)}
 
@@ -278,7 +286,7 @@ const AddUpdateSubSops = () => {
 									})}
 								/>
 							</FormGroup>
-							{errors.score?.message}
+							<span style={{ color: 'red' }}>{errors.score?.message}</span>
 						</div>
 					)}
 					{(perams.sop_slug === 'call_opening_found' ||
@@ -307,7 +315,7 @@ const AddUpdateSubSops = () => {
 										);
 									})}
 								</Select>
-								{errors.team_list?.message}
+								<span style={{ color: 'red' }}>{errors.team_list?.message}</span>
 							</FormGroup>
 						</div>
 					)}
@@ -329,7 +337,7 @@ const AddUpdateSubSops = () => {
 										}}
 									/>
 								</FormGroup>
-								{errors.keywords?.message}
+								<span style={{ color: 'red' }}>{errors.keywords?.message}</span>
 							</div>
 							<div className='d-flex align-items-center'>
 								{keywordsList &&
@@ -386,7 +394,7 @@ const AddUpdateSubSops = () => {
 										}}
 									/>
 								</FormGroup>
-								{errors.tag_list?.message}
+								<span style={{ color: 'red' }}>{errors.tag_list?.message}</span>
 							</div>
 							<div className='d-flex align-items-center'>
 								{tagList &&
@@ -438,15 +446,16 @@ const AddUpdateSubSops = () => {
 										required: 'tag_type is required',
 									})}>
 									<Option value=''>Select tag_type</Option>
-									{tagList?.map((tag) => {
-										return (
-											<Option key={tag} value={tag}>
-												{tag}
-											</Option>
-										);
-									})}
+									{tagList &&
+										tagList?.map((tag) => {
+											return (
+												<Option key={tag} value={tag}>
+													{tag}
+												</Option>
+											);
+										})}
 								</Select>
-								{errors.tag_type?.message}
+								<span style={{ color: 'red' }}>{errors.tag_type?.message}</span>
 							</FormGroup>
 						</div>
 					)}
@@ -477,8 +486,7 @@ const AddUpdateSubSops = () => {
 										})}
 									/>
 								</FormGroup>
-
-								{errors.min?.message}
+								<span style={{ color: 'red' }}>{errors.min?.message}</span>
 							</div>
 							<div className='col-12'>
 								<FormGroup id='max' isFloating label='Your max value'>
@@ -490,7 +498,7 @@ const AddUpdateSubSops = () => {
 										})}
 									/>
 								</FormGroup>
-								{errors.max?.message}
+								<span style={{ color: 'red' }}>{errors.max?.message}</span>
 							</div>
 						</>
 					)}
@@ -515,7 +523,9 @@ const AddUpdateSubSops = () => {
 									<Option value='True'>True</Option>
 									<Option value='False'>False</Option>
 								</Select>
-								{errors.sentiment_type?.message}
+								<span style={{ color: 'red' }}>
+									{errors.sentiment_type?.message}
+								</span>
 							</FormGroup>
 						</div>
 					)}
@@ -534,7 +544,9 @@ const AddUpdateSubSops = () => {
 									<Option value='True'>True</Option>
 									<Option value='False'>False</Option>
 								</Select>
-								{errors.incidents_type?.message}
+								<span style={{ color: 'red' }}>
+									{errors.incidents_type?.message}
+								</span>
 							</FormGroup>
 						</div>
 					)}
@@ -557,17 +569,29 @@ const AddUpdateSubSops = () => {
 									<Option value='True'>True</Option>
 									<Option value='False'>False</Option>
 								</Select>
-								{errors.type?.message}
+								<span style={{ color: 'red' }}>{errors.type?.message}</span>
 							</FormGroup>
 						</div>
 					)}
 					<div className='col-12'>
-						<Button
-							color={editMode ? 'success' : 'info'}
-							className='w-100 py-3'
-							type='submit'>
-							{editMode ? 'Update' : 'Create'}
-						</Button>
+						<div className='row d-flex'>
+							<div className='col'>
+								<Button
+									color={editMode ? 'success' : 'info'}
+									type='submit'
+									className='float-end mx-2'>
+									{editMode ? 'Update' : 'Create'}
+								</Button>
+								<Button
+									isLight
+									color='danger'
+									className='float-end'
+									tag='a'
+									to={`/users/${perams.id}/sops/${perams.sop_slug}`}>
+									Cancel
+								</Button>
+							</div>
+						</div>
 					</div>
 				</form>
 			</Page>

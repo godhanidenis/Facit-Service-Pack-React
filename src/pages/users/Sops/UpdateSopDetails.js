@@ -12,6 +12,7 @@ import { loadCategoryStart } from '../../../redux/ducks/category';
 import { updateSopsStart } from '../../../redux/ducks/sops';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Page from '../../../layout/Page/Page';
+import Checks, { ChecksGroup } from '../../../components/bootstrap/forms/Checks';
 
 const UpdateSopDetails = () => {
 	const perams = useParams();
@@ -20,7 +21,8 @@ const UpdateSopDetails = () => {
 	const dispatch = useDispatch();
 	const { sops } = useSelector((state) => state.sops);
 	const { category } = useSelector((state) => state.category);
-
+	const [checked, setChecked] = useState(false);
+	const toggleChecked = () => setChecked((value) => !value);
 	useEffect(() => {
 		dispatch(loadCategoryStart());
 	}, [dispatch, perams.id]);
@@ -70,7 +72,7 @@ const UpdateSopDetails = () => {
 		<PageWrapper>
 			<Page className='p-0'>
 				<form
-					className='row g-4'
+					className='row g-4 w-75'
 					onSubmit={handleSubmit(onSubmit, onError)}
 					onReset={reset}>
 					<div className='col-12'>
@@ -82,7 +84,7 @@ const UpdateSopDetails = () => {
 								})}
 							/>
 						</FormGroup>
-						{errors.Sub_category?.message}
+						<span style={{ color: 'red' }}>{errors.Sub_category?.message}</span>
 					</div>
 					<div className='col-12'>
 						<Label>Select Category</Label>
@@ -102,7 +104,7 @@ const UpdateSopDetails = () => {
 									);
 								})}
 							</Select>
-							{errors.Category?.message}
+							<span style={{ color: 'red' }}>{errors.Category?.message}</span>
 						</FormGroup>
 					</div>
 					<div className='col-12'>
@@ -152,7 +154,7 @@ const UpdateSopDetails = () => {
 								<Option value='false'>False</Option>
 							</Select>
 						</FormGroup>
-						{errors.enabled?.message}
+						<span style={{ color: 'red' }}>{errors.enabled?.message}</span>
 					</div>
 					<div className='col-12'>
 						<Label>Select Filter</Label>
@@ -201,7 +203,7 @@ const UpdateSopDetails = () => {
 								<Option value='false'>False</Option>
 							</Select>
 						</FormGroup>
-						{errors.filter?.message}
+						<span style={{ color: 'red' }}>{errors.filter?.message}</span>
 					</div>
 					<div className='col-12'>
 						<Label>Select SOP</Label>
@@ -250,8 +252,33 @@ const UpdateSopDetails = () => {
 								<Option value='true'>True</Option>
 								<Option value='false'>False</Option>
 							</Select>
+
+							{/* <ChecksGroup>
+							<Checks
+								type='switch'
+								name='sop'
+								checked={selectedSop?.sop}
+								onChange={() => {
+									setSelectedSop({
+										...selectedSop,
+										sop: !selectedSop?.sop,
+									});
+								}}
+								{...register('sop', {
+									required: 'sop is required',
+								})}
+								// key={cat.id}
+								// id={cat.id.toString()}
+								// name='emailNotification'
+								// value={cat.id}
+								// onChange={formik.handleChange}
+								// checked={formik.values.emailNotification.includes(
+								// 	cat.id.toString(),
+								// )}
+							/>
+						</ChecksGroup> */}
 						</FormGroup>
-						{errors.sop?.message}
+						<span style={{ color: 'red' }}>{errors.sop?.message}</span>
 					</div>
 					<div className='col-12'>
 						<Label>Select Type</Label>
@@ -261,7 +288,7 @@ const UpdateSopDetails = () => {
 								<Option value={1}>Critical</Option>
 								<Option value={2}>non Critical</Option>
 							</Select>
-							{errors.type?.message}
+							<span style={{ color: 'red' }}>{errors.type?.message}</span>
 						</FormGroup>
 					</div>
 					<div className='col-12'>
@@ -277,7 +304,7 @@ const UpdateSopDetails = () => {
 								<Option value='Agent'>Agent</Option>
 								<Option value='Customer'>Customer</Option>
 							</Select>
-							{errors.user_type?.message}
+							<span style={{ color: 'red' }}>{errors.user_type?.message}</span>
 						</FormGroup>
 					</div>
 					<div className='col-12'>
@@ -298,12 +325,25 @@ const UpdateSopDetails = () => {
 								})}
 							/>
 						</FormGroup>
-						{errors.weightage?.message}
+						<span style={{ color: 'red' }}>{errors.weightage?.message}</span>
 					</div>
+
 					<div className='col-12'>
-						<Button color='success' className='w-100 py-3' type='submit'>
-							Update
-						</Button>
+						<div className='row d-flex'>
+							<div className='col'>
+								<Button color='success' className='float-end mx-2' type='submit'>
+									Update
+								</Button>
+								<Button
+									isLight
+									color='danger'
+									className='float-end'
+									tag='a'
+									to={`/users/${id.id}/sops/${id.id1}`}>
+									Cancel
+								</Button>
+							</div>
+						</div>
 					</div>
 				</form>
 			</Page>

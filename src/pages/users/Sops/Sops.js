@@ -1,17 +1,36 @@
-import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import Button from '../../../components/bootstrap/Button';
 import Card, { CardBody } from '../../../components/bootstrap/Card';
 import UpdateSopDetails from './UpdateSopDetails';
 import SopsDetails from './SopsDetails';
 import AddUpdateSubSops from './AddUpdateSubSops';
 import Spinner from '../../../components/bootstrap/Spinner';
+import { loadTagListStart } from '../../../redux/ducks/tagList';
 
 const Sops = () => {
 	const [selectedSopTab, setSelectedSopTab] = useState();
+	const id = useParams();
+	// console.log('id///...', id);
+	// console.log('path...', window.location.pathname);
+	// console.log('hrewf ....', window.location.href);
+
+	// const url = window.location.pathname;
+
+	// const lastSegment = url.split('/').pop();
+
+	// console.log('last seg...', lastSegment);
+	const dispatch = useDispatch();
 	const { sops, loading } = useSelector((state) => state.sops);
 	const { subSops } = useSelector((state) => state.subSops);
+	console.log('sops .??', sops.length);
+	useEffect(() => {
+		const formData = {
+			doctype: 'tagging_found',
+		};
+		dispatch(loadTagListStart({ id: id.id, slug: formData }));
+	}, [dispatch, id.id]);
 
 	const handleActiveListTab = (sopId) => {
 		const selectedSop = sops.find((sop) => sop.id === Number(sopId));
@@ -59,7 +78,12 @@ const Sops = () => {
 									<>
 										<div className='d-flex align-items-center justify-content-between'>
 											<div className='d-flex align-items-center'>
-												<h1>{selectedSopTab?.Sub_category}</h1>
+												<h1>
+													{selectedSopTab?.Sub_category.replaceAll(
+														'_',
+														' ',
+													)}
+												</h1>
 
 												<Button
 													icon='Edit'
@@ -109,7 +133,15 @@ const Sops = () => {
 													color='info'
 													isLight
 													tag='a'
-													to={`${selectedSopTab?.slug}/sub/create`}>
+													to={`${selectedSopTab?.slug}/sub/create`}
+													isDisable={
+														window.location.pathname ===
+															`/users/${id.id}/sops/${selectedSopTab?.slug}/sub/create` ||
+														window.location.pathname ===
+															`/users/${id.id}/sops/${selectedSopTab?.slug}/sub/update` ||
+														window.location.pathname ===
+															`/users/${id.id}/sops/${selectedSopTab?.slug}/update`
+													}>
 													Add
 												</Button>
 											)}

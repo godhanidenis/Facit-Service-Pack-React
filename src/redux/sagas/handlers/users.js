@@ -38,6 +38,7 @@ export function* handleCreateUser({ payload }) {
 		const response = yield call(requestCreateUsers, payload);
 
 		if (response.status === 200) {
+			console.log('success..create....????????////////200', response.data.data);
 			yield put(createUsersSuccess(response.data.data));
 		}
 	} catch (error) {
@@ -62,6 +63,7 @@ export function* handleUpdateUser({ payload: { id, toBeUpdatedUser } }) {
 		const response = yield call(requestUpdateUsers, id, toBeUpdatedUser);
 
 		if (response.status === 200) {
+			console.log('success..create....????????////////200', response.data.data);
 			yield put(updateUsersSuccess(response.data.data));
 		}
 	} catch (error) {

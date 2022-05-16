@@ -14,7 +14,7 @@ import Card, {
 import Button from '../../../components/bootstrap/Button';
 import Icon from '../../../components/icon/Icon';
 import useSortableData from '../../../hooks/useSortableData';
-import { deleteLobsStart, loadLobsStart } from '../../../redux/ducks/lobs';
+import { deleteLobsStart } from '../../../redux/ducks/lobs';
 import PaginationButtons, {
 	dataPagination,
 	PER_COUNT,
@@ -49,12 +49,6 @@ const Lobstbl = () => {
 	const { lobs, loading, error } = useSelector((state) => state.lobs);
 	const { addToast } = useToasts();
 
-	// useEffect(() => {
-	// 	if (!lobs.length && loading !== true) {
-	// 		dispatch(loadLobsStart(Id.id));
-	// 	}
-	// }, [dispatch, Id.id, lobs.length, loading]);
-
 	useEffect(() => {
 		console.log('loading???????????', error);
 		if (error !== '') {
@@ -83,11 +77,17 @@ const Lobstbl = () => {
 
 	return (
 		<>
-			{loading ? (
-				<div className='d-flex align-items-center justify-content-center w-100 h-100'>
-					<Spinner isGrow={false} />
-				</div>
-			) : (
+			<div
+				className={
+					loading
+						? 'd-flex align-items-center justify-content-center w-100 h-100'
+						: 'visually-hidden'
+				}
+				style={{ position: 'absolute', top: 50, left: 50 }}>
+				<Spinner isGrow={false} />
+			</div>
+
+			<div style={{ opacity: loading ? 0.5 : 1 }}>
 				<PageWrapper>
 					<Page className='p-0'>
 						<div className='row'>
@@ -205,7 +205,7 @@ const Lobstbl = () => {
 						</div>
 					</Page>
 				</PageWrapper>
-			)}
+			</div>
 
 			<DeleteModel
 				deleteModalOpen={deleteModalOpen}

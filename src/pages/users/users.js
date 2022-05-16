@@ -30,42 +30,8 @@ const UsersPage = () => {
 		dispatch(loadUsersStart());
 	}, [dispatch]);
 
-	// const LIST_TAB = {
-	// 	EMPLOYEES: 'Employees',
-	// 	SERVICE: 'Services',
-	// 	PACKAGE: 'Packages',
-	// };
-	// const [activeListTab, setActiveListTab] = useState(LIST_TAB.EMPLOYEES);
-	// const handleActiveListTab = (tabName) => {
-	// 	setActiveListTab(tabName);
-	// };
-	// const getStatusActiveListTabColor = (tabName) => {
-	// 	if (activeListTab === tabName) return 'success';
-	// 	return 'light';
-	// };
 	return (
 		<div className='w-100'>
-			{/* <Card>
-				<CardHeader>
-					<CardActions>
-						<div className='bg-light p-2 rounded-3'>
-							{Object.keys(LIST_TAB).map((key) => (
-								<Button
-									key={key}
-									color={getStatusActiveListTabColor(LIST_TAB[key])}
-									onClick={() => handleActiveListTab(LIST_TAB[key])}>
-									{LIST_TAB[key]}
-								</Button>
-							))}
-						</div>
-					</CardActions>
-				</CardHeader>
-				<CardBody className='table-responsive'>
-					{activeListTab === LIST_TAB.EMPLOYEES && <Userstbl />}
-					{activeListTab === LIST_TAB.SERVICE && <AddUpdateUser />}
-					{activeListTab === LIST_TAB.PACKAGE && <AddUpdateUser />}
-				</CardBody>
-			</Card> */}
 			<Routes>
 				<Route path='' element={<Userstbl />} />
 				<Route path=':id/*' element={<UserDetails />} />
@@ -116,11 +82,17 @@ const Userstbl = () => {
 
 	return (
 		<>
-			{loading ? (
-				<div className='d-flex align-items-center justify-content-center w-100 h-100'>
-					<Spinner isGrow={false} />
-				</div>
-			) : (
+			<div
+				className={
+					loading
+						? 'd-flex align-items-center justify-content-center w-100 h-100'
+						: 'visually-hidden'
+				}
+				style={{ position: 'absolute', top: 50, left: 50 }}>
+				<Spinner isGrow={false} />
+			</div>
+
+			<div style={{ opacity: loading ? 0.5 : 1 }}>
 				<PageWrapper>
 					<Page container='fluid'>
 						<div className='row'>
@@ -234,7 +206,7 @@ const Userstbl = () => {
 																	color='danger'
 																	style={{
 																		marginLeft: '10px',
-																		cursor: 'pointer',
+																		// cursor: 'pointer',
 																	}}
 																	onClick={() => {
 																		setCurrentUser(item);
@@ -272,7 +244,7 @@ const Userstbl = () => {
 						</div>
 					</Page>
 				</PageWrapper>
-			)}
+			</div>
 
 			<DeleteModel
 				deleteModalOpen={deleteModalOpen}

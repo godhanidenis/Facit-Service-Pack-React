@@ -2,15 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
-import PageWrapper from '../../../../layout/PageWrapper/PageWrapper';
-import Page from '../../../../layout/Page/Page';
-import Card, {
-	CardActions,
-	CardBody,
-	CardHeader,
-	CardLabel,
-	CardTitle,
-} from '../../../../components/bootstrap/Card';
+
 import Button from '../../../../components/bootstrap/Button';
 import FormGroup from '../../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../../components/bootstrap/forms/Input';
@@ -18,12 +10,14 @@ import Label from '../../../../components/bootstrap/forms/Label';
 import Select from '../../../../components/bootstrap/forms/Select';
 import Option from '../../../../components/bootstrap/Option';
 import { createAgentsStart, updateAgentsStart } from '../../../../redux/ducks/agents';
+import Spinner from '../../../../components/bootstrap/Spinner';
 
 const AddEditAgent = () => {
 	const id = useParams();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [editMode, setEditMode] = useState(false);
+	const [dataSubmited, setDataSubmited] = useState(false);
 
 	const {
 		register,
@@ -33,7 +27,7 @@ const AddEditAgent = () => {
 		reset,
 	} = useForm();
 	const { teams } = useSelector((state) => state.teams);
-	const { agents } = useSelector((state) => state.agents);
+	const { agents, loading } = useSelector((state) => state.agents);
 	useEffect(() => {
 		if (id.id1) {
 			setEditMode(true);
@@ -51,6 +45,11 @@ const AddEditAgent = () => {
 		}
 	}, [id, agents, setValue]);
 
+	useEffect(() => {
+		console.log('useefect laodinh', loading);
+		if (!loading && dataSubmited) navigate(`/users/${id.id}/teams/${id.teamId}/agents`);
+	}, [dataSubmited, navigate, id.id, id.teamId, loading]);
+
 	const onSubmit = (data) => {
 		console.log('data', data);
 		const formData = {
@@ -62,18 +61,34 @@ const AddEditAgent = () => {
 		};
 		if (editMode) {
 			dispatch(updateAgentsStart({ id: id.id1, toBeUpdatedAgent: formData }));
-			navigate(`/users/${id.id}/teams/${id.teamId}/agents`);
+			setDataSubmited(true);
 		} else {
 			dispatch(createAgentsStart(formData));
-			navigate(`/users/${id.id}/teams/${id.teamId}/agents`);
+			setDataSubmited(true);
 		}
 	};
 	const onError = (errors) => console.log('Errors Occurred !! :', errors);
 
 	return (
 		<>
-			<div className='row align-items-center justify-content-center m-4'>
+			<div
+				className={
+					loading
+						? 'd-flex align-items-center justify-content-center w-100 h-100'
+						: 'visually-hidden'
+				}
+				style={{ position: 'absolute', top: 50, left: 50 }}>
+				<Spinner isGrow={false} />
+			</div>
+			<div
+				className='row align-items-center justify-content-center m-4'
+				style={{ opacity: loading ? 0.5 : 1 }}>
 				<div className='col-md-6'>
+					<div className='col-12 mb-4'>
+						<h3>
+							<b>{!editMode ? 'Add Lob Details' : 'Update Lob Details'}</b>
+						</h3>
+					</div>
 					<form
 						className='row g-4'
 						onSubmit={handleSubmit(onSubmit, onError)}
@@ -88,7 +103,7 @@ const AddEditAgent = () => {
 									})}
 								/>
 							</FormGroup>
-							{errors.Agent_id?.message}
+							<span style={{ color: 'red' }}>{errors.Agent_id?.message}</span>
 						</div>
 						<div className='col-12'>
 							<FormGroup id='Agent_name' isFloating label='Your Agent Name'>
@@ -99,7 +114,7 @@ const AddEditAgent = () => {
 									})}
 								/>
 							</FormGroup>
-							{errors.Agent_name?.message}
+							<span style={{ color: 'red' }}>{errors.Agent_name?.message}</span>
 						</div>
 
 						<div className='col-12'>
@@ -121,7 +136,7 @@ const AddEditAgent = () => {
 									})}
 								/>
 							</FormGroup>
-							{errors.phone_no?.message}
+							<span style={{ color: 'red' }}>{errors.phone_no?.message}</span>
 						</div>
 						<div className='col-12'>
 							<div className='row'>
@@ -143,182 +158,37 @@ const AddEditAgent = () => {
 												);
 											})}
 										</Select>
-										{errors.Team?.message}
+										<span style={{ color: 'red' }}>{errors.Team?.message}</span>
 									</FormGroup>
 								</div>
 							</div>
-						</div>
 
-						{/* <div className='col-12'>
-							<Button
-								color={editMode ? 'success' : 'info'}
-								className='w-100 py-3'
-								type='submit'>
-								{!editMode ? 'Create' : 'Update'}
-							</Button>
-						</div> */}
-						<div className='col-12' style={{ marginTop: 50 }}>
-							<div className='row d-flex'>
-								<div className='col'>
-									<Button
-										isLight
-										color='success'
-										// className='w-100 py-3 float-right'
-										className='float-end mx-2'
-										type='submit'>
-										{!editMode ? 'Create' : 'Update'}
-									</Button>
-
-									<Button
-										color='info'
-										isLight
-										className='float-end'
-										tag='a'
-										to={`/users/${id.id}/teams/${id.teamId}/agents`}>
-										cancle
-									</Button>
-									{/* <Button
+							<div className='col-12' style={{ marginTop: 50 }}>
+								<div className='row d-flex'>
+									<div className='col'>
+										<Button
 											isLight
-											color='info'
-											className='w-100 py-3'
+											color='success'
+											className='float-end mx-2'
 											type='submit'>
+											{!editMode ? 'Create' : 'Update'}
+										</Button>
+
+										<Button
+											color='info'
+											isLight
+											className='float-end'
+											tag='a'
+											to={`/users/${id.id}/teams/${id.teamId}/agents`}>
 											cancle
-										</Button> */}
+										</Button>
+									</div>
 								</div>
 							</div>
 						</div>
 					</form>
 				</div>
 			</div>
-			{/* <PageWrapper className='mt-3'>
-				<Page className='p-0'>
-					<div className='row h-100 align-items-center justify-content-center'>
-						<div className='col-xl-4 col-lg-6 col-md-8 shadow-3d-container'>
-							<Card className='shadow-3d-dark'>
-								<CardHeader>
-									<CardLabel icon='People' iconColor='info'>
-										<CardTitle tag='h4' className='h5'>
-											{!editMode
-												? 'Add Agent Details'
-												: 'Update Agent Details'}
-										</CardTitle>
-									</CardLabel>
-									<CardActions>
-										<Button
-											icon='Backspace'
-											color='info'
-											isLight
-											tag='a'
-											// to={`/users/${id.id}/teams/${id.agentId}/agents`}>
-											to='../../agents'>
-											Back to Agents
-										</Button>
-									</CardActions>
-								</CardHeader>
-								<CardBody>
-									<form
-										className='row g-4'
-										onSubmit={handleSubmit(onSubmit, onError)}
-										onReset={reset}>
-										<div className='col-12'>
-											<FormGroup
-												id='Agent_id'
-												isFloating
-												label='Your Agent Id'>
-												<Input
-													autoComplete='off'
-													type='number'
-													{...register('Agent_id', {
-														required: 'Agent Id is required',
-													})}
-												/>
-											</FormGroup>
-											{errors.Agent_id?.message}
-										</div>
-										<div className='col-12'>
-											<FormGroup
-												id='Agent_name'
-												isFloating
-												label='Your Agent Name'>
-												<Input
-													autoComplete='off'
-													{...register('Agent_name', {
-														required: 'Agent Name is required',
-													})}
-												/>
-											</FormGroup>
-											{errors.Agent_name?.message}
-										</div>
-
-										<div className='col-12'>
-											<FormGroup
-												id='phone_no'
-												isFloating
-												label='Your Phone Number'>
-												<Input
-													type='number'
-													autoComplete='off'
-													{...register('phone_no', {
-														required: 'Phone Number is required',
-
-														minLength: {
-															value: 10,
-															message:
-																'Phone Number must be 10 numbers',
-														},
-														maxLength: {
-															value: 10,
-															message:
-																'Phone Number must be 10 numbers',
-														},
-													})}
-												/>
-											</FormGroup>
-											{errors.phone_no?.message}
-										</div>
-										<div className='col-12'>
-											<div className='row'>
-												<Label>Select Team</Label>
-												<div className='col-auto'>
-													<FormGroup>
-														<Select
-															size='sm'
-															ariaLabel='Select Team'
-															{...register('Team', {
-																required: 'Team is required',
-															})}>
-															<Option value=''>Select Team</Option>
-															{teams?.map((team) => {
-																return (
-																	<Option
-																		key={team?.id}
-																		value={team?.id}>
-																		{team?.Team_name}
-																	</Option>
-																);
-															})}
-														</Select>
-														{errors.Team?.message}
-													</FormGroup>
-												</div>
-											</div>
-										</div>
-
-										<div className='col-12'>
-											<Button
-												color={editMode ? 'success' : 'info'}
-												className='w-100 py-3'
-												type='submit'>
-												{!editMode ? 'Create' : 'Update'}
-											</Button>
-										</div>
-									</form>
-								</CardBody>
-							</Card>
-						</div>
-					</div>
-				</Page>
-			</PageWrapper> */}
 		</>
 	);
 };

@@ -12,7 +12,7 @@ import Card, {
 } from '../../../components/bootstrap/Card';
 import Page from '../../../layout/Page/Page';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
-import { deleteTeamsStart, loadTeamsStart } from '../../../redux/ducks/teams';
+import { deleteTeamsStart } from '../../../redux/ducks/teams';
 import Icon from '../../../components/icon/Icon';
 import useSortableData from '../../../hooks/useSortableData';
 import PaginationButtons, {
@@ -53,12 +53,6 @@ const UsersTeams = () => {
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { addToast } = useToasts();
 
-	// useEffect(() => {
-	// 	if (!teams.length) {
-	// 		dispatch(loadTeamsStart(id.id));
-	// 	}
-	// }, [dispatch, id.id, teams.length]);
-
 	const handleDeleteTeam = () => {
 		dispatch(deleteTeamsStart(currentTeam.id));
 		setDeleteModalOpen(false);
@@ -86,11 +80,17 @@ const UsersTeams = () => {
 
 	return (
 		<>
-			{loading ? (
-				<div className='d-flex align-items-center justify-content-center w-100 h-100'>
-					<Spinner isGrow={false} />
-				</div>
-			) : (
+			<div
+				className={
+					loading
+						? 'd-flex align-items-center justify-content-center w-100 h-100'
+						: 'visually-hidden'
+				}
+				style={{ position: 'absolute', top: 50, left: 50 }}>
+				<Spinner isGrow={false} />
+			</div>
+
+			<div style={{ opacity: loading ? 0.5 : 1 }}>
 				<PageWrapper>
 					<Page className='p-0'>
 						<div className='row'>
@@ -264,7 +264,8 @@ const UsersTeams = () => {
 						</div>
 					</Page>
 				</PageWrapper>
-			)}
+			</div>
+
 			<DeleteModel
 				deleteModalOpen={deleteModalOpen}
 				setDeleteModalOpen={setDeleteModalOpen}

@@ -18,6 +18,7 @@ import Label from '../../../components/bootstrap/forms/Label';
 import Select from '../../../components/bootstrap/forms/Select';
 import Option from '../../../components/bootstrap/Option';
 import DeleteModel from '../../../common/ConfirmationModal';
+import { updateTagListStart } from '../../../redux/ducks/tagList';
 
 const SopsDetails = () => {
 	const dispatch = useDispatch();
@@ -36,6 +37,7 @@ const SopsDetails = () => {
 		reset,
 	} = useForm();
 	const [tagList, setTagList] = useState([]);
+
 	useEffect(() => {
 		const formData = {
 			doctype: perams.sop_slug,
@@ -107,6 +109,14 @@ const SopsDetails = () => {
 			max: Number(data?.max),
 			type: data?.type,
 		};
+		if (id.id1 === 'tagging_found') {
+			dispatch(
+				updateTagListStart({
+					id: tagId,
+					record: formDataUpdateTagging,
+				}),
+			);
+		}
 
 		if (perams.sop_slug === 'tagging_found') {
 			dispatch(
@@ -166,78 +176,91 @@ const SopsDetails = () => {
 						switch (perams.sop_slug) {
 							case 'tagging_found':
 								return (
-									<form
-										className='row g-4'
-										onSubmit={handleSubmit(onSubmit, onError)}
-										onReset={reset}>
-										<div className='col-12'>
-											<Button
-												color='success'
-												className='mb-2'
-												style={{ display: 'flex', marginLeft: 'auto' }}
-												type='submit'>
-												Save
-											</Button>
-										</div>
-										<div className='col-12'>
-											<FormGroup
-												id='tag_list'
-												isFloating
-												label='Your tag_list'>
-												<Input
-													autoComplete='off'
-													{...register('tag_list')}
-													onKeyPress={(ev) => {
-														if (ev.key === 'Enter') {
-															ev.preventDefault();
-															console.log(ev.target.value);
-															setTagList([
-																...tagList,
-																ev.target.value,
-															]);
-														}
-													}}
-												/>
-											</FormGroup>
-											{errors.tag_list?.message}
-										</div>
-										<div className='d-flex align-items-center'>
-											{tagList &&
-												tagList?.map((tag) => {
-													return (
-														<div
-															key={tag}
-															style={{
-																display: 'flex',
-																alignItems: 'center',
-																justifyContent: 'space-between',
-																padding: '5px',
-																border: '1px solid gray',
-																borderRadius: '12px',
-																width: '140px',
-																margin: '8px',
-															}}>
-															<span className='fw-bold'>{tag}</span>
-															<Icon
-																size='lg'
-																icon='Cancel'
-																color='danger'
-																style={{
-																	cursor: 'pointer',
-																}}
-																onClick={() =>
-																	setTagList((tags) =>
-																		tags.filter(
-																			(tg) => tg !== tag,
-																		),
-																	)
+									<div>
+										{subSops.length ? (
+											<form
+												className='row g-4 w-75'
+												onSubmit={handleSubmit(onSubmit, onError)}
+												onReset={reset}>
+												<div className='col-12'>
+													<FormGroup
+														id='tag_list'
+														isFloating
+														label='Your tag_list'>
+														<Input
+															autoComplete='off'
+															{...register('tag_list')}
+															onKeyPress={(ev) => {
+																if (ev.key === 'Enter') {
+																	ev.preventDefault();
+																	console.log(ev.target.value);
+																	setTagList([
+																		...tagList,
+																		ev.target.value,
+																	]);
 																}
-															/>
-														</div>
-													);
-												})}
-										</div>
-									</form>
+															}}
+														/>
+													</FormGroup>
+													{errors.tag_list?.message}
+												</div>
+												<div className='d-flex align-items-center'>
+													{tagList &&
+														tagList?.map((tag) => {
+															return (
+																<div
+																	key={tag}
+																	style={{
+																		display: 'flex',
+																		alignItems: 'center',
+																		justifyContent:
+																			'space-between',
+																		padding: '5px',
+																		border: '1px solid gray',
+																		borderRadius: '12px',
+																		width: '140px',
+																		margin: '8px',
+																	}}>
+																	<span className='fw-bold'>
+																		{tag}
+																	</span>
+																	<Icon
+																		size='lg'
+																		icon='Cancel'
+																		color='danger'
+																		style={{
+																			cursor: 'pointer',
+																		}}
+																		onClick={() =>
+																			setTagList((tags) =>
+																				tags.filter(
+																					(tg) =>
+																						tg !== tag,
+																				),
+																			)
+																		}
+																	/>
+																</div>
+															);
+														})}
+												</div>
+												<div className='col-12'>
+													<Button
+														color='success'
+														className='mb-2'
+														style={{
+															display: 'flex',
+															marginLeft: 'auto',
+														}}
+														type='submit'>
+														Save
+													</Button>
+												</div>
+											</form>
+										) : (
+											''
+										)}
+									</div>
 								);
 
 							case 'customer_call_end_sentiment_found':
@@ -252,21 +275,9 @@ const SopsDetails = () => {
 									<div>
 										{subSops.length ? (
 											<form
-												className='row g-4'
+												className='row g-4 w-75'
 												onSubmit={handleSubmit(onSubmit, onError)}
 												onReset={reset}>
-												<div className='col-12'>
-													<Button
-														color='success'
-														className='mb-2'
-														style={{
-															display: 'flex',
-															marginLeft: 'auto',
-														}}
-														type='submit'>
-														Save
-													</Button>
-												</div>
 												<div className='col-12'>
 													<FormGroup
 														id='min'
@@ -316,6 +327,18 @@ const SopsDetails = () => {
 														{errors.sentiment_type?.message}
 													</FormGroup>
 												</div>
+												<div className='col-12'>
+													<Button
+														color='success'
+														className='mb-2'
+														style={{
+															display: 'flex',
+															marginLeft: 'auto',
+														}}
+														type='submit'>
+														Save
+													</Button>
+												</div>
 											</form>
 										) : (
 											''
@@ -329,21 +352,9 @@ const SopsDetails = () => {
 									<div>
 										{subSops.length ? (
 											<form
-												className='row g-4'
+												className='row g-4 w-75'
 												onSubmit={handleSubmit(onSubmit, onError)}
 												onReset={reset}>
-												<div className='col-12'>
-													<Button
-														color='success'
-														className='mb-2'
-														style={{
-															display: 'flex',
-															marginLeft: 'auto',
-														}}
-														type='submit'>
-														Save
-													</Button>
-												</div>
 												<div className='col-12'>
 													<FormGroup
 														id='min'
@@ -393,6 +404,18 @@ const SopsDetails = () => {
 														{errors.incidents_type?.message}
 													</FormGroup>
 												</div>
+												<div className='col-12'>
+													<Button
+														color='success'
+														className='mb-2'
+														style={{
+															display: 'flex',
+															marginLeft: 'auto',
+														}}
+														type='submit'>
+														Save
+													</Button>
+												</div>
 											</form>
 										) : (
 											''
@@ -409,21 +432,9 @@ const SopsDetails = () => {
 									<div>
 										{subSops.length ? (
 											<form
-												className='row g-4'
+												className='row g-4 w-75'
 												onSubmit={handleSubmit(onSubmit, onError)}
 												onReset={reset}>
-												<div className='col-12'>
-													<Button
-														color='success'
-														className='mb-2'
-														style={{
-															display: 'flex',
-															marginLeft: 'auto',
-														}}
-														type='submit'>
-														Save
-													</Button>
-												</div>
 												<div className='col-12'>
 													<FormGroup
 														id='min'
@@ -467,8 +478,21 @@ const SopsDetails = () => {
 															<Option value='True'>True</Option>
 															<Option value='False'>False</Option>
 														</Select>
+
 														{errors.type?.message}
 													</FormGroup>
+												</div>
+												<div className='col-12'>
+													<Button
+														color='success'
+														className='mb-2'
+														style={{
+															display: 'flex',
+															marginLeft: 'auto',
+														}}
+														type='submit'>
+														Save
+													</Button>
 												</div>
 											</form>
 										) : (
@@ -485,49 +509,63 @@ const SopsDetails = () => {
 							case 'call_additional_info_found':
 							case 'call_alternate_channel_found':
 								return (
-									subSops.length &&
-									subSops?.map((subSop) => {
-										return (
-											<Card key={subSop?._id}>
-												<CardBody className='d-flex align-items-center justify-content-between'>
-													<div>
-														<h1>{subSop?._source?.text}</h1>
+									<div className='row d-flex align-items-center justify-content-between'>
+										{subSops.length &&
+											subSops?.map((subSop) => {
+												return (
+													<div className='col-6'>
+														<Card key={subSop?._id}>
+															<CardBody>
+																<div className='row'>
+																	<div className='col-10'>
+																		<h4>
+																			{subSop?._source?.text}
+																		</h4>
+																	</div>
+																</div>
+																<div>
+																	<Icon
+																		size='lg'
+																		icon='Edit'
+																		color='info'
+																		style={{
+																			cursor: 'pointer',
+																		}}
+																		onClick={() => {
+																			navigate(
+																				`/users/${perams.id}/sops/${perams.sop_slug}/sub/update`,
+																				{
+																					state: {
+																						id: subSop?._id,
+																					},
+																				},
+																			);
+																		}}
+																	/>
+																	<Icon
+																		size='lg'
+																		icon='Delete'
+																		color='danger'
+																		style={{
+																			cursor: 'pointer',
+																			marginLeft: '25px',
+																		}}
+																		onClick={() => {
+																			setCurrentSubSops(
+																				subSop,
+																			);
+																			setDeleteModalOpen(
+																				true,
+																			);
+																		}}
+																	/>
+																</div>
+															</CardBody>
+														</Card>
 													</div>
-													<div>
-														<Icon
-															size='lg'
-															icon='Edit'
-															color='info'
-															style={{ cursor: 'pointer' }}
-															onClick={() => {
-																navigate(
-																	`/users/${perams.id}/sops/${perams.sop_slug}/sub/update`,
-																	{
-																		state: {
-																			id: subSop?._id,
-																		},
-																	},
-																);
-															}}
-														/>
-														<Icon
-															size='lg'
-															icon='Delete'
-															color='danger'
-															style={{
-																cursor: 'pointer',
-																marginLeft: '25px',
-															}}
-															onClick={() => {
-																setCurrentSubSops(subSop);
-																setDeleteModalOpen(true);
-															}}
-														/>
-													</div>
-												</CardBody>
-											</Card>
-										);
-									})
+												);
+											})}
+									</div>
 								);
 							default:
 								return null;

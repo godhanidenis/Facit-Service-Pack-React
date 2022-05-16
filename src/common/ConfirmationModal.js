@@ -20,7 +20,7 @@ const DeleteModel = (props) => {
 			isCentered>
 			<ModalHeader>
 				<ModalTitle>
-					<div>
+					<div className='d-flex align-items-center'>
 						<Icon
 							size='3x'
 							icon='Cancel'
