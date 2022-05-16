@@ -95,11 +95,11 @@ const AddUpdateLob = () => {
 								<Input
 									autoComplete='off'
 									{...register('Lob_name', {
-										required: 'Lob_name is required',
+										required: 'Lob name is required',
 									})}
 								/>
 							</FormGroup>
-							{errors.Lob_name?.message}
+							<span style={{ color: 'red' }}>{errors.Lob_name?.message}</span>
 						</div>
 
 						<div className='col-12'>

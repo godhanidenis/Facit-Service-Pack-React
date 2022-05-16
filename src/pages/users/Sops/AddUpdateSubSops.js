@@ -313,7 +313,7 @@ const AddUpdateSubSops = () => {
 									})}
 								/>
 							</FormGroup>
-							{errors.text?.message}
+							<span style={{ color: 'red' }}>{errors.text?.message}</span>
 						</div>
 					)}
 
@@ -334,7 +334,7 @@ const AddUpdateSubSops = () => {
 									})}
 								/>
 							</FormGroup>
-							{errors.score?.message}
+							<span style={{ color: 'red' }}>{errors.score?.message}</span>
 						</div>
 					)}
 					{(id.id1 === 'call_opening_found' ||
@@ -363,7 +363,7 @@ const AddUpdateSubSops = () => {
 										);
 									})}
 								</Select>
-								{errors.team_list?.message}
+								<span style={{ color: 'red' }}>{errors.team_list?.message}</span>
 							</FormGroup>
 						</div>
 					)}
@@ -385,7 +385,7 @@ const AddUpdateSubSops = () => {
 										}}
 									/>
 								</FormGroup>
-								{errors.keywords?.message}
+								<span style={{ color: 'red' }}>{errors.keywords?.message}</span>
 							</div>
 							<div className='d-flex align-items-center'>
 								{keywordsList &&
@@ -443,7 +443,7 @@ const AddUpdateSubSops = () => {
 										}}
 									/>
 								</FormGroup>
-								{errors.tag_list?.message}
+								<span style={{ color: 'red' }}>{errors.tag_list?.message}</span>
 							</div>
 							<div className='d-flex align-items-center'>
 								{tagList &&
@@ -504,7 +504,7 @@ const AddUpdateSubSops = () => {
 											);
 										})}
 								</Select>
-								{errors.tag_type?.message}
+								<span style={{ color: 'red' }}>{errors.tag_type?.message}</span>
 							</FormGroup>
 						</div>
 					)}
@@ -535,8 +535,7 @@ const AddUpdateSubSops = () => {
 										})}
 									/>
 								</FormGroup>
-
-								{errors.min?.message}
+								<span style={{ color: 'red' }}>{errors.min?.message}</span>
 							</div>
 							<div className='col-12'>
 								<FormGroup id='max' isFloating label='Your max value'>
@@ -548,7 +547,7 @@ const AddUpdateSubSops = () => {
 										})}
 									/>
 								</FormGroup>
-								{errors.max?.message}
+								<span style={{ color: 'red' }}>{errors.max?.message}</span>
 							</div>
 						</>
 					)}
@@ -573,7 +572,9 @@ const AddUpdateSubSops = () => {
 									<Option value='True'>True</Option>
 									<Option value='False'>False</Option>
 								</Select>
-								{errors.sentiment_type?.message}
+								<span style={{ color: 'red' }}>
+									{errors.sentiment_type?.message}
+								</span>
 							</FormGroup>
 						</div>
 					)}
@@ -592,7 +593,9 @@ const AddUpdateSubSops = () => {
 									<Option value='True'>True</Option>
 									<Option value='False'>False</Option>
 								</Select>
-								{errors.incidents_type?.message}
+								<span style={{ color: 'red' }}>
+									{errors.incidents_type?.message}
+								</span>
 							</FormGroup>
 						</div>
 					)}
@@ -615,7 +618,7 @@ const AddUpdateSubSops = () => {
 									<Option value='True'>True</Option>
 									<Option value='False'>False</Option>
 								</Select>
-								{errors.type?.message}
+								<span style={{ color: 'red' }}>{errors.type?.message}</span>
 							</FormGroup>
 						</div>
 					)}

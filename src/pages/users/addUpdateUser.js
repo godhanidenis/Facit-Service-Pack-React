@@ -49,9 +49,9 @@ const AddUpdateUser = () => {
 				];
 
 				fields.forEach((field) => setValue(field, singleUser[field]));
-				setSelectedImage(`${singleUser?.profile_picture}`);
+				setSelectedImage(`${singleUser?.pre_signed_url}`);
 
-				srcToFile(`${singleUser?.profile_picture}`, 'profile.png', 'image/png').then(
+				srcToFile(`${singleUser?.pre_signed_url}`, 'profile.png', 'image/png').then(
 					function (file) {
 						setUpdateProfilePictureFile(file);
 					},
@@ -132,6 +132,7 @@ const AddUpdateUser = () => {
 						onReset={reset}>
 						<div>
 							<h1>Create New User</h1>
+							{/* <h1>{!editMode ? 'Create New User' : 'Update User'}</h1> */}
 						</div>
 						<div className='row pt-5 '>
 							<div className='col-4 d-flex align-items-center justify-content-center flex-column'>

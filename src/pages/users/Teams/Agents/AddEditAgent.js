@@ -103,7 +103,7 @@ const AddEditAgent = () => {
 									})}
 								/>
 							</FormGroup>
-							{errors.Agent_id?.message}
+							<span style={{ color: 'red' }}>{errors.Agent_id?.message}</span>
 						</div>
 						<div className='col-12'>
 							<FormGroup id='Agent_name' isFloating label='Your Agent Name'>
@@ -114,7 +114,7 @@ const AddEditAgent = () => {
 									})}
 								/>
 							</FormGroup>
-							{errors.Agent_name?.message}
+							<span style={{ color: 'red' }}>{errors.Agent_name?.message}</span>
 						</div>
 
 						<div className='col-12'>
@@ -136,7 +136,7 @@ const AddEditAgent = () => {
 									})}
 								/>
 							</FormGroup>
-							{errors.phone_no?.message}
+							<span style={{ color: 'red' }}>{errors.phone_no?.message}</span>
 						</div>
 						<div className='col-12'>
 							<div className='row'>
@@ -158,7 +158,7 @@ const AddEditAgent = () => {
 												);
 											})}
 										</Select>
-										{errors.Team?.message}
+										<span style={{ color: 'red' }}>{errors.Team?.message}</span>
 									</FormGroup>
 								</div>
 							</div>

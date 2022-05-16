@@ -77,7 +77,7 @@ const UserDetail = () => {
 
 				setUserInfoData(singleUser);
 
-				setSelectedImage(`${singleUser?.profile_picture}`);
+				setSelectedImage(`${singleUser?.pre_signed_url}`);
 				const current = new Date(singleUser?.date_joined);
 				setjoinedDate(current.toDateString());
 				console.log('date???????????', current.toDateString());
@@ -91,8 +91,8 @@ const UserDetail = () => {
 					<div className='col-12'>
 						<div className='row align-items-center'>
 							<div className='col-auto'>
-								<Avatar src={User1Img} />
-								{/* <Avatar src={selectedImage || ''} /> */}
+								{/* <Avatar src={User1Img} /> */}
+								<Avatar src={selectedImage || ''} />
 								<div
 									className='bg-success rounded-circle'
 									style={{

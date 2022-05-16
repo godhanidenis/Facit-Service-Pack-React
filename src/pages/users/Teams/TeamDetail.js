@@ -15,14 +15,23 @@ const TeamsPage = () => {
 	const id = useParams();
 
 	useEffect(() => {
-		if (window.location.pathname === `/users/${id.id}/teams/${id.teamId}/agents`) {
+		if (
+			window.location.pathname === `/users/${id.id}/teams/${id.teamId}/agents` ||
+			`/users/${id.id}/teams/${id.teamId}/agents/create` ||
+			`/users/${id.id}/teams/${id.teamId}/agents/edit`
+			// (`/users/${id.id}/teams/${id.teamId}/agents/create` ||
+			// 	`/users/${id.id}/teams/${id.teamId}/agents/edit` ||
+			// 	`/users/${id.id}/teams/${id.teamId}/agents`)
+		) {
+			// setAgentdetaillinkActie('');)) {
 			setAgentdetaillinkActie('');
 			setAgentlinkActie('active');
-		} else {
+		}
+		if (`/users/${id.id}/teams/${id.teamId}/`) {
 			setAgentdetaillinkActie('active');
 			setAgentlinkActie('');
 		}
-	}, [id.id, id.teamId]);
+	}, [id.id, id.id1, id.teamId]);
 
 	return (
 		<div className='w-100 h-100' style={{ margin: 10 }}>
