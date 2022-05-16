@@ -23,7 +23,7 @@ import { updateTagListStart } from '../../../redux/ducks/tagList';
 const SopsDetails = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const id = useParams();
+	const perams = useParams();
 	const [tagId, setTagId] = useState();
 	const { subSops } = useSelector((state) => state.subSops);
 	console.log('sub sops::', subSops);
@@ -40,10 +40,10 @@ const SopsDetails = () => {
 
 	useEffect(() => {
 		const formData = {
-			doctype: id.id1,
+			doctype: perams.sop_slug,
 		};
-		dispatch(loadSubSopsStart({ id: id.id, slug: formData }));
-	}, [dispatch, id.id, id.id1]);
+		dispatch(loadSubSopsStart({ id: perams.id, slug: formData }));
+	}, [dispatch, perams.id, perams.sop_slug]);
 	console.log('sub sops::', subSops);
 
 	const handleDeleteSubSops = () => {
@@ -84,27 +84,27 @@ const SopsDetails = () => {
 	const onSubmit = (data) => {
 		console.log('data', data);
 		const formDataUpdateTagging = {
-			doctype: id.id1.replace('_found', ''),
+			doctype: perams.sop_slug.replace('_found', ''),
 			tag_list: tagList,
-			user_id: Number(id.id),
+			user_id: Number(perams.id),
 		};
 		const formDataUpdateMinMaxSentimate = {
-			doctype: id.id1.replace('_found', ''),
-			user_id: Number(id.id),
+			doctype: perams.sop_slug.replace('_found', ''),
+			user_id: Number(perams.id),
 			min: Number(data?.min),
 			max: Number(data?.max),
 			sentiment_type: data?.sentiment_type,
 		};
 		const formDataUpdateMinMaxIncident = {
-			doctype: id.id1.replace('_found', ''),
-			user_id: Number(id.id),
+			doctype: perams.sop_slug.replace('_found', ''),
+			user_id: Number(perams.id),
 			min: Number(data?.min),
 			max: Number(data?.max),
 			incidents_type: data?.incidents_type,
 		};
 		const formDataUpdateMinMaxType = {
-			doctype: id.id1.replace('_found', ''),
-			user_id: Number(id.id),
+			doctype: perams.sop_slug.replace('_found', ''),
+			user_id: Number(perams.id),
 			min: Number(data?.min),
 			max: Number(data?.max),
 			type: data?.type,
@@ -118,7 +118,7 @@ const SopsDetails = () => {
 			);
 		}
 
-		if (id.id1 === 'tagging_found') {
+		if (perams.sop_slug === 'tagging_found') {
 			dispatch(
 				updateSubSopsStart({
 					id: tagId,
@@ -126,14 +126,14 @@ const SopsDetails = () => {
 				}),
 			);
 		} else if (
-			id.id1 === 'customer_call_end_sentiment_found' ||
-			id.id1 === 'customer_overall_call_sentiment_found' ||
-			id.id1 === 'customer_call_start_sentiment_found' ||
-			id.id1 === 'customer_overtalk_incidents_found' ||
-			id.id1 === 'overall_call_sentiment_found' ||
-			id.id1 === 'call_start_sentiment_found' ||
-			id.id1 === 'call_end_sentiment_found' ||
-			id.id1 === 'overtalk_incidents_found'
+			perams.sop_slug === 'customer_call_end_sentiment_found' ||
+			perams.sop_slug === 'customer_overall_call_sentiment_found' ||
+			perams.sop_slug === 'customer_call_start_sentiment_found' ||
+			perams.sop_slug === 'customer_overtalk_incidents_found' ||
+			perams.sop_slug === 'overall_call_sentiment_found' ||
+			perams.sop_slug === 'call_start_sentiment_found' ||
+			perams.sop_slug === 'call_end_sentiment_found' ||
+			perams.sop_slug === 'overtalk_incidents_found'
 		) {
 			dispatch(
 				updateSubSopsStart({
@@ -142,8 +142,8 @@ const SopsDetails = () => {
 				}),
 			);
 		} else if (
-			id.id1 === 'silence_incidents_found' ||
-			id.id1 === 'customer_silence_incidents_found'
+			perams.sop_slug === 'silence_incidents_found' ||
+			perams.sop_slug === 'customer_silence_incidents_found'
 		) {
 			dispatch(
 				updateSubSopsStart({
@@ -152,11 +152,11 @@ const SopsDetails = () => {
 				}),
 			);
 		} else if (
-			id.id1 === 'rate_of_speech_found' ||
-			id.id1 === 'responsiveness_found' ||
-			id.id1 === 'customer_rate_of_speech_found' ||
-			id.id1 === 'customer_responsiveness_found' ||
-			id.id1 === 'customer_clarity_found'
+			perams.sop_slug === 'rate_of_speech_found' ||
+			perams.sop_slug === 'responsiveness_found' ||
+			perams.sop_slug === 'customer_rate_of_speech_found' ||
+			perams.sop_slug === 'customer_responsiveness_found' ||
+			perams.sop_slug === 'customer_clarity_found'
 		) {
 			dispatch(
 				updateSubSopsStart({
@@ -173,7 +173,7 @@ const SopsDetails = () => {
 			<PageWrapper>
 				<Page className='p-0'>
 					{(() => {
-						switch (id.id1) {
+						switch (perams.sop_slug) {
 							case 'tagging_found':
 								return (
 									<div>
@@ -522,42 +522,43 @@ const SopsDetails = () => {
 																			{subSop?._source?.text}
 																		</h4>
 																	</div>
-																	<div className='col-2 d-flex align-items-center justify-content-between'>
-																		<Icon
-																			size='lg'
-																			icon='Edit'
-																			color='info'
-																			style={{
-																				cursor: 'pointer',
-																			}}
-																			onClick={() => {
-																				navigate(
-																					`/users/${id.id}/sops/${id.id1}/sub/update`,
-																					{
-																						state: {
-																							id: subSop?._id,
-																						},
+																</div>
+																<div>
+																	<Icon
+																		size='lg'
+																		icon='Edit'
+																		color='info'
+																		style={{
+																			cursor: 'pointer',
+																		}}
+																		onClick={() => {
+																			navigate(
+																				`/users/${perams.id}/sops/${perams.sop_slug}/sub/update`,
+																				{
+																					state: {
+																						id: subSop?._id,
 																					},
-																				);
-																			}}
-																		/>
-																		<Icon
-																			size='lg'
-																			icon='Delete'
-																			color='danger'
-																			style={{
-																				cursor: 'pointer',
-																			}}
-																			onClick={() => {
-																				setCurrentSubSops(
-																					subSop,
-																				);
-																				setDeleteModalOpen(
-																					true,
-																				);
-																			}}
-																		/>
-																	</div>
+																				},
+																			);
+																		}}
+																	/>
+																	<Icon
+																		size='lg'
+																		icon='Delete'
+																		color='danger'
+																		style={{
+																			cursor: 'pointer',
+																			marginLeft: '25px',
+																		}}
+																		onClick={() => {
+																			setCurrentSubSops(
+																				subSop,
+																			);
+																			setDeleteModalOpen(
+																				true,
+																			);
+																		}}
+																	/>
 																</div>
 															</CardBody>
 														</Card>

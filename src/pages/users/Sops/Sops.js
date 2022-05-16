@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Routes, Route } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import Button from '../../../components/bootstrap/Button';
 import Card, { CardBody } from '../../../components/bootstrap/Card';
-
 import UpdateSopDetails from './UpdateSopDetails';
 import SopsDetails from './SopsDetails';
 import AddUpdateSubSops from './AddUpdateSubSops';
@@ -11,9 +10,8 @@ import Spinner from '../../../components/bootstrap/Spinner';
 import { loadTagListStart } from '../../../redux/ducks/tagList';
 
 const Sops = () => {
+	const [selectedSopTab, setSelectedSopTab] = useState();
 	const id = useParams();
-	console.log('iddddddddddddd', id);
-	console.log('window.location.pathname', window.location.pathname);
 	// console.log('id///...', id);
 	// console.log('path...', window.location.pathname);
 	// console.log('hrewf ....', window.location.href);
@@ -25,10 +23,6 @@ const Sops = () => {
 	// console.log('last seg...', lastSegment);
 	const dispatch = useDispatch();
 	const { sops, loading } = useSelector((state) => state.sops);
-
-	const [activeListTab, setActiveListTab] = useState();
-	const [selectListTab, setSelectListTab] = useState();
-
 	const { subSops } = useSelector((state) => state.subSops);
 	console.log('sops .??', sops.length);
 	useEffect(() => {
@@ -37,29 +31,10 @@ const Sops = () => {
 		};
 		dispatch(loadTagListStart({ id: id.id, slug: formData }));
 	}, [dispatch, id.id]);
-	// useEffect(() => {
-	// 	if (!sops.length) {
-	// 		dispatch(loadSopsStart(id.id));
-	// 		dispatch(loadTeamsStart(id.id));
-	// 		// setActiveListTab(lastSegment.replace('_found', ''));
-	// 	}
-	// 	// const singleSop = sops.find((sop) => sop.slug === lastSegment);
-	// 	// console.log('single sop', singleSop);
-	// 	// setSelectListTab(singleSop);
-	// }, [dispatch, id.id, sops]);
 
-	const handleActiveListTab = (tabName, id) => {
-		console.log('id', id);
-
-		setActiveListTab(tabName);
-
-		const singleSop = sops.find((sop) => sop.id === Number(id));
-		console.log('single sop', singleSop);
-		setSelectListTab(singleSop);
-	};
-	const getStatusActiveListTabColor = (tabName) => {
-		if (activeListTab === tabName) return 'success';
-		return 'light';
+	const handleActiveListTab = (sopId) => {
+		const selectedSop = sops.find((sop) => sop.id === Number(sopId));
+		setSelectedSopTab(selectedSop);
 	};
 
 	return (
@@ -74,18 +49,21 @@ const Sops = () => {
 					<div className='col-3'>
 						<Card stretch>
 							<CardBody isScrollable>
-								<div className='row g-4 rounded-3'>
-									{sops?.map((i) => (
-										<div className='col-12' key={i?.id}>
+								<div className='row g-5 rounded-3'>
+									{sops?.map((sop) => (
+										<div className='col-12' key={sop?.id}>
 											<Button
 												className='w-100'
-												color={getStatusActiveListTabColor(i?.Sub_category)}
-												onClick={() =>
-													handleActiveListTab(i?.Sub_category, i?.id)
+												color={
+													selectedSopTab?.Sub_category ===
+													sop?.Sub_category
+														? 'success'
+														: 'light'
 												}
+												onClick={() => handleActiveListTab(sop?.id)}
 												tag='a'
-												to={i?.slug}>
-												{i?.Sub_category}
+												to={sop?.slug}>
+												{sop?.Sub_category}
 											</Button>
 										</div>
 									))}
@@ -96,12 +74,12 @@ const Sops = () => {
 					<div className='col-9'>
 						<Card stretch>
 							<CardBody isScrollable>
-								{activeListTab && (
+								{selectedSopTab && (
 									<>
 										<div className='d-flex align-items-center justify-content-between'>
 											<div className='d-flex align-items-center'>
 												<h1>
-													{selectListTab?.Sub_category.replaceAll(
+													{selectedSopTab?.Sub_category.replaceAll(
 														'_',
 														' ',
 													)}
@@ -116,36 +94,38 @@ const Sops = () => {
 														cursor: 'pointer',
 														marginLeft: '25px',
 													}}
-													to={`${selectListTab?.slug}/update`}
+													to={`${selectedSopTab?.slug}/update`}
 												/>
 											</div>
-											{(selectListTab?.slug === 'tagging_found' ||
-												selectListTab?.slug ===
+											{(selectedSopTab?.slug === 'tagging_found' ||
+												selectedSopTab?.slug ===
 													'customer_call_end_sentiment_found' ||
-												selectListTab?.slug ===
+												selectedSopTab?.slug ===
 													'customer_overall_call_sentiment_found' ||
-												selectListTab?.slug ===
+												selectedSopTab?.slug ===
 													'customer_call_start_sentiment_found' ||
-												selectListTab?.slug ===
+												selectedSopTab?.slug ===
 													'customer_overtalk_incidents_found' ||
-												selectListTab?.slug ===
+												selectedSopTab?.slug ===
 													'overall_call_sentiment_found' ||
-												selectListTab?.slug ===
+												selectedSopTab?.slug ===
 													'call_start_sentiment_found' ||
-												selectListTab?.slug ===
+												selectedSopTab?.slug ===
 													'call_end_sentiment_found' ||
-												selectListTab?.slug ===
+												selectedSopTab?.slug ===
 													'overtalk_incidents_found' ||
-												selectListTab?.slug === 'silence_incidents_found' ||
-												selectListTab?.slug ===
+												selectedSopTab?.slug ===
+													'silence_incidents_found' ||
+												selectedSopTab?.slug ===
 													'customer_silence_incidents_found' ||
-												selectListTab?.slug === 'rate_of_speech_found' ||
-												selectListTab?.slug === 'responsiveness_found' ||
-												selectListTab?.slug ===
+												selectedSopTab?.slug === 'rate_of_speech_found' ||
+												selectedSopTab?.slug === 'responsiveness_found' ||
+												selectedSopTab?.slug ===
 													'customer_rate_of_speech_found' ||
-												selectListTab?.slug ===
+												selectedSopTab?.slug ===
 													'customer_responsiveness_found' ||
-												selectListTab?.slug === 'customer_clarity_found') &&
+												selectedSopTab?.slug ===
+													'customer_clarity_found') &&
 											subSops.length ? (
 												''
 											) : (
@@ -153,43 +133,40 @@ const Sops = () => {
 													color='info'
 													isLight
 													tag='a'
-													to={`${selectListTab?.slug}/sub/create`}
+													to={`${selectedSopTab?.slug}/sub/create`}
 													isDisable={
 														window.location.pathname ===
-															`/users/${id.id}/sops/${selectListTab?.slug}/sub/create` ||
+															`/users/${id.id}/sops/${selectedSopTab?.slug}/sub/create` ||
 														window.location.pathname ===
-															`/users/${id.id}/sops/${selectListTab?.slug}/sub/update` ||
+															`/users/${id.id}/sops/${selectedSopTab?.slug}/sub/update` ||
 														window.location.pathname ===
-															`/users/${id.id}/sops/${selectListTab?.slug}/update`
+															`/users/${id.id}/sops/${selectedSopTab?.slug}/update`
 													}>
 													Add
 												</Button>
 											)}
 										</div>
 
-										<br />
-										<br />
-
 										<div>
 											<Routes>
 												<Route
 													exact
-													path=':id1'
+													path=':sop_slug'
 													element={<SopsDetails />}
 												/>
 												<Route
 													exact
-													path=':id1/update'
+													path=':sop_slug/update'
 													element={<UpdateSopDetails />}
 												/>
 												<Route
 													exact
-													path=':id1/sub/create'
+													path=':sop_slug/sub/create'
 													element={<AddUpdateSubSops />}
 												/>
 												<Route
 													exact
-													path=':id1/sub/update'
+													path=':sop_slug/sub/update'
 													element={<AddUpdateSubSops />}
 												/>
 											</Routes>
