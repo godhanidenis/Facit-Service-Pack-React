@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, Route, Routes, useParams } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 import Button from '../../../components/bootstrap/Button';
@@ -7,27 +7,27 @@ import { CardActions } from '../../../components/bootstrap/Card';
 import Nav, { NavItem } from '../../../components/bootstrap/Nav';
 import Spinner from '../../../components/bootstrap/Spinner';
 import Toasts from '../../../components/bootstrap/Toasts';
+import { loadAgentsStart } from '../../../redux/ducks/agents';
 import AgentPage from './Agents/Agents';
 
 const TeamsPage = () => {
 	const [AgentlinkActie, setAgentlinkActie] = useState('');
 	const [AgentdetaillinkActie, setAgentdetaillinkActie] = useState('active');
 	const id = useParams();
-
+	const dispatch = useDispatch();
+	useEffect(() => {
+		dispatch(loadAgentsStart(Number(id.id)));
+	}, [dispatch, id.id]);
 	useEffect(() => {
 		if (
 			window.location.pathname === `/users/${id.id}/teams/${id.teamId}/agents` ||
 			`/users/${id.id}/teams/${id.teamId}/agents/create` ||
 			`/users/${id.id}/teams/${id.teamId}/agents/edit`
-			// (`/users/${id.id}/teams/${id.teamId}/agents/create` ||
-			// 	`/users/${id.id}/teams/${id.teamId}/agents/edit` ||
-			// 	`/users/${id.id}/teams/${id.teamId}/agents`)
 		) {
-			// setAgentdetaillinkActie('');)) {
 			setAgentdetaillinkActie('');
 			setAgentlinkActie('active');
 		}
-		if (`/users/${id.id}/teams/${id.teamId}/`) {
+		if (window.location.pathname === `/users/${id.id}/teams/${id.teamId}/`) {
 			setAgentdetaillinkActie('active');
 			setAgentlinkActie('');
 		}

@@ -105,6 +105,7 @@ const AddUpdateUser = () => {
 			setSelectedImage(URL.createObjectURL(e.target.files[0]));
 			console.log('selectedImage...???????', selectedImage);
 			console.log('updateProfilePictureFile?????????', updateProfilePictureFile);
+			errors.profile_picture = '';
 		}
 	};
 
