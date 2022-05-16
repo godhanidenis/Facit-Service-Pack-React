@@ -206,7 +206,7 @@ const Userstbl = () => {
 																	color='danger'
 																	style={{
 																		marginLeft: '10px',
-																		// cursor: 'pointer',
+																		cursor: 'pointer',
 																	}}
 																	onClick={() => {
 																		setCurrentUser(item);
