@@ -3,45 +3,31 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Page from '../../../layout/Page/Page';
-import Card, {
-	CardHeader,
-	CardBody,
-	CardLabel,
-	CardTitle,
-} from '../../../components/bootstrap/Card';
 import Button from '../../../components/bootstrap/Button';
 import Icon from '../../../components/icon/Icon';
-
 import FormGroup from '../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../components/bootstrap/forms/Input';
 import Label from '../../../components/bootstrap/forms/Label';
 import Select from '../../../components/bootstrap/forms/Select';
 import Option from '../../../components/bootstrap/Option';
-import { loadTeamsStart } from '../../../redux/ducks/teams';
-import {
-	createSubSopsStart,
-	loadSubSopsStart,
-	updateSubSopsStart,
-} from '../../../redux/ducks/subSops';
+import { createSubSopsStart, updateSubSopsStart } from '../../../redux/ducks/subSops';
 
 const AddUpdateSubSops = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const location = useLocation();
+	const perams = useParams();
+
 	const [editMode, setEditMode] = useState(false);
-	// console.log('::::::', location?.state?.id);
-	const id = useParams();
-	// console.log('id::', id);
-	const { teams } = useSelector((state) => state.teams);
-	const { subSops } = useSelector((state) => state.subSops);
-	// console.log('sub sops', subSops);
 	const [keywordsList, setKeywordsList] = useState([]);
 	const [tagList, setTagList] = useState([]);
-	// console.log('keywordsList', keywordsList);
-	// console.log('tagList', tagList);
+
+	// Selectors
+	const { teams } = useSelector((state) => state.teams);
+	const { subSops } = useSelector((state) => state.subSops);
+
 	const {
 		register,
 		handleSubmit,
@@ -50,155 +36,108 @@ const AddUpdateSubSops = () => {
 		reset,
 	} = useForm();
 
-	const getTegging = async (taggingdata) => {
-		let result = {};
-		try {
-			const res = await axios.post(
-				`${process.env.REACT_APP_DOMAIN}/admin_panel/getsopelasticsearch/?user_id=${taggingdata.id}`,
-				taggingdata.slug,
-			);
-			result = res.data || [];
-			result.data[0]?._source?.tag_list?.map((str, index) => ({ value: str, id: str }));
-			console.log('::::', result);
-			setTagList(result.data[0]._source.tag_list);
-			return { success: true, data: result };
-		} catch (err) {
-			return {
-				success: false,
-				message: err || 'something went wrong',
-			};
-		}
-	};
-
 	useEffect(() => {
-		if (id.id1 === 'call_additional_info_found' || id.id1 === 'call_alternate_channel_found') {
-			console.log('hiii');
-			const formDataTagging = {
-				doctype: 'tagging_found',
-			};
-			getTegging({ id: id.id, slug: formDataTagging });
-		}
 		if (!location?.state?.id) {
 			setEditMode(false);
 		} else {
 			setEditMode(true);
-			if (subSops.length) {
-				const singleSubSop = subSops.find((subSop) => subSop._id === location?.state?.id);
-				console.log('object', singleSubSop);
+			if (subSops?.length) {
+				const selectedSop = subSops.find((subSop) => subSop._id === location?.state?.id);
+				console.log('selectedSop :', selectedSop);
 
-				setValue('text', singleSubSop?._source?.text);
-				setValue('score', singleSubSop?._source?.score);
+				setValue('text', selectedSop?._source?.text);
+				setValue('score', selectedSop?._source?.score);
+				setValue('min', selectedSop?._source?.min);
+				setValue('max', selectedSop?._source?.max);
+				setValue('sentiment_type', selectedSop?._source?.sentiment_type);
+				setValue('incidents_type', selectedSop?._source?.incidents_type);
+				setValue('type', selectedSop?._source?.type);
+				setValue('tag_type', selectedSop?._source?.tag_type);
+				setKeywordsList(selectedSop?._source?.keywords);
+				setTagList(selectedSop?._source?.tag_list);
 
-				setValue('min', singleSubSop?._source?.min);
-				setValue('max', singleSubSop?._source?.max);
-				setValue('sentiment_type', singleSubSop?._source?.sentiment_type);
-				setValue('incidents_type', singleSubSop?._source?.incidents_type);
-				setValue('type', singleSubSop?._source?.type);
-
-				setValue('tag_type', singleSubSop?._source?.tag_type);
-
-				setKeywordsList(singleSubSop?._source?.keywords);
-				setTagList(singleSubSop?._source?.tag_list);
-
-				console.log('singleSubSop?._source?.tag_type', singleSubSop?._source?.tag_type);
-				// console.log('singleSubSop?._source?.team_list', singleSubSop?._source?.team_list);
-
-				const arr1 = singleSubSop?._source?.team_list;
-				const arry1 = [];
+				const teamList = [];
 				// eslint-disable-next-line array-callback-return
-				arr1?.map((ar) => {
-					arry1.push(String(ar));
+				selectedSop?._source?.team_list?.map((teamId) => {
+					teamList.push(String(teamId));
 				});
-				setValue('team_list', arry1);
-
-				// const arr2 = singleSubSop?._source?.tag_type;
-				// const arry2 = [];
-				// // eslint-disable-next-line array-callback-return
-				// arr2?.map((ar2) => {
-				// 	console.log('::::', typeof ar2);
-				// 	arry2.push(String(ar2));
-				// });
-				// console.log('ddd', arry2);
-				// setValue('tag_type', arry2);
+				setValue('team_list', teamList);
 			}
 		}
-	}, [id.id, id.id1, location?.state?.id, setValue, subSops]);
+	}, [perams.id, perams.sop_slug, location?.state?.id, setValue, subSops]);
 
 	const onSubmit = (data) => {
-		console.log('AddEdit FormData', data);
-		// console.log('keywords FormData', keywordsList);
-		// console.log('tagList FormData', tagList);
-		const arr = data.team_list;
-		const arry = [];
+		console.log('SopAddUpdate FormData', data);
+		const teamList = [];
 		// eslint-disable-next-line array-callback-return
-		arr?.map((ar) => {
-			arry.push(Number(ar));
+		data.team_list?.map((ar) => {
+			teamList.push(Number(ar));
 		});
 		const formDataCreate = {
 			record: {
-				doctype: id.id1.replace('_found', ''),
+				doctype: perams.sop_slug.replace('_found', ''),
 				text: data.text,
 				score: Number(data.score),
-				team_list: arry,
-				user_id: Number(id.id),
+				team_list: teamList,
+				user_id: Number(perams.id),
 			},
 		};
 		const formDataUpdate = {
-			doctype: id.id1.replace('_found', ''),
+			doctype: perams.sop_slug.replace('_found', ''),
 			text: data.text,
 			score: Number(data.score),
-			team_list: arry,
-			user_id: Number(id.id),
+			team_list: teamList,
+			user_id: Number(perams.id),
 		};
 
 		const formDataCreateOnHoldCallRefreshMent = {
 			record: {
-				doctype: id.id1.replace('_found', ''),
+				doctype: perams.sop_slug.replace('_found', ''),
 				text: data.text,
 				score: Number(data.score),
-				team_list: arry,
-				user_id: Number(id.id),
+				team_list: teamList,
+				user_id: Number(perams.id),
 				keywords: keywordsList,
 			},
 		};
 		const formDataUpdateOnHoldCallRefreshMent = {
-			doctype: id.id1.replace('_found', ''),
+			doctype: perams.sop_slug.replace('_found', ''),
 			text: data.text,
 			score: Number(data.score),
-			team_list: arry,
-			user_id: Number(id.id),
+			team_list: teamList,
+			user_id: Number(perams.id),
 			keywords: keywordsList,
 		};
 		const formDataCreateTagging = {
 			record: {
-				doctype: id.id1.replace('_found', ''),
+				doctype: perams.sop_slug.replace('_found', ''),
 				tag_list: tagList,
-				user_id: Number(id.id),
+				user_id: Number(perams.id),
 			},
 		};
 
 		const formDataCreateCallInfoChannel = {
 			record: {
-				doctype: id.id1.replace('_found', ''),
+				doctype: perams.sop_slug.replace('_found', ''),
 				text: data.text,
 				score: Number(data.score),
-				team_list: arry,
-				user_id: Number(id.id),
+				team_list: teamList,
+				user_id: Number(perams.id),
 				tag_type: data.tag_type,
 			},
 		};
 		const formDataUpdateCallInfoChannel = {
-			doctype: id.id1.replace('_found', ''),
+			doctype: perams.sop_slug.replace('_found', ''),
 			text: data.text,
 			score: Number(data.score),
-			team_list: arry,
-			user_id: Number(id.id),
+			team_list: teamList,
+			user_id: Number(perams.id),
 			tag_type: data.tag_type,
 		};
 		const formDataCreateMinMaxSentimate = {
 			record: {
-				doctype: id.id1.replace('_found', ''),
-				user_id: Number(id.id),
+				doctype: perams.sop_slug.replace('_found', ''),
+				user_id: Number(perams.id),
 				min: Number(data?.min),
 				max: Number(data?.max),
 				sentiment_type: data?.sentiment_type,
@@ -207,8 +146,8 @@ const AddUpdateSubSops = () => {
 
 		const formDataCreateMinMaxIncident = {
 			record: {
-				doctype: id.id1.replace('_found', ''),
-				user_id: Number(id.id),
+				doctype: perams.sop_slug.replace('_found', ''),
+				user_id: Number(perams.id),
 				min: Number(data?.min),
 				max: Number(data?.max),
 				incidents_type: data?.incidents_type,
@@ -217,8 +156,8 @@ const AddUpdateSubSops = () => {
 
 		const formDataCreateMinMaxType = {
 			record: {
-				doctype: id.id1.replace('_found', ''),
-				user_id: Number(id.id),
+				doctype: perams.sop_slug.replace('_found', ''),
+				user_id: Number(perams.id),
 				min: Number(data?.min),
 				max: Number(data?.max),
 				type: data?.type,
@@ -226,7 +165,10 @@ const AddUpdateSubSops = () => {
 		};
 
 		if (editMode) {
-			if (id.id1 === 'on_hold_found' || id.id1 === 'call_refreshment_found') {
+			if (
+				perams.sop_slug === 'on_hold_found' ||
+				perams.sop_slug === 'call_refreshment_found'
+			) {
 				dispatch(
 					updateSubSopsStart({
 						id: location?.state?.id,
@@ -234,8 +176,8 @@ const AddUpdateSubSops = () => {
 					}),
 				);
 			} else if (
-				id.id1 === 'call_additional_info_found' ||
-				id.id1 === 'call_alternate_channel_found'
+				perams.sop_slug === 'call_additional_info_found' ||
+				perams.sop_slug === 'call_alternate_channel_found'
 			) {
 				dispatch(
 					updateSubSopsStart({
@@ -246,45 +188,48 @@ const AddUpdateSubSops = () => {
 			} else {
 				dispatch(updateSubSopsStart({ id: location?.state?.id, record: formDataUpdate }));
 			}
-			navigate(`/users/${id.id}/sops/${id.id1}`);
+			navigate(`/users/${perams.id}/sops/${perams.sop_slug}`);
 		} else {
-			if (id.id1 === 'on_hold_found' || id.id1 === 'call_refreshment_found') {
+			if (
+				perams.sop_slug === 'on_hold_found' ||
+				perams.sop_slug === 'call_refreshment_found'
+			) {
 				dispatch(createSubSopsStart(formDataCreateOnHoldCallRefreshMent));
-			} else if (id.id1 === 'tagging_found') {
+			} else if (perams.sop_slug === 'tagging_found') {
 				dispatch(createSubSopsStart(formDataCreateTagging));
 			} else if (
-				id.id1 === 'customer_call_end_sentiment_found' ||
-				id.id1 === 'customer_overall_call_sentiment_found' ||
-				id.id1 === 'customer_call_start_sentiment_found' ||
-				id.id1 === 'customer_overtalk_incidents_found' ||
-				id.id1 === 'overall_call_sentiment_found' ||
-				id.id1 === 'call_start_sentiment_found' ||
-				id.id1 === 'call_end_sentiment_found' ||
-				id.id1 === 'overtalk_incidents_found'
+				perams.sop_slug === 'customer_call_end_sentiment_found' ||
+				perams.sop_slug === 'customer_overall_call_sentiment_found' ||
+				perams.sop_slug === 'customer_call_start_sentiment_found' ||
+				perams.sop_slug === 'customer_overtalk_incidents_found' ||
+				perams.sop_slug === 'overall_call_sentiment_found' ||
+				perams.sop_slug === 'call_start_sentiment_found' ||
+				perams.sop_slug === 'call_end_sentiment_found' ||
+				perams.sop_slug === 'overtalk_incidents_found'
 			) {
 				dispatch(createSubSopsStart(formDataCreateMinMaxSentimate));
 			} else if (
-				id.id1 === 'silence_incidents_found' ||
-				id.id1 === 'customer_silence_incidents_found'
+				perams.sop_slug === 'silence_incidents_found' ||
+				perams.sop_slug === 'customer_silence_incidents_found'
 			) {
 				dispatch(createSubSopsStart(formDataCreateMinMaxIncident));
 			} else if (
-				id.id1 === 'rate_of_speech_found' ||
-				id.id1 === 'responsiveness_found' ||
-				id.id1 === 'customer_rate_of_speech_found' ||
-				id.id1 === 'customer_responsiveness_found' ||
-				id.id1 === 'customer_clarity_found'
+				perams.sop_slug === 'rate_of_speech_found' ||
+				perams.sop_slug === 'responsiveness_found' ||
+				perams.sop_slug === 'customer_rate_of_speech_found' ||
+				perams.sop_slug === 'customer_responsiveness_found' ||
+				perams.sop_slug === 'customer_clarity_found'
 			) {
 				dispatch(createSubSopsStart(formDataCreateMinMaxType));
 			} else if (
-				id.id1 === 'call_additional_info_found' ||
-				id.id1 === 'call_alternate_channel_found'
+				perams.sop_slug === 'call_additional_info_found' ||
+				perams.sop_slug === 'call_alternate_channel_found'
 			) {
 				dispatch(createSubSopsStart(formDataCreateCallInfoChannel));
 			} else {
 				dispatch(createSubSopsStart(formDataCreate));
 			}
-			navigate(`/users/${id.id}/sops/${id.id1}`);
+			navigate(`/users/${perams.id}/sops/${perams.sop_slug}`);
 		}
 	};
 	const onError = (errors) => console.log('Errors Occurred !! :', errors);
@@ -296,13 +241,13 @@ const AddUpdateSubSops = () => {
 					className='row g-4'
 					onSubmit={handleSubmit(onSubmit, onError)}
 					onReset={reset}>
-					{(id.id1 === 'call_opening_found' ||
-						id.id1 === 'customer_verification_found' ||
-						id.id1 === 'on_hold_found' ||
-						id.id1 === 'call_refreshment_found' ||
-						id.id1 === 'call_closures_found' ||
-						id.id1 === 'call_additional_info_found' ||
-						id.id1 === 'call_alternate_channel_found') && (
+					{(perams.sop_slug === 'call_opening_found' ||
+						perams.sop_slug === 'customer_verification_found' ||
+						perams.sop_slug === 'on_hold_found' ||
+						perams.sop_slug === 'call_refreshment_found' ||
+						perams.sop_slug === 'call_closures_found' ||
+						perams.sop_slug === 'call_additional_info_found' ||
+						perams.sop_slug === 'call_alternate_channel_found') && (
 						<div className='col-12'>
 							<FormGroup id='text' isFloating label='Your Text'>
 								<Input
@@ -316,13 +261,13 @@ const AddUpdateSubSops = () => {
 						</div>
 					)}
 
-					{(id.id1 === 'call_opening_found' ||
-						id.id1 === 'customer_verification_found' ||
-						id.id1 === 'on_hold_found' ||
-						id.id1 === 'call_refreshment_found' ||
-						id.id1 === 'call_closures_found' ||
-						id.id1 === 'call_additional_info_found' ||
-						id.id1 === 'call_alternate_channel_found') && (
+					{(perams.sop_slug === 'call_opening_found' ||
+						perams.sop_slug === 'customer_verification_found' ||
+						perams.sop_slug === 'on_hold_found' ||
+						perams.sop_slug === 'call_refreshment_found' ||
+						perams.sop_slug === 'call_closures_found' ||
+						perams.sop_slug === 'call_additional_info_found' ||
+						perams.sop_slug === 'call_alternate_channel_found') && (
 						<div className='col-12'>
 							<FormGroup id='score' isFloating label='Your Score'>
 								<Input
@@ -336,13 +281,13 @@ const AddUpdateSubSops = () => {
 							{errors.score?.message}
 						</div>
 					)}
-					{(id.id1 === 'call_opening_found' ||
-						id.id1 === 'customer_verification_found' ||
-						id.id1 === 'on_hold_found' ||
-						id.id1 === 'call_refreshment_found' ||
-						id.id1 === 'call_closures_found' ||
-						id.id1 === 'call_additional_info_found' ||
-						id.id1 === 'call_alternate_channel_found') && (
+					{(perams.sop_slug === 'call_opening_found' ||
+						perams.sop_slug === 'customer_verification_found' ||
+						perams.sop_slug === 'on_hold_found' ||
+						perams.sop_slug === 'call_refreshment_found' ||
+						perams.sop_slug === 'call_closures_found' ||
+						perams.sop_slug === 'call_additional_info_found' ||
+						perams.sop_slug === 'call_alternate_channel_found') && (
 						<div className='col-12'>
 							<Label>Select teamList</Label>
 							<FormGroup>
@@ -366,7 +311,8 @@ const AddUpdateSubSops = () => {
 							</FormGroup>
 						</div>
 					)}
-					{(id.id1 === 'on_hold_found' || id.id1 === 'call_refreshment_found') && (
+					{(perams.sop_slug === 'on_hold_found' ||
+						perams.sop_slug === 'call_refreshment_found') && (
 						<>
 							<div className='col-12'>
 								<FormGroup id='keywords' isFloating label='Your keywords'>
@@ -378,7 +324,6 @@ const AddUpdateSubSops = () => {
 										onKeyPress={(ev) => {
 											if (ev.key === 'Enter') {
 												ev.preventDefault();
-												console.log(ev.target.value);
 												setKeywordsList([...keywordsList, ev.target.value]);
 											}
 										}}
@@ -424,7 +369,7 @@ const AddUpdateSubSops = () => {
 							</div>
 						</>
 					)}
-					{id.id1 === 'tagging_found' && (
+					{perams.sop_slug === 'tagging_found' && (
 						<>
 							<div className='col-12'>
 								<FormGroup id='tag_list' isFloating label='Your tag_list'>
@@ -436,7 +381,6 @@ const AddUpdateSubSops = () => {
 										onKeyPress={(ev) => {
 											if (ev.key === 'Enter') {
 												ev.preventDefault();
-												console.log(ev.target.value);
 												setTagList([...tagList, ev.target.value]);
 											}
 										}}
@@ -481,8 +425,8 @@ const AddUpdateSubSops = () => {
 						</>
 					)}
 
-					{(id.id1 === 'call_additional_info_found' ||
-						id.id1 === 'call_alternate_channel_found') && (
+					{(perams.sop_slug === 'call_additional_info_found' ||
+						perams.sop_slug === 'call_alternate_channel_found') && (
 						<div className='col-12'>
 							<Label>Select Tag Type</Label>
 							<FormGroup>
@@ -507,21 +451,21 @@ const AddUpdateSubSops = () => {
 						</div>
 					)}
 
-					{(id.id1 === 'customer_call_end_sentiment_found' ||
-						id.id1 === 'customer_overall_call_sentiment_found' ||
-						id.id1 === 'customer_call_start_sentiment_found' ||
-						id.id1 === 'customer_overtalk_incidents_found' ||
-						id.id1 === 'overall_call_sentiment_found' ||
-						id.id1 === 'call_start_sentiment_found' ||
-						id.id1 === 'call_end_sentiment_found' ||
-						id.id1 === 'overtalk_incidents_found' ||
-						id.id1 === 'silence_incidents_found' ||
-						id.id1 === 'customer_silence_incidents_found' ||
-						id.id1 === 'rate_of_speech_found' ||
-						id.id1 === 'responsiveness_found' ||
-						id.id1 === 'customer_rate_of_speech_found' ||
-						id.id1 === 'customer_responsiveness_found' ||
-						id.id1 === 'customer_clarity_found') && (
+					{(perams.sop_slug === 'customer_call_end_sentiment_found' ||
+						perams.sop_slug === 'customer_overall_call_sentiment_found' ||
+						perams.sop_slug === 'customer_call_start_sentiment_found' ||
+						perams.sop_slug === 'customer_overtalk_incidents_found' ||
+						perams.sop_slug === 'overall_call_sentiment_found' ||
+						perams.sop_slug === 'call_start_sentiment_found' ||
+						perams.sop_slug === 'call_end_sentiment_found' ||
+						perams.sop_slug === 'overtalk_incidents_found' ||
+						perams.sop_slug === 'silence_incidents_found' ||
+						perams.sop_slug === 'customer_silence_incidents_found' ||
+						perams.sop_slug === 'rate_of_speech_found' ||
+						perams.sop_slug === 'responsiveness_found' ||
+						perams.sop_slug === 'customer_rate_of_speech_found' ||
+						perams.sop_slug === 'customer_responsiveness_found' ||
+						perams.sop_slug === 'customer_clarity_found') && (
 						<>
 							<div className='col-12'>
 								<FormGroup id='min' isFloating label='Your min value'>
@@ -550,14 +494,14 @@ const AddUpdateSubSops = () => {
 							</div>
 						</>
 					)}
-					{(id.id1 === 'customer_call_end_sentiment_found' ||
-						id.id1 === 'customer_overall_call_sentiment_found' ||
-						id.id1 === 'customer_call_start_sentiment_found' ||
-						id.id1 === 'customer_overtalk_incidents_found' ||
-						id.id1 === 'overall_call_sentiment_found' ||
-						id.id1 === 'call_start_sentiment_found' ||
-						id.id1 === 'call_end_sentiment_found' ||
-						id.id1 === 'overtalk_incidents_found') && (
+					{(perams.sop_slug === 'customer_call_end_sentiment_found' ||
+						perams.sop_slug === 'customer_overall_call_sentiment_found' ||
+						perams.sop_slug === 'customer_call_start_sentiment_found' ||
+						perams.sop_slug === 'customer_overtalk_incidents_found' ||
+						perams.sop_slug === 'overall_call_sentiment_found' ||
+						perams.sop_slug === 'call_start_sentiment_found' ||
+						perams.sop_slug === 'call_end_sentiment_found' ||
+						perams.sop_slug === 'overtalk_incidents_found') && (
 						<div className='col-12'>
 							<Label>Select Sentiment Type</Label>
 							<FormGroup>
@@ -575,8 +519,8 @@ const AddUpdateSubSops = () => {
 							</FormGroup>
 						</div>
 					)}
-					{(id.id1 === 'silence_incidents_found' ||
-						id.id1 === 'customer_silence_incidents_found') && (
+					{(perams.sop_slug === 'silence_incidents_found' ||
+						perams.sop_slug === 'customer_silence_incidents_found') && (
 						<div className='col-12'>
 							<Label>Select incident Type</Label>
 							<FormGroup>
@@ -595,11 +539,11 @@ const AddUpdateSubSops = () => {
 						</div>
 					)}
 
-					{(id.id1 === 'rate_of_speech_found' ||
-						id.id1 === 'responsiveness_found' ||
-						id.id1 === 'customer_rate_of_speech_found' ||
-						id.id1 === 'customer_responsiveness_found' ||
-						id.id1 === 'customer_clarity_found') && (
+					{(perams.sop_slug === 'rate_of_speech_found' ||
+						perams.sop_slug === 'responsiveness_found' ||
+						perams.sop_slug === 'customer_rate_of_speech_found' ||
+						perams.sop_slug === 'customer_responsiveness_found' ||
+						perams.sop_slug === 'customer_clarity_found') && (
 						<div className='col-12'>
 							<Label>Select Type</Label>
 							<FormGroup>

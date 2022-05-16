@@ -14,7 +14,7 @@ import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Page from '../../../layout/Page/Page';
 
 const UpdateSopDetails = () => {
-	const id = useParams();
+	const perams = useParams();
 	const navigate = useNavigate();
 	const [selectedSop, setSelectedSop] = useState();
 	const dispatch = useDispatch();
@@ -23,7 +23,7 @@ const UpdateSopDetails = () => {
 
 	useEffect(() => {
 		dispatch(loadCategoryStart());
-	}, [dispatch, id.id]);
+	}, [dispatch, perams.id]);
 	const {
 		register,
 		handleSubmit,
@@ -33,7 +33,7 @@ const UpdateSopDetails = () => {
 	} = useForm();
 
 	useEffect(() => {
-		const singleSop = sops.find((sop) => sop.slug === id.id1);
+		const singleSop = sops.find((sop) => sop.slug === perams.sop_slug);
 		console.log('sinle sop', singleSop);
 		setSelectedSop(singleSop);
 
@@ -45,7 +45,7 @@ const UpdateSopDetails = () => {
 		setValue('type', singleSop?.type);
 		setValue('user_type', singleSop?.user_type);
 		setValue('weightage', singleSop?.weightage);
-	}, [id, setValue, sops]);
+	}, [perams.sop_slug, setValue, sops]);
 	console.log('selectedSop', selectedSop);
 	const onError = (errors) => console.log('Errors Occurred !! :', errors);
 
@@ -60,11 +60,11 @@ const UpdateSopDetails = () => {
 			type: data.type,
 			user_type: data.user_type,
 			weightage: data.weightage,
-			User: Number(id.id),
+			User: Number(perams.id),
 		};
 
-		dispatch(updateSopsStart({ id: id.id1, toBeUpdatedSop: formData }));
-		navigate(`/users/${id.id}/sops/${id.id1}`);
+		dispatch(updateSopsStart({ id: perams.sop_slug, toBeUpdatedSop: formData }));
+		navigate(`/users/${perams.id}/sops/${perams.sop_slug}`);
 	};
 	return (
 		<PageWrapper>
