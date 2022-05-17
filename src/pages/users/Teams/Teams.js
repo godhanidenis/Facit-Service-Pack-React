@@ -75,6 +75,22 @@ const UsersTeams = () => {
 				},
 			);
 		}
+		// if (error === '' && !loading) {
+		// 	addToast(
+		// 		<Toasts
+		// 			title='successfully completed Team'
+		// 			icon='success'
+		// 			iconColor='danger'
+		// 			color='green'
+		// 			time='Now'
+		// 			isDismiss>
+		// 			{`${error}`}
+		// 		</Toasts>,
+		// 		{
+		// 			autoDismiss: true,
+		// 		},
+		// 	);
+		// }
 	}, [addToast, error]);
 
 	return (

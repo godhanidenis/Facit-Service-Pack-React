@@ -31,7 +31,7 @@ const AgentPage = () => {
 			<Routes>
 				<Route exact path='' element={<Agents />} />
 				<Route exact path='create' element={<AddEditAgent />} />
-				<Route exact path='edit/:id1' element={<AddEditAgent />} />
+				<Route exact path='edit/:agentId' element={<AddEditAgent />} />
 			</Routes>
 		</div>
 	);

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useToasts } from 'react-toast-notifications';
 import Button from '../../../components/bootstrap/Button';
 import FormGroup from '../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../components/bootstrap/forms/Input';
@@ -26,6 +27,7 @@ import {
 import { createTeamLeadsStart, deleteTeamLeadsStart } from '../../../redux/ducks/teamLeads';
 import { createLobsStart, deleteLobsStart, updateLobsStart } from '../../../redux/ducks/lobs';
 import Spinner from '../../../components/bootstrap/Spinner';
+import Toasts from '../../../components/bootstrap/Toasts';
 
 const AddEditTeam = () => {
 	const id = useParams();
@@ -76,17 +78,32 @@ const AddEditTeam = () => {
 		getValues,
 	} = useForm();
 
-	const { teams, loading } = useSelector((state) => state.teams);
+	const { teams, loading, error } = useSelector((state) => state.teams);
 
 	const { locations } = useSelector((state) => state.locations);
 
 	const { teamLeads } = useSelector((state) => state.teamLeads);
 
 	const { lobs } = useSelector((state) => state.lobs);
-
+	const { addToast } = useToasts();
 	useEffect(() => {
-		if (!loading && dataSubmited) navigate(`/users/${id.id}/teams`);
-	}, [loading, dataSubmited, navigate, id.id]);
+		if (!loading && dataSubmited && !error) {
+			addToast(
+				<Toasts
+					title={!editMode ? 'Successfully Team Created' : 'Successfully Team Updated'}
+					icon='warning'
+					iconColor='success'
+					time='Now'
+					isDismiss>
+					{`${error}`}
+				</Toasts>,
+				{
+					autoDismiss: true,
+				},
+			);
+			navigate(`/users/${id.id}/teams`);
+		}
+	}, [loading, dataSubmited, navigate, id.id, error, addToast, editMode]);
 
 	const onChangeLocationValue = (e) => {
 		const { name, value } = e.target;

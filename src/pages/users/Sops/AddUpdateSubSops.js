@@ -13,7 +13,6 @@ import Label from '../../../components/bootstrap/forms/Label';
 import Select from '../../../components/bootstrap/forms/Select';
 import Option from '../../../components/bootstrap/Option';
 import { createSubSopsStart, updateSubSopsStart } from '../../../redux/ducks/subSops';
-import { loadTagListStart } from '../../../redux/ducks/tagList';
 
 const AddUpdateSubSops = () => {
 	const dispatch = useDispatch();
@@ -573,7 +572,29 @@ const AddUpdateSubSops = () => {
 							</FormGroup>
 						</div>
 					)}
-					<div className='col-12'>
+					<div className='col-12' style={{ marginTop: 50 }}>
+						<div className='row d-flex'>
+							<div className='col'>
+								<Button
+									isLight
+									color='success'
+									className='float-end mx-2'
+									type='submit'>
+									{!editMode ? 'Create' : 'Update'}
+								</Button>
+
+								<Button
+									color='info'
+									isLight
+									className='float-end'
+									tag='a'
+									to={`/users/${perams.id}/sops/${perams.sop_slug}`}>
+									cancle
+								</Button>
+							</div>
+						</div>
+					</div>
+					{/* <div className='col-12'>
 						<div className='row d-flex'>
 							<div className='col'>
 								<Button
@@ -592,7 +613,7 @@ const AddUpdateSubSops = () => {
 								</Button>
 							</div>
 						</div>
-					</div>
+					</div> */}
 				</form>
 			</Page>
 		</PageWrapper>
