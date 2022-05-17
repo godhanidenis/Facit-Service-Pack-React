@@ -59,7 +59,6 @@ const UsersTeams = () => {
 	};
 
 	useEffect(() => {
-		console.log('loading???????????', error);
 		if (error !== '') {
 			addToast(
 				<Toasts
@@ -89,12 +88,12 @@ const UsersTeams = () => {
 				style={{ position: 'absolute', top: 50, left: 50 }}>
 				<Spinner isGrow={false} />
 			</div>
-
 			<div style={{ opacity: loading ? 0.5 : 1 }}>
 				<PageWrapper>
 					<Page className='p-0'>
 						<div className='row'>
 							<div className='col-xxl-12'>
+								<hr style={{ opacity: '0.05' }} />
 								<Card>
 									<CardHeader>
 										<CardLabel icon='People' iconColor='info'>

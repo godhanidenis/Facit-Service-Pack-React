@@ -34,7 +34,7 @@ const TeamsPage = () => {
 	}, [id.id, id.id1, id.teamId]);
 
 	return (
-		<div className='w-100 h-100' style={{ margin: 10 }}>
+		<div className='w-100 h-100' style={{ marginTop: 10 }}>
 			<div className='d-flex align-items-center justify-content-center mb-2'>
 				<div className='row'>
 					<div className='bg-light p-2 rounded-3'>
@@ -47,7 +47,7 @@ const TeamsPage = () => {
 										setAgentdetaillinkActie('active');
 										setAgentlinkActie('');
 									}}>
-									Teams Details
+									Team Details
 								</NavLink>
 							</NavItem>
 							<NavItem>
@@ -83,7 +83,6 @@ const TeamDetail = () => {
 	const { teams, loading, error } = useSelector((state) => state.teams);
 	const { addToast } = useToasts();
 	useEffect(() => {
-		console.log('loading???????????', error);
 		if (error !== '') {
 			addToast(
 				<Toasts
@@ -111,75 +110,76 @@ const TeamDetail = () => {
 		}
 	}, [id, teams]);
 	return (
-		<div>
+		// eslint-disable-next-line react/jsx-no-useless-fragment
+		<>
 			{loading ? (
 				<div className='d-flex align-items-center justify-content-center w-100 h-100'>
 					<Spinner isGrow={false} />
 				</div>
 			) : (
-				<div className='row' style={{ marginTop: 20 }}>
-					<div className='col-9'>
-						<CardActions>
-							<Button
-								icon='Backspace'
-								className='float-end'
-								color='info'
-								isLight
-								tag='a'
-								to={`../../../../../users/${id.id}/teams`}>
-								Back to teams
-							</Button>
-						</CardActions>
-					</div>
-					<div
-						className='row d-flex align-items-center justify-content-center'
-						style={{ marginTop: 20 }}>
-						<div className='col-md-3'>
-							<p className='mb-1'>
-								<b>Team Name</b>
-							</p>
-							<div className=' border rounded p-2'>{teamInfoData?.Team_name}</div>
+				<div className='row justify-content-center w-100'>
+					<div className='col-6 d-flex justify-content-center flex-column'>
+						<hr style={{ opacity: '0.05' }} />
+						<div className='row align-items-center'>
+							<CardActions className='d-flex justify-content-end'>
+								<Button
+									icon='Backspace'
+									color='info'
+									isLight
+									tag='a'
+									to={`../../../../../users/${id.id}/teams`}>
+									Back to teams
+								</Button>
+							</CardActions>
 						</div>
-						<div className='col-md-3'>
-							<p className='mb-1'>
-								<b>TeamLead Name</b>
-							</p>
-							<div className=' border rounded p-2'>
-								{teamInfoData?.Team_lead.TeamLead_name}
+						<div className='row align-items-center' style={{ marginTop: 20 }}>
+							<div className='col'>
+								<p className='mb-1'>
+									<b>Team Name</b>
+								</p>
+								<div className=' border rounded p-2'>{teamInfoData?.Team_name}</div>
+							</div>
+							<div className='col'>
+								<p className='mb-1'>
+									<b>TeamLead Name</b>
+								</p>
+								<div className=' border rounded p-2'>
+									{teamInfoData?.Team_lead.TeamLead_name}
+								</div>
 							</div>
 						</div>
-					</div>
-					<div
-						className='row d-flex align-items-center justify-content-center'
-						style={{ marginTop: 20 }}>
-						<div className='col-md-3'>
-							<p className='mb-1'>
-								<b>location</b>
-							</p>
-							<div className=' border rounded p-2'>
-								{teamInfoData?.Location.Location_name}
+						<div className='row align-items-center' style={{ marginTop: 20 }}>
+							<div className='col'>
+								<p className='mb-1'>
+									<b>location</b>
+								</p>
+								<div className=' border rounded p-2'>
+									{teamInfoData?.Location.Location_name}
+								</div>
+							</div>
+							<div className='col'>
+								<p className='mb-1'>
+									<b>No Agentns</b>
+								</p>
+								<div className=' border rounded p-2'>
+									{teamInfoData?.No_agentns}
+								</div>
 							</div>
 						</div>
-						<div className='col-md-3'>
-							<p className='mb-1'>
-								<b>No Agentns</b>
-							</p>
-							<div className=' border rounded p-2'>{teamInfoData?.No_agentns}</div>
-						</div>
-					</div>
-					<div
-						className='row d-flex align-items-center justify-content-center'
-						style={{ marginTop: 20 }}>
-						<div className='col-md-3'>
-							<p className='mb-1'>
-								<b>Lob</b>
-							</p>
-							<div className=' border rounded p-2'>{teamInfoData?.LOB.Lob_name}</div>
+						<div className='row align-items-center' style={{ marginTop: 20 }}>
+							<div className='col-md-6'>
+								<p className='mb-1'>
+									<b>Lob</b>
+								</p>
+								<div className=' border rounded p-2'>
+									{teamInfoData?.LOB.Lob_name}
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			)}
-		</div>
+		</>
 	);
 };
 

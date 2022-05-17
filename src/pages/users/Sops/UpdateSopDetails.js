@@ -339,7 +339,7 @@ const UpdateSopDetails = () => {
 									color='danger'
 									className='float-end'
 									tag='a'
-									to={`/users/${id.id}/sops/${id.id1}`}>
+									to={`/users/${perams.id}/sops/${perams.sop_slug}`}>
 									Cancel
 								</Button>
 							</div>

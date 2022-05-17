@@ -97,6 +97,7 @@ const Agents = () => {
 					<Page className='p-0'>
 						<div className='row'>
 							<div className='col-xxl-12'>
+								<hr style={{ opacity: '0.05' }} />
 								<Card>
 									<CardHeader>
 										<CardLabel icon='People' iconColor='info'>

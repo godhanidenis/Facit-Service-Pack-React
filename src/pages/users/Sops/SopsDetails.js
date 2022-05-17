@@ -109,7 +109,7 @@ const SopsDetails = () => {
 			max: Number(data?.max),
 			type: data?.type,
 		};
-		if (id.id1 === 'tagging_found') {
+		if (perams.sop_slug === 'tagging_found') {
 			dispatch(
 				updateTagListStart({
 					id: tagId,

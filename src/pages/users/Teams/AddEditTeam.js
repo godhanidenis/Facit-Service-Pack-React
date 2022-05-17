@@ -183,9 +183,7 @@ const AddEditTeam = () => {
 
 			if (teams.length) {
 				const singleTeam = teams.find((team) => team.id === Number(id.id1));
-
 				setValue('Team_name', singleTeam.Team_name);
-
 				setValue('Location', singleTeam.Location.id);
 				setValue('Team_lead', singleTeam.Team_lead.id);
 				setValue('LOB', singleTeam.LOB.id);
@@ -229,12 +227,13 @@ const AddEditTeam = () => {
 			</div>
 			<div
 				className='row d-flex align-items-center justify-content-center'
-				style={{ margin: 30, opacity: loading ? 0.5 : 1 }}>
-				<div className='col-md-7'>
+				style={{ opacity: loading ? 0.5 : 1 }}>
+				<div className='col-md-5'>
+					<hr style={{ opacity: '0.05' }} />
 					<div
 						className='row d-flex align-items-center justify-content-center'
-						style={{ margin: 20 }}>
-						<div className='col'>
+						style={{ marginBottom: 20, marginLeft: 5, marginTop: 20 }}>
+						<div className='col-md-10'>
 							<h1>
 								<b>{!editMode ? 'Add Team Details' : 'Update Team Details'}</b>
 							</h1>
@@ -242,10 +241,10 @@ const AddEditTeam = () => {
 					</div>
 					<div className='row d-flex align-items-center justify-content-center'>
 						<form
-							className='row g-4'
+							className='row justify-content-center align-items-center'
 							onSubmit={handleSubmit(onSubmit, onError)}
 							onReset={reset}>
-							<div className='col-7'>
+							<div className='col-10'>
 								<FormGroup id='Team_name' isFloating label='Your Team Name'>
 									<Input
 										autoComplete='off'
@@ -257,14 +256,15 @@ const AddEditTeam = () => {
 								<span style={{ color: 'red' }}>{errors.Team_name?.message}</span>
 							</div>
 
-							<div className='col-12'>
-								<div className='row'>
-									<Label>Select Location</Label>
+							<div style={{ marginTop: 10 }}>
+								<div className='row justify-content-center align-items-center'>
 									<div className='col-4'>
+										<Label>Select Location</Label>
 										<FormGroup>
 											<Select
 												size='sm'
 												ariaLabel='Select Location'
+												style={{ padding: 10 }}
 												{...register('Location', {
 													required: 'Location is required',
 												})}>
@@ -282,7 +282,7 @@ const AddEditTeam = () => {
 											</span>
 										</FormGroup>
 									</div>
-									<div className='col-3'>
+									<div className='col-3' style={{ marginTop: '30px' }}>
 										<Button
 											isLight
 											icon='edit'
@@ -300,11 +300,12 @@ const AddEditTeam = () => {
 											onClick={handleLocationDelete}
 										/>
 									</div>
-									<div className='col-4'>
+									<div className='col-3' style={{ marginTop: '30px' }}>
 										<Button
 											icon='add'
 											isLight
 											color={darkModeStatus ? 'dark' : 'info'}
+											style={{ width: '140px' }}
 											onClick={() => {
 												setAddLocationModalOpen(true);
 												setLocationId();
@@ -315,14 +316,15 @@ const AddEditTeam = () => {
 								</div>
 							</div>
 
-							<div className='col-12'>
-								<div className='row'>
-									<Label>Select Team Lead</Label>
+							<div style={{ marginTop: 10 }}>
+								<div className='row justify-content-center align-items-center'>
 									<div className='col-4'>
+										<Label>Select Team Lead</Label>
 										<FormGroup>
 											<Select
 												size='sm'
 												ariaLabel='Select Team Lead'
+												style={{ padding: 10 }}
 												{...register('Team_lead', {
 													required: 'Team Lead is required',
 												})}>
@@ -340,7 +342,7 @@ const AddEditTeam = () => {
 											</span>
 										</FormGroup>
 									</div>
-									<div className='col-3'>
+									<div className='col-3' style={{ marginTop: '30px' }}>
 										<Button
 											icon='edit'
 											color={darkModeStatus ? 'dark' : 'info'}
@@ -359,11 +361,12 @@ const AddEditTeam = () => {
 											onClick={handleTeamLeadDelete}
 										/>
 									</div>
-									<div className='col-4'>
+									<div className='col-3' style={{ marginTop: '30px' }}>
 										<Button
 											icon='add'
 											isLight
 											color={darkModeStatus ? 'dark' : 'info'}
+											style={{ width: '140px' }}
 											onClick={() => {
 												setTeamLeadModalOpen(true);
 											}}>
@@ -373,14 +376,15 @@ const AddEditTeam = () => {
 								</div>
 							</div>
 
-							<div className='col-12'>
-								<div className='row'>
-									<Label>Select LOB</Label>
+							<div style={{ marginTop: 10 }}>
+								<div className='row justify-content-center align-items-center'>
 									<div className='col-4'>
+										<Label>Select LOB</Label>
 										<FormGroup>
 											<Select
 												size='sm'
 												ariaLabel='Select LOB'
+												style={{ padding: 10 }}
 												{...register('LOB', {
 													required: 'LOB is required',
 												})}>
@@ -398,7 +402,7 @@ const AddEditTeam = () => {
 											</span>
 										</FormGroup>
 									</div>
-									<div className='col-3'>
+									<div className='col-3' style={{ marginTop: '30px' }}>
 										<Button
 											icon='edit'
 											color={darkModeStatus ? 'dark' : 'info'}
@@ -417,11 +421,12 @@ const AddEditTeam = () => {
 											style={{ margin: 5 }}
 										/>
 									</div>
-									<div className='col-4'>
+									<div className='col-3' style={{ marginTop: '30px' }}>
 										<Button
 											icon='add'
 											isLight
 											color={darkModeStatus ? 'dark' : 'info'}
+											style={{ width: '140px' }}
 											onClick={() => {
 												setLobModalOpen(true);
 												setLobId();
@@ -432,24 +437,19 @@ const AddEditTeam = () => {
 								</div>
 							</div>
 
-							<div className='col-12' style={{ marginTop: 50 }}>
-								<div className='row d-flex'>
-									<div className='col-9'>
-										<Button
-											isLight
-											color='success'
-											className='float-end mx-2'
-											type='submit'>
-											{!editMode ? 'Create' : 'Update'}
-										</Button>
-
+							<div style={{ marginTop: 40 }}>
+								<div className='row align-items-center justify-content-center'>
+									<div className='col-md-10 d-flex justify-content-end p-0'>
 										<Button
 											color='info'
 											isLight
-											className='float-end'
+											className='me-2'
 											tag='a'
 											to={`/users/${id.id}/teams`}>
 											cancle
+										</Button>
+										<Button isLight color='success' type='submit'>
+											{!editMode ? 'Create' : 'Update'}
 										</Button>
 									</div>
 								</div>
