@@ -29,11 +29,11 @@ const AddEditAgent = () => {
 	const { teams } = useSelector((state) => state.teams);
 	const { agents, loading } = useSelector((state) => state.agents);
 	useEffect(() => {
-		if (id.id1) {
+		if (id.agentId) {
 			setEditMode(true);
 
 			if (agents.length) {
-				const singleAgent = agents.find((agent) => agent.id === Number(id.id1));
+				const singleAgent = agents.find((agent) => agent.id === Number(id.agentId));
 				console.log('singleAgent', singleAgent.Team.id);
 				setValue('Agent_id', singleAgent.Agent_id);
 				setValue('Agent_name', singleAgent.Agent_name);
@@ -60,7 +60,7 @@ const AddEditAgent = () => {
 			User: Number(id.id),
 		};
 		if (editMode) {
-			dispatch(updateAgentsStart({ id: id.id1, toBeUpdatedAgent: formData }));
+			dispatch(updateAgentsStart({ id: id.agentId, toBeUpdatedAgent: formData }));
 			setDataSubmited(true);
 		} else {
 			dispatch(createAgentsStart(formData));

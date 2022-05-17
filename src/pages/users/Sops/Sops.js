@@ -12,15 +12,6 @@ import { loadTagListStart } from '../../../redux/ducks/tagList';
 const Sops = () => {
 	const [selectedSopTab, setSelectedSopTab] = useState();
 	const id = useParams();
-	// console.log('id///...', id);
-	// console.log('path...', window.location.pathname);
-	// console.log('hrewf ....', window.location.href);
-
-	// const url = window.location.pathname;
-
-	// const lastSegment = url.split('/').pop();
-
-	// console.log('last seg...', lastSegment);
 	const dispatch = useDispatch();
 	const { sops, loading } = useSelector((state) => state.sops);
 	const { subSops } = useSelector((state) => state.subSops);

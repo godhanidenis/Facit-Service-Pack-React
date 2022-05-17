@@ -12,7 +12,6 @@ import { loadCategoryStart } from '../../../redux/ducks/category';
 import { updateSopsStart } from '../../../redux/ducks/sops';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Page from '../../../layout/Page/Page';
-import Checks, { ChecksGroup } from '../../../components/bootstrap/forms/Checks';
 
 const UpdateSopDetails = () => {
 	const perams = useParams();
@@ -109,39 +108,7 @@ const UpdateSopDetails = () => {
 					</div>
 					<div className='col-12'>
 						<Label>Select Enabled</Label>
-						{/* <div style={{ display: 'flex', alignItems: 'center' }}>
-							<input
-								type='radio'
-								checked={JSON.stringify(selectedSop?.enabled) === 'true'}
-								onClick={() => {
-									setSelectedSop({
-										...selectedSop,
-										enabled: !selectedSop?.enabled,
-									});
-								}}
-								{...register('enabled', {
-									required: 'enabled is required',
-								})}
-								value='true'
-							/>
-							<span style={{ marginLeft: '5px' }}>True</span>
-							<input
-								type='radio'
-								checked={JSON.stringify(selectedSop?.enabled) === 'false'}
-								onClick={() => {
-									setSelectedSop({
-										...selectedSop,
-										enabled: !selectedSop?.enabled,
-									});
-								}}
-								{...register('enabled', {
-									required: 'enabled is required',
-								})}
-								value='false'
-								style={{ marginLeft: '20px' }}
-							/>
-							<span style={{ marginLeft: '5px' }}>False</span>
-						</div> */}
+
 						<FormGroup>
 							<Select
 								size='sm'
@@ -158,39 +125,7 @@ const UpdateSopDetails = () => {
 					</div>
 					<div className='col-12'>
 						<Label>Select Filter</Label>
-						{/* <div style={{ display: 'flex', alignItems: 'center' }}>
-							<input
-								type='radio'
-								checked={JSON.stringify(selectedSop?.filter) === 'true'}
-								onClick={() => {
-									setSelectedSop({
-										...selectedSop,
-										filter: !selectedSop?.filter,
-									});
-								}}
-								{...register('filter', {
-									required: 'filter is required',
-								})}
-								value='true'
-							/>
-							<span style={{ marginLeft: '5px' }}>True</span>
-							<input
-								type='radio'
-								checked={JSON.stringify(selectedSop?.filter) === 'false'}
-								onClick={() => {
-									setSelectedSop({
-										...selectedSop,
-										filter: !selectedSop?.filter,
-									});
-								}}
-								{...register('filter', {
-									required: 'filter is required',
-								})}
-								value='false'
-								style={{ marginLeft: '20px' }}
-							/>
-							<span style={{ marginLeft: '5px' }}>False</span>
-						</div> */}
+
 						<FormGroup>
 							<Select
 								size='sm'
@@ -208,39 +143,6 @@ const UpdateSopDetails = () => {
 					<div className='col-12'>
 						<Label>Select SOP</Label>
 
-						{/* <div style={{ display: 'flex', alignItems: 'center' }}>
-							<input
-								type='radio'
-								checked={JSON.stringify(selectedSop?.sop) === 'true'}
-								onClick={() => {
-									setSelectedSop({
-										...selectedSop,
-										sop: !selectedSop?.sop,
-									});
-								}}
-								{...register('sop', {
-									required: 'sop is required',
-								})}
-								value='true'
-							/>
-							<span style={{ marginLeft: '5px' }}>True</span>
-							<input
-								type='radio'
-								checked={JSON.stringify(selectedSop?.sop) === 'false'}
-								onClick={() => {
-									setSelectedSop({
-										...selectedSop,
-										sop: !selectedSop?.sop,
-									});
-								}}
-								{...register('sop', {
-									required: 'sop is required',
-								})}
-								value='false'
-								style={{ marginLeft: '20px' }}
-							/>
-							<span style={{ marginLeft: '5px' }}>False</span>
-						</div> */}
 						<FormGroup>
 							<Select
 								size='sm'
@@ -252,31 +154,6 @@ const UpdateSopDetails = () => {
 								<Option value='true'>True</Option>
 								<Option value='false'>False</Option>
 							</Select>
-
-							{/* <ChecksGroup>
-							<Checks
-								type='switch'
-								name='sop'
-								checked={selectedSop?.sop}
-								onChange={() => {
-									setSelectedSop({
-										...selectedSop,
-										sop: !selectedSop?.sop,
-									});
-								}}
-								{...register('sop', {
-									required: 'sop is required',
-								})}
-								// key={cat.id}
-								// id={cat.id.toString()}
-								// name='emailNotification'
-								// value={cat.id}
-								// onChange={formik.handleChange}
-								// checked={formik.values.emailNotification.includes(
-								// 	cat.id.toString(),
-								// )}
-							/>
-						</ChecksGroup> */}
 						</FormGroup>
 						<span style={{ color: 'red' }}>{errors.sop?.message}</span>
 					</div>
@@ -327,8 +204,29 @@ const UpdateSopDetails = () => {
 						</FormGroup>
 						<span style={{ color: 'red' }}>{errors.weightage?.message}</span>
 					</div>
+					<div className='col-12' style={{ marginTop: 50 }}>
+						<div className='row d-flex'>
+							<div className='col'>
+								<Button
+									isLight
+									color='success'
+									className='float-end mx-2'
+									type='submit'>
+									Update
+								</Button>
 
-					<div className='col-12'>
+								<Button
+									color='info'
+									isLight
+									className='float-end'
+									tag='a'
+									to={`/users/${perams.id}/sops/${perams.agentId}`}>
+									cancle
+								</Button>
+							</div>
+						</div>
+					</div>
+					{/* <div className='col-12'>
 						<div className='row d-flex'>
 							<div className='col'>
 								<Button color='success' className='float-end mx-2' type='submit'>
@@ -339,12 +237,12 @@ const UpdateSopDetails = () => {
 									color='danger'
 									className='float-end'
 									tag='a'
-									to={`/users/${id.id}/sops/${id.id1}`}>
+									to={`/users/${perams.id}/sops/${perams.agentId}`}>
 									Cancel
 								</Button>
 							</div>
 						</div>
-					</div>
+					</div> */}
 				</form>
 			</Page>
 		</PageWrapper>

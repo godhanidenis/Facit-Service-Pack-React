@@ -104,16 +104,6 @@ const UserDetail = () => {
 										color: '#5cb85c',
 									}}
 								/>
-								{/* <Icon
-							size='lg'
-							icon='Circle'
-							color='danger'
-							style={{
-								position: 'relative',
-								right: 30,
-								top: 50,
-							}}
-						/> */}
 							</div>
 							<div className='col-md-auto'>
 								<h1>

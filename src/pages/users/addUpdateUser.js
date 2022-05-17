@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
 import Button from '../../components/bootstrap/Button';
 import FormGroup from '../../components/bootstrap/forms/FormGroup';
 import Input from '../../components/bootstrap/forms/Input';
@@ -10,6 +11,7 @@ import UserImage from '../../assets/img/wanna/wanna2.png';
 import Avatar from '../../components/Avatar';
 import Icon from '../../components/icon/Icon';
 import Spinner from '../../components/bootstrap/Spinner';
+import Toasts from '../../components/bootstrap/Toasts';
 
 const AddUpdateUser = () => {
 	const dispatch = useDispatch();
@@ -21,7 +23,7 @@ const AddUpdateUser = () => {
 	const [selectedImage, setSelectedImage] = useState();
 	const [updateProfilePictureFile, setUpdateProfilePictureFile] = useState();
 	const [dataSubmited, setDataSubmited] = useState(false);
-
+	const { addToast } = useToasts();
 	const {
 		register,
 		handleSubmit,
@@ -30,7 +32,7 @@ const AddUpdateUser = () => {
 		reset,
 	} = useForm();
 
-	const { users, loading } = useSelector((state) => state.users);
+	const { users, loading, error } = useSelector((state) => state.users);
 
 	useEffect(() => {
 		if (id) {
@@ -113,6 +115,41 @@ const AddUpdateUser = () => {
 		document.getElementById('profile').click();
 	};
 
+	useEffect(() => {
+		console.log('loading???????????', error);
+		if (error !== '') {
+			addToast(
+				<Toasts
+					title='Error in Team'
+					icon='warning'
+					iconColor='danger'
+					color='red'
+					time='Now'
+					isDismiss>
+					{`${error}`}
+				</Toasts>,
+				{
+					autoDismiss: true,
+				},
+			);
+		}
+
+		// if (error === false) {
+		// 	addToast(
+		// 		<Toasts
+		// 			title={!editMode ? 'Successfully User Created' : 'Successfully User Updated'}
+		// 			icon='warning'
+		// 			iconColor='success'
+		// 			time='Now'
+		// 			isDismiss>
+		// 			{`${error}`}
+		// 		</Toasts>,
+		// 		{
+		// 			autoDismiss: true,
+		// 		},
+		// 	);
+		// }
+	}, [addToast, editMode, error]);
 	return (
 		<>
 			<div
