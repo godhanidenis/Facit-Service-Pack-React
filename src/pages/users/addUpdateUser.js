@@ -72,8 +72,25 @@ const AddUpdateUser = () => {
 
 	useEffect(() => {
 		console.log('useefect laodinh', loading);
-		if (!loading && dataSubmited) navigate('/users');
-	}, [loading, dataSubmited, navigate]);
+		if (!loading && dataSubmited && !error) {
+			// if (error === '' && loading === false) {
+			addToast(
+				<Toasts
+					title={!editMode ? 'Successfully User Created' : 'Successfully User Updated'}
+					icon='warning'
+					iconColor='success'
+					time='Now'
+					isDismiss>
+					{`${error}`}
+				</Toasts>,
+				{
+					autoDismiss: true,
+				},
+			);
+			// }
+			navigate('/users');
+		}
+	}, [loading, dataSubmited, navigate, error, addToast, editMode]);
 
 	const onSubmit = (data) => {
 		console.log('AddEdit FormData', data);
@@ -134,7 +151,7 @@ const AddUpdateUser = () => {
 			);
 		}
 
-		// if (error === false) {
+		// if (error === '' && loading === false) {
 		// 	addToast(
 		// 		<Toasts
 		// 			title={!editMode ? 'Successfully User Created' : 'Successfully User Updated'}
@@ -149,7 +166,7 @@ const AddUpdateUser = () => {
 		// 		},
 		// 	);
 		// }
-	}, [addToast, editMode, error]);
+	}, [addToast, editMode, error, loading]);
 	return (
 		<>
 			<div

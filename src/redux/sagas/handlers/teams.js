@@ -31,7 +31,6 @@ export function* handleGetTeams({ payload }) {
 export function* handleCreateTeam({ payload }) {
 	try {
 		const response = yield call(requestCreateTeams, payload);
-		console.log('res....', response);
 		if (response.status === 200) {
 			yield put(createTeamsSuccess(response.data.data));
 		}

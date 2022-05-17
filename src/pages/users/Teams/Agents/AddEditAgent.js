@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { useToasts } from 'react-toast-notifications';
 import Button from '../../../../components/bootstrap/Button';
 import FormGroup from '../../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../../components/bootstrap/forms/Input';
@@ -11,6 +12,7 @@ import Select from '../../../../components/bootstrap/forms/Select';
 import Option from '../../../../components/bootstrap/Option';
 import { createAgentsStart, updateAgentsStart } from '../../../../redux/ducks/agents';
 import Spinner from '../../../../components/bootstrap/Spinner';
+import Toasts from '../../../../components/bootstrap/Toasts';
 
 const AddEditAgent = () => {
 	const id = useParams();
@@ -18,6 +20,7 @@ const AddEditAgent = () => {
 	const navigate = useNavigate();
 	const [editMode, setEditMode] = useState(false);
 	const [dataSubmited, setDataSubmited] = useState(false);
+	const { addToast } = useToasts();
 
 	const {
 		register,
@@ -27,7 +30,7 @@ const AddEditAgent = () => {
 		reset,
 	} = useForm();
 	const { teams } = useSelector((state) => state.teams);
-	const { agents, loading } = useSelector((state) => state.agents);
+	const { agents, loading, error } = useSelector((state) => state.agents);
 	useEffect(() => {
 		if (id.agentId) {
 			setEditMode(true);
@@ -47,8 +50,23 @@ const AddEditAgent = () => {
 
 	useEffect(() => {
 		console.log('useefect laodinh', loading);
-		if (!loading && dataSubmited) navigate(`/users/${id.id}/teams/${id.teamId}/agents`);
-	}, [dataSubmited, navigate, id.id, id.teamId, loading]);
+		if (!loading && dataSubmited && !error) {
+			addToast(
+				<Toasts
+					title={!editMode ? 'Successfully Agent Created' : 'Successfully Agent Updated'}
+					icon='warning'
+					iconColor='success'
+					time='Now'
+					isDismiss>
+					{`${error}`}
+				</Toasts>,
+				{
+					autoDismiss: true,
+				},
+			);
+			navigate(`/users/${id.id}/teams/${id.teamId}/agents`);
+		}
+	}, [dataSubmited, navigate, id.id, id.teamId, loading, addToast, editMode, error]);
 
 	const onSubmit = (data) => {
 		console.log('data', data);
