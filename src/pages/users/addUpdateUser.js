@@ -72,7 +72,6 @@ const AddUpdateUser = () => {
 	}
 
 	useEffect(() => {
-		console.log('useefect laodinh', loading);
 		if (!loading && dataSubmited && !error) {
 			// if (error === '' && loading === false) {
 			addToast(
@@ -94,8 +93,6 @@ const AddUpdateUser = () => {
 	}, [loading, dataSubmited, navigate, error, addToast, editMode]);
 
 	const onSubmit = (data) => {
-		console.log('AddEdit FormData', data);
-
 		const formData = new FormData();
 		formData.append('username', data.username);
 		if (!editMode) {
@@ -123,8 +120,7 @@ const AddUpdateUser = () => {
 		if (e.target.files && e.target.files.length > 0) {
 			setUpdateProfilePictureFile(e.target.files[0]);
 			setSelectedImage(URL.createObjectURL(e.target.files[0]));
-			console.log('selectedImage...???????', selectedImage);
-			console.log('updateProfilePictureFile?????????', updateProfilePictureFile);
+
 			errors.profile_picture = '';
 		}
 	};
@@ -159,7 +155,7 @@ const AddUpdateUser = () => {
 						? 'd-flex align-items-center justify-content-center w-100 h-100'
 						: 'visually-hidden'
 				}
-				style={{ position: 'absolute', top: 50, left: 50 }}>
+				style={{ position: 'absolute', top: 50, left: 50, opacity: 1, zIndex: 1 }}>
 				<Spinner isGrow={false} />
 			</div>
 
@@ -310,37 +306,178 @@ const AddUpdateUser = () => {
 											</div>
 										</div>
 									</div>
-									<div className='row mt-4'>
-										<div className='col-auto mt-3'>
-											<Icon
-												size='lg'
-												icon='Email'
-												color='success'
-												style={{
-													cursor: 'pointer',
-													marginLeft: '10px',
-												}}
-											/>
+								</div>
+								<div className='row d-flex mt-4'>
+									<div className='col-auto mt-3'>
+										<Icon
+											size='lg'
+											icon='person'
+											color='success'
+											style={{
+												cursor: 'pointer',
+												marginLeft: '10px',
+											}}
+										/>
+									</div>
+									<div className='col-md-6'>
+										<div className='col-12'>
+											<FormGroup
+												id='username'
+												isFloating
+												label='Your Username'>
+												<Input
+													autoComplete='off'
+													{...register('username', {
+														required: 'Username is required',
+													})}
+												/>
+											</FormGroup>
+											<span style={{ color: 'red' }}>
+												{errors.username?.message}
+											</span>
 										</div>
-										<div className='col'>
-											<div className='col-12'>
-												<FormGroup id='email' isFloating label='Your email'>
+									</div>
+								</div>
+								{!editMode && (
+									<>
+										<div className='row d-flex mt-4'>
+											<div className='col-auto mt-3'>
+												<Icon
+													size='lg'
+													icon='VpnKey'
+													color='success'
+													style={{
+														cursor: 'pointer',
+														marginLeft: '10px',
+													}}
+												/>
+											</div>
+											<div className='col-md-6'>
+												<FormGroup
+													id='password'
+													isFloating
+													label='Your Password'>
 													<Input
-														type='email'
 														autoComplete='off'
-														{...register('email', {
-															required: 'Email is required',
-															pattern: {
-																value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+														type='password'
+														{...register('password', {
+															required: editMode
+																? false
+																: 'Password is required',
+															minLength: {
+																value: 4,
 																message:
-																	'Please enter a valid email',
+																	'Password must be more than 4 characters',
+															},
+															maxLength: {
+																value: 15,
+																message:
+																	'Password cannot exceed more than 15 characters',
 															},
 														})}
 													/>
 												</FormGroup>
-												<span style={{ color: 'red' }}>
-													{errors.email?.message}
-												</span>
+											</div>
+										</div>
+										{errors.password?.message}
+									</>
+								)}
+								<div className='row d-flex mt-4'>
+									<div className='col-auto mt-3'>
+										<Icon
+											size='lg'
+											icon='Email'
+											color='success'
+											style={{
+												cursor: 'pointer',
+												marginLeft: '10px',
+											}}
+										/>
+									</div>
+									<div className='col-md-6'>
+										<div className='col-12'>
+											<FormGroup id='email' isFloating label='Your email'>
+												<Input
+													type='email'
+													autoComplete='off'
+													{...register('email', {
+														required: 'Email is required',
+														pattern: {
+															value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+															message: 'Please enter a valid email',
+														},
+													})}
+												/>
+											</FormGroup>
+											<span style={{ color: 'red' }}>
+												{errors.email?.message}
+											</span>
+										</div>
+									</div>
+								</div>
+								<div className='row d-flex mt-4'>
+									<div className='col-auto mt-3'>
+										<Icon
+											size='lg'
+											icon='LocalPhone'
+											color='success'
+											style={{
+												cursor: 'pointer',
+												marginLeft: '10px',
+											}}
+										/>
+									</div>
+									<div className='col-md-6'>
+										<div className='col-12'>
+											<FormGroup
+												id='phone_number'
+												isFloating
+												label='Your PhoneNumber'>
+												<Input
+													autoComplete='off'
+													type='number'
+													{...register('phone_number', {
+														required: 'Phone Number is required',
+														minLength: {
+															value: 10,
+															message:
+																'Phone Number must be 10 numbers',
+														},
+														maxLength: {
+															value: 10,
+															message:
+																'Phone Number must be 10 numbers',
+														},
+													})}
+												/>
+											</FormGroup>
+											<span style={{ color: 'red' }}>
+												{errors.phone_number?.message}
+											</span>
+										</div>
+									</div>
+								</div>
+								<div className='col-md-7'>
+									<div className='col-12' style={{ marginTop: 50 }}>
+										<div className='row d-flex'>
+											<div className='col'>
+												<Button
+													isLight
+													color='success'
+													// className='w-100 py-3 float-right'
+													className='float-end mx-2'
+													type='submit'>
+													{!editMode ? 'Create' : 'Update'}
+												</Button>
+
+												<Button
+													color='info'
+													isLight
+													className='float-end'
+													tag='a'
+													to='/users'>
+													cancle
+												</Button>
 											</div>
 										</div>
 									</div>

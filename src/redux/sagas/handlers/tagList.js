@@ -12,7 +12,6 @@ import {
 export function* handleGetTagList({ payload: { id, slug } }) {
 	try {
 		const response = yield call(requestGetTagList, id, slug);
-		console.log('resssss tag ', response);
 		if (response.status === 200) {
 			yield put(loadTagListSuccess(response?.data?.data));
 		}
@@ -23,10 +22,9 @@ export function* handleGetTagList({ payload: { id, slug } }) {
 export function* handleUpdateTagList({ payload: { id, record } }) {
 	try {
 		const response = yield call(requestUpdateTagList, id, record);
-		console.log('response..', response);
 
 		if (response.status === 200) {
-			yield put(updateTagListSuccess(response.data.data));
+			yield put(updateTagListSuccess(response?.data?.data));
 		}
 	} catch (error) {
 		yield put(updateTagListError(error));

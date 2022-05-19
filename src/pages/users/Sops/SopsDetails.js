@@ -19,14 +19,16 @@ import Select from '../../../components/bootstrap/forms/Select';
 import Option from '../../../components/bootstrap/Option';
 import DeleteModel from '../../../common/ConfirmationModal';
 import { updateTagListStart } from '../../../redux/ducks/tagList';
+import { updateSkillSetListStart } from '../../../redux/ducks/skillSetList';
+import Spinner from '../../../components/bootstrap/Spinner';
 
 const SopsDetails = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const perams = useParams();
+	console.log('peramssssss', perams);
 	const [tagId, setTagId] = useState();
-	const { subSops } = useSelector((state) => state.subSops);
-	console.log('sub sops::', subSops);
+	const { subSops, loading } = useSelector((state) => state.subSops);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [currentSubSops, setCurrentSubSops] = useState();
 	const {
@@ -37,6 +39,7 @@ const SopsDetails = () => {
 		reset,
 	} = useForm();
 	const [tagList, setTagList] = useState([]);
+	const [skillSetList, setSkillSetList] = useState([]);
 
 	useEffect(() => {
 		const formData = {
@@ -44,10 +47,8 @@ const SopsDetails = () => {
 		};
 		dispatch(loadSubSopsStart({ id: perams.id, slug: formData }));
 	}, [dispatch, perams.id, perams.sop_slug]);
-	console.log('sub sops::', subSops);
 
 	const handleDeleteSubSops = () => {
-		console.log('currentSubSops?._id,', currentSubSops?._id);
 		dispatch(
 			deleteSubSopsStart({
 				id: currentSubSops?._id,
@@ -57,13 +58,13 @@ const SopsDetails = () => {
 	};
 
 	const taggingData = () => {
-		console.log('lng', subSops.length);
 		if (subSops.length) {
 			subSops?.map((sub) => {
-				console.log('sub', sub);
+				console.log('sub/..............', sub);
 				// eslint-disable-next-line no-sequences
 				return (
 					setTagList(sub?._source?.tag_list),
+					setSkillSetList(sub?._source?.skill_set_list),
 					setTagId(sub?._id),
 					setValue('min', sub?._source?.min),
 					setValue('max', sub?._source?.max),
@@ -82,10 +83,14 @@ const SopsDetails = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [subSops]);
 	const onSubmit = (data) => {
-		console.log('data', data);
 		const formDataUpdateTagging = {
 			doctype: perams.sop_slug.replace('_found', ''),
 			tag_list: tagList,
+			user_id: Number(perams.id),
+		};
+		const formDataUpdateSkill = {
+			doctype: perams.sop_slug.replace('_found', ''),
+			skill_set_list: skillSetList,
 			user_id: Number(perams.id),
 		};
 		const formDataUpdateMinMaxSentimate = {
@@ -109,11 +114,19 @@ const SopsDetails = () => {
 			max: Number(data?.max),
 			type: data?.type,
 		};
-		if (perams.agentId === 'tagging_found') {
+		if (perams.sop_slug === 'tagging_found') {
 			dispatch(
 				updateTagListStart({
 					id: tagId,
 					record: formDataUpdateTagging,
+				}),
+			);
+		}
+		if (perams.sop_slug === 'skill_set_found') {
+			dispatch(
+				updateSkillSetListStart({
+					id: tagId,
+					record: formDataUpdateSkill,
 				}),
 			);
 		}
@@ -123,6 +136,13 @@ const SopsDetails = () => {
 				updateSubSopsStart({
 					id: tagId,
 					record: formDataUpdateTagging,
+				}),
+			);
+		} else if (perams.sop_slug === 'skill_set_found') {
+			dispatch(
+				updateSubSopsStart({
+					id: tagId,
+					record: formDataUpdateSkill,
 				}),
 			);
 		} else if (
@@ -170,6 +190,15 @@ const SopsDetails = () => {
 
 	return (
 		<>
+			<div
+				className={
+					loading
+						? 'd-flex align-items-center justify-content-center w-100 h-100'
+						: 'visually-hidden'
+				}
+				style={{ position: 'absolute', top: 50, left: 50, opacity: 1, zIndex: 1 }}>
+				<Spinner isGrow={false} />
+			</div>
 			<PageWrapper>
 				<Page className='p-0'>
 					{(() => {
@@ -193,7 +222,6 @@ const SopsDetails = () => {
 															onKeyPress={(ev) => {
 																if (ev.key === 'Enter') {
 																	ev.preventDefault();
-																	console.log(ev.target.value);
 																	setTagList([
 																		...tagList,
 																		ev.target.value,
@@ -263,6 +291,97 @@ const SopsDetails = () => {
 									</div>
 								);
 
+							case 'skill_set_found':
+								return (
+									<div>
+										{subSops.length ? (
+											<form
+												className='row g-4 w-75'
+												onSubmit={handleSubmit(onSubmit, onError)}
+												onReset={reset}>
+												<div className='col-12'>
+													<FormGroup
+														id='skill_set_list'
+														isFloating
+														label='Your skill_set_list'>
+														<Input
+															autoComplete='off'
+															{...register('skill_set_list')}
+															onKeyPress={(ev) => {
+																if (ev.key === 'Enter') {
+																	ev.preventDefault();
+																	console.log(ev.target.value);
+																	setSkillSetList([
+																		...skillSetList,
+																		ev.target.value,
+																	]);
+																}
+															}}
+														/>
+													</FormGroup>
+													{errors.skill_set_list?.message}
+												</div>
+												<div className='d-flex align-items-center'>
+													{skillSetList &&
+														skillSetList?.map((skill) => {
+															return (
+																<div
+																	key={skill}
+																	style={{
+																		display: 'flex',
+																		alignItems: 'center',
+																		justifyContent:
+																			'space-between',
+																		padding: '5px',
+																		border: '1px solid gray',
+																		borderRadius: '12px',
+																		width: '150px',
+																		margin: '8px',
+																	}}>
+																	<span className='fw-bold'>
+																		{skill}
+																	</span>
+																	<Icon
+																		size='lg'
+																		icon='Cancel'
+																		color='danger'
+																		style={{
+																			cursor: 'pointer',
+																		}}
+																		onClick={() =>
+																			setSkillSetList(
+																				(skills) =>
+																					skills.filter(
+																						(sk) =>
+																							sk !==
+																							skill,
+																					),
+																			)
+																		}
+																	/>
+																</div>
+															);
+														})}
+												</div>
+												<div className='col-12'>
+													<Button
+														color='success'
+														className='mb-2'
+														style={{
+															display: 'flex',
+															marginLeft: 'auto',
+														}}
+														type='submit'>
+														Save
+													</Button>
+												</div>
+											</form>
+										) : (
+											''
+										)}
+									</div>
+								);
+
 							case 'customer_call_end_sentiment_found':
 							case 'customer_overall_call_sentiment_found':
 							case 'customer_overtalk_incidents_found':
@@ -272,7 +391,7 @@ const SopsDetails = () => {
 							case 'call_end_sentiment_found':
 							case 'overtalk_incidents_found':
 								return (
-									<div>
+									<div style={{ opacity: loading ? 0.5 : 1 }}>
 										{subSops.length ? (
 											<form
 												className='row g-4 w-75'
@@ -349,7 +468,7 @@ const SopsDetails = () => {
 							case 'customer_silence_incidents_found':
 							case 'silence_incidents_found':
 								return (
-									<div>
+									<div style={{ opacity: loading ? 0.5 : 1 }}>
 										{subSops.length ? (
 											<form
 												className='row g-4 w-75'
@@ -429,7 +548,7 @@ const SopsDetails = () => {
 							case 'customer_responsiveness_found':
 							case 'customer_clarity_found':
 								return (
-									<div>
+									<div style={{ opacity: loading ? 0.5 : 1 }}>
 										{subSops.length ? (
 											<form
 												className='row g-4 w-75'
@@ -509,56 +628,58 @@ const SopsDetails = () => {
 							case 'call_additional_info_found':
 							case 'call_alternate_channel_found':
 								return (
-									<div className='row d-flex align-items-center justify-content-between'>
+									<div
+										className='row d-flex align-items-center justify-content-between'
+										style={{ opacity: loading ? 0.5 : 1 }}>
 										{subSops.length &&
 											subSops?.map((subSop) => {
 												return (
-													<div className='col-6'>
+													<div className='col-md-6'>
 														<Card key={subSop?._id}>
 															<CardBody>
 																<div className='row'>
-																	<div className='col-10'>
+																	<div className='col-md-10'>
 																		<h4>
 																			{subSop?._source?.text}
 																		</h4>
 																	</div>
-																</div>
-																<div>
-																	<Icon
-																		size='lg'
-																		icon='Edit'
-																		color='info'
-																		style={{
-																			cursor: 'pointer',
-																		}}
-																		onClick={() => {
-																			navigate(
-																				`/users/${perams.id}/sops/${perams.sop_slug}/sub/update`,
-																				{
-																					state: {
-																						id: subSop?._id,
+																	<div className='col-md-2 d-flex align-items-center justify-content-between'>
+																		<Icon
+																			size='lg'
+																			icon='Edit'
+																			color='info'
+																			style={{
+																				cursor: 'pointer',
+																			}}
+																			onClick={() => {
+																				navigate(
+																					`/users/${perams.id}/sops/${perams.sop_slug}/sub/update`,
+																					{
+																						state: {
+																							id: subSop?._id,
+																						},
 																					},
-																				},
-																			);
-																		}}
-																	/>
-																	<Icon
-																		size='lg'
-																		icon='Delete'
-																		color='danger'
-																		style={{
-																			cursor: 'pointer',
-																			marginLeft: '25px',
-																		}}
-																		onClick={() => {
-																			setCurrentSubSops(
-																				subSop,
-																			);
-																			setDeleteModalOpen(
-																				true,
-																			);
-																		}}
-																	/>
+																				);
+																			}}
+																		/>
+																		<Icon
+																			size='lg'
+																			icon='Delete'
+																			color='danger'
+																			style={{
+																				cursor: 'pointer',
+																				// marginLeft: '25px',
+																			}}
+																			onClick={() => {
+																				setCurrentSubSops(
+																					subSop,
+																				);
+																				setDeleteModalOpen(
+																					true,
+																				);
+																			}}
+																		/>
+																	</div>
 																</div>
 															</CardBody>
 														</Card>

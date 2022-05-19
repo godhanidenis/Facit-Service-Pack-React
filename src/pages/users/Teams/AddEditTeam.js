@@ -91,7 +91,7 @@ const AddEditTeam = () => {
 		if (!loading && dataSubmited && !error) {
 			addToast(
 				<Toasts
-					title={!editMode ? 'Successfully Team Created' : 'Successfully Team Updated'}
+					title={editMode ? 'Successfully Team Updated' : 'Successfully Team Created'}
 					icon='warning'
 					iconColor='success'
 					time='Now'
@@ -115,7 +115,6 @@ const AddEditTeam = () => {
 			setLocationEditMode(true);
 			const singleLocation = locations.find((location) => location.id === Number(locationId));
 			setFormLocationValue({ ...singleLocation });
-			console.log('first', singleLocation);
 		} else {
 			setLocationEditMode(false);
 			setFormLocationValue({ ...initialLocation });
@@ -125,7 +124,6 @@ const AddEditTeam = () => {
 			setLobEditMode(true);
 			const singleLob = lobs.find((lob) => lob.id === Number(lobId));
 			setFormLobValue({ ...singleLob });
-			console.log('first', singleLob);
 		} else {
 			setLobEditMode(false);
 			setFormLobValue({ ...initialLob });
@@ -212,8 +210,6 @@ const AddEditTeam = () => {
 	}, [id, teams, setValue]);
 
 	const onSubmit = (data) => {
-		console.log('AddEdit FormData', data);
-
 		const formData = {
 			Team_name: data.Team_name,
 			Location: Number(data.Location),
@@ -240,7 +236,7 @@ const AddEditTeam = () => {
 						? 'd-flex align-items-center justify-content-center w-100 h-100'
 						: 'visually-hidden'
 				}
-				style={{ position: 'absolute', top: 50, left: 50 }}>
+				style={{ position: 'absolute', top: 50, left: 50, opacity: 1, zIndex: 1 }}>
 				<Spinner isGrow={false} />
 			</div>
 			<div

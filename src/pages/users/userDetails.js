@@ -68,7 +68,7 @@ const UserDetail = () => {
 	const { id } = useParams();
 	const [selectedImage, setSelectedImage] = useState();
 	const [userInfoData, setUserInfoData] = useState();
-	const { users } = useSelector((state) => state.users);
+	const { users, loading } = useSelector((state) => state.users);
 
 	const [joinedDate, setjoinedDate] = useState();
 	useEffect(() => {
@@ -81,7 +81,6 @@ const UserDetail = () => {
 				setSelectedImage(`${singleUser?.pre_signed_url}`);
 				const current = new Date(singleUser?.date_joined);
 				setjoinedDate(current.toDateString());
-				console.log('date???????????', current.toDateString());
 			}
 		}
 	}, [id, users, dispatch, userInfoData?.date_joined]);
@@ -90,15 +89,17 @@ const UserDetail = () => {
 		<>
 			<div
 				className={
-					!(users.length > 0)
+					loading
 						? 'd-flex align-items-center justify-content-center w-100 h-100'
 						: 'visually-hidden'
 				}
-				style={{ position: 'absolute', top: 50, left: 50 }}>
+				style={{ position: 'absolute', top: 50, left: 50, opacity: 1, zIndex: 1 }}>
 				<Spinner isGrow={false} />
 			</div>
 			{users.length > 0 && (
-				<div className='row align-items-center justify-content-center'>
+				<div
+					className='row align-items-center justify-content-center'
+					style={{ opacity: loading ? 0.5 : 1 }}>
 					<div className='col-md-6'>
 						<hr style={{ opacity: '0.05' }} />
 						<div className='row align-items-center'>
@@ -114,7 +115,7 @@ const UserDetail = () => {
 									<div className='col-auto'>
 										{/* <Avatar src={User1Img} /> */}
 										<Avatar
-											src={selectedImage || ''}
+											src={selectedImage || User1Img}
 											style={{ boxShadow: '0px 0px 14px -4px #888888' }}
 										/>
 										<div
