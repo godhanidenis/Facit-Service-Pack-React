@@ -513,52 +513,52 @@ const SopsDetails = () => {
 										{subSops.length &&
 											subSops?.map((subSop) => {
 												return (
-													<div className='col-6'>
+													<div className='col-md-6'>
 														<Card key={subSop?._id}>
 															<CardBody>
 																<div className='row'>
-																	<div className='col-10'>
+																	<div className='col-md-10'>
 																		<h4>
 																			{subSop?._source?.text}
 																		</h4>
 																	</div>
-																</div>
-																<div>
-																	<Icon
-																		size='lg'
-																		icon='Edit'
-																		color='info'
-																		style={{
-																			cursor: 'pointer',
-																		}}
-																		onClick={() => {
-																			navigate(
-																				`/users/${perams.id}/sops/${perams.sop_slug}/sub/update`,
-																				{
-																					state: {
-																						id: subSop?._id,
+																	<div className='col-md-2 d-flex align-items-center justify-content-between'>
+																		<Icon
+																			size='lg'
+																			icon='Edit'
+																			color='info'
+																			style={{
+																				cursor: 'pointer',
+																			}}
+																			onClick={() => {
+																				navigate(
+																					`/users/${perams.id}/sops/${perams.sop_slug}/sub/update`,
+																					{
+																						state: {
+																							id: subSop?._id,
+																						},
 																					},
-																				},
-																			);
-																		}}
-																	/>
-																	<Icon
-																		size='lg'
-																		icon='Delete'
-																		color='danger'
-																		style={{
-																			cursor: 'pointer',
-																			marginLeft: '25px',
-																		}}
-																		onClick={() => {
-																			setCurrentSubSops(
-																				subSop,
-																			);
-																			setDeleteModalOpen(
-																				true,
-																			);
-																		}}
-																	/>
+																				);
+																			}}
+																		/>
+																		<Icon
+																			size='lg'
+																			icon='Delete'
+																			color='danger'
+																			style={{
+																				cursor: 'pointer',
+																				// marginLeft: '25px',
+																			}}
+																			onClick={() => {
+																				setCurrentSubSops(
+																					subSop,
+																				);
+																				setDeleteModalOpen(
+																					true,
+																				);
+																			}}
+																		/>
+																	</div>
 																</div>
 															</CardBody>
 														</Card>

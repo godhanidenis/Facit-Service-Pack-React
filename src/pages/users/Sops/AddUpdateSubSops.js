@@ -60,9 +60,12 @@ const AddUpdateSubSops = () => {
 				setValue('sentiment_type', selectedSop?._source?.sentiment_type);
 				setValue('incidents_type', selectedSop?._source?.incidents_type);
 				setValue('type', selectedSop?._source?.type);
-				setValue('tag_type', selectedSop?._source?.tag_type);
+				// setValue('tag_type', selectedSop?._source?.tag_type);
 				setKeywordsList(selectedSop?._source?.keywords);
-				setTagList(selectedSop?._source?.tag_list);
+				if (perams.id1 === 'tagging_found') {
+					setTagList(selectedSop?._source?.tag_list);
+				}
+				// setTagList(selectedSop?._source?.tag_list);
 				const teamList = [];
 				// eslint-disable-next-line array-callback-return
 				selectedSop?._source?.team_list?.map((teamId) => {
@@ -71,7 +74,7 @@ const AddUpdateSubSops = () => {
 				setValue('team_list', teamList);
 			}
 		}
-	}, [perams.id, perams.sop_slug, location?.state?.id, setValue, subSops, tagLists]);
+	}, [perams.id, perams.sop_slug, location?.state?.id, setValue, subSops, tagLists, perams.id1]);
 
 	const onSubmit = (data) => {
 		console.log('SopAddUpdate FormData', data);

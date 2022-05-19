@@ -312,6 +312,37 @@ const AddUpdateUser = () => {
 										</div>
 									</div>
 								</div>
+								{!editMode && (
+									<>
+										<div className='col-12'>
+											<FormGroup
+												id='password'
+												isFloating
+												label='Your Password'>
+												<Input
+													autoComplete='off'
+													type='password'
+													{...register('password', {
+														required: editMode
+															? false
+															: 'Password is required',
+														minLength: {
+															value: 4,
+															message:
+																'Password must be more than 4 characters',
+														},
+														maxLength: {
+															value: 15,
+															message:
+																'Password cannot exceed more than 15 characters',
+														},
+													})}
+												/>
+											</FormGroup>
+										</div>
+										{errors.password?.message}
+									</>
+								)}
 								<div className='row d-flex mt-4'>
 									<div className='col-auto mt-3'>
 										<Icon
