@@ -19,11 +19,13 @@ import Select from '../../../components/bootstrap/forms/Select';
 import Option from '../../../components/bootstrap/Option';
 import DeleteModel from '../../../common/ConfirmationModal';
 import { updateTagListStart } from '../../../redux/ducks/tagList';
+import { updateSkillSetListStart } from '../../../redux/ducks/skillSetList';
 
 const SopsDetails = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const perams = useParams();
+	console.log('peramssssss', perams);
 	const [tagId, setTagId] = useState();
 	const { subSops } = useSelector((state) => state.subSops);
 	console.log('sub sops::', subSops);
@@ -37,6 +39,7 @@ const SopsDetails = () => {
 		reset,
 	} = useForm();
 	const [tagList, setTagList] = useState([]);
+	const [skillSetList, setSkillSetList] = useState([]);
 
 	useEffect(() => {
 		const formData = {
@@ -60,10 +63,11 @@ const SopsDetails = () => {
 		console.log('lng', subSops.length);
 		if (subSops.length) {
 			subSops?.map((sub) => {
-				console.log('sub', sub);
+				console.log('sub/..............', sub);
 				// eslint-disable-next-line no-sequences
 				return (
 					setTagList(sub?._source?.tag_list),
+					setSkillSetList(sub?._source?.skill_set_list),
 					setTagId(sub?._id),
 					setValue('min', sub?._source?.min),
 					setValue('max', sub?._source?.max),
@@ -88,6 +92,11 @@ const SopsDetails = () => {
 			tag_list: tagList,
 			user_id: Number(perams.id),
 		};
+		const formDataUpdateSkill = {
+			doctype: perams.sop_slug.replace('_found', ''),
+			skill_set_list: skillSetList,
+			user_id: Number(perams.id),
+		};
 		const formDataUpdateMinMaxSentimate = {
 			doctype: perams.sop_slug.replace('_found', ''),
 			user_id: Number(perams.id),
@@ -109,11 +118,19 @@ const SopsDetails = () => {
 			max: Number(data?.max),
 			type: data?.type,
 		};
-		if (perams.agentId === 'tagging_found') {
+		if (perams.sop_slug === 'tagging_found') {
 			dispatch(
 				updateTagListStart({
 					id: tagId,
 					record: formDataUpdateTagging,
+				}),
+			);
+		}
+		if (perams.sop_slug === 'skill_set_found') {
+			dispatch(
+				updateSkillSetListStart({
+					id: tagId,
+					record: formDataUpdateSkill,
 				}),
 			);
 		}
@@ -123,6 +140,13 @@ const SopsDetails = () => {
 				updateSubSopsStart({
 					id: tagId,
 					record: formDataUpdateTagging,
+				}),
+			);
+		} else if (perams.sop_slug === 'skill_set_found') {
+			dispatch(
+				updateSubSopsStart({
+					id: tagId,
+					record: formDataUpdateSkill,
 				}),
 			);
 		} else if (
@@ -237,6 +261,97 @@ const SopsDetails = () => {
 																					(tg) =>
 																						tg !== tag,
 																				),
+																			)
+																		}
+																	/>
+																</div>
+															);
+														})}
+												</div>
+												<div className='col-12'>
+													<Button
+														color='success'
+														className='mb-2'
+														style={{
+															display: 'flex',
+															marginLeft: 'auto',
+														}}
+														type='submit'>
+														Save
+													</Button>
+												</div>
+											</form>
+										) : (
+											''
+										)}
+									</div>
+								);
+
+							case 'skill_set_found':
+								return (
+									<div>
+										{subSops.length ? (
+											<form
+												className='row g-4 w-75'
+												onSubmit={handleSubmit(onSubmit, onError)}
+												onReset={reset}>
+												<div className='col-12'>
+													<FormGroup
+														id='skill_set_list'
+														isFloating
+														label='Your skill_set_list'>
+														<Input
+															autoComplete='off'
+															{...register('skill_set_list')}
+															onKeyPress={(ev) => {
+																if (ev.key === 'Enter') {
+																	ev.preventDefault();
+																	console.log(ev.target.value);
+																	setSkillSetList([
+																		...skillSetList,
+																		ev.target.value,
+																	]);
+																}
+															}}
+														/>
+													</FormGroup>
+													{errors.skill_set_list?.message}
+												</div>
+												<div className='d-flex align-items-center'>
+													{skillSetList &&
+														skillSetList?.map((skill) => {
+															return (
+																<div
+																	key={skill}
+																	style={{
+																		display: 'flex',
+																		alignItems: 'center',
+																		justifyContent:
+																			'space-between',
+																		padding: '5px',
+																		border: '1px solid gray',
+																		borderRadius: '12px',
+																		width: '150px',
+																		margin: '8px',
+																	}}>
+																	<span className='fw-bold'>
+																		{skill}
+																	</span>
+																	<Icon
+																		size='lg'
+																		icon='Cancel'
+																		color='danger'
+																		style={{
+																			cursor: 'pointer',
+																		}}
+																		onClick={() =>
+																			setSkillSetList(
+																				(skills) =>
+																					skills.filter(
+																						(sk) =>
+																							sk !==
+																							skill,
+																					),
 																			)
 																		}
 																	/>

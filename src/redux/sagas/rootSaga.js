@@ -86,6 +86,8 @@ import {
 	handleUpdateSubSop,
 } from './handlers/subSops';
 import { handleGetTagList, handleUpdateTagList } from './handlers/tagList';
+import { LOAD_SKILLSETLIST_START, UPDATE_SKILLSETLIST_START } from '../ducks/skillSetList';
+import { handleGetSkillSetList, handleUpdateSkillSetList } from './handlers/skillSetList';
 
 function* onLoadUsers() {
 	yield takeLatest(LOAD_USERS_START, handleGetUsers);
@@ -208,6 +210,14 @@ function* onLoadTagList() {
 function* onUpdateTagList() {
 	yield takeLatest(UPDATE_TAGLIST_START, handleUpdateTagList);
 }
+
+function* onLoadSkillSetList() {
+	yield takeLatest(LOAD_SKILLSETLIST_START, handleGetSkillSetList);
+}
+function* onUpdateSkillSetList() {
+	yield takeLatest(UPDATE_SKILLSETLIST_START, handleUpdateSkillSetList);
+}
+
 const userSagas = [
 	fork(onLoadUsers),
 	fork(onCreateUsers),
@@ -252,6 +262,7 @@ const subSopSagas = [
 ];
 
 const tagListSagas = [fork(onLoadTagList), fork(onUpdateTagList)];
+const skillSetListSagas = [fork(onLoadSkillSetList), fork(onUpdateSkillSetList)];
 export default function* watcherSaga() {
 	yield all([
 		...userSagas,
@@ -264,5 +275,6 @@ export default function* watcherSaga() {
 		...categorySagas,
 		...subSopSagas,
 		...tagListSagas,
+		...skillSetListSagas,
 	]);
 }

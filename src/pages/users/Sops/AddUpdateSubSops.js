@@ -19,15 +19,19 @@ const AddUpdateSubSops = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const perams = useParams();
+	console.log('params', perams);
 
 	const [editMode, setEditMode] = useState(false);
 	const [keywordsList, setKeywordsList] = useState([]);
 	const [tagList, setTagList] = useState([]);
+	const [skillSetList, setSkillSetList] = useState([]);
 
 	// Selectors
 	const { teams } = useSelector((state) => state.teams);
 	const { subSops } = useSelector((state) => state.subSops);
 	const { tagLists } = useSelector((state) => state.tagLists);
+	const { skillSetLists } = useSelector((state) => state.skillSetLists);
+	console.log('skillSetLists', skillSetLists);
 	const {
 		register,
 		handleSubmit,
@@ -39,12 +43,15 @@ const AddUpdateSubSops = () => {
 	useEffect(() => {
 		if (editMode) {
 			const singleSubSop = subSops.find((subSop) => subSop._id === location?.state?.id);
+			console.log('singleSubSop', singleSubSop);
 			setValue('tag_type', singleSubSop?._source?.tag_type);
+			setValue('skill_set_list', singleSubSop?._source?.skill_set_list);
 		}
-	}, [editMode, location?.state?.id, setValue, subSops, tagLists]);
+	}, [editMode, location?.state?.id, setValue, subSops, tagLists, skillSetLists]);
 
 	useEffect(() => {
 		setTagList(tagLists[0]?._source?.tag_list);
+		setSkillSetList(skillSetLists[0]?._source?.skill_set_list);
 		if (!location?.state?.id) {
 			setEditMode(false);
 		} else {
@@ -62,9 +69,13 @@ const AddUpdateSubSops = () => {
 				setValue('type', selectedSop?._source?.type);
 				// setValue('tag_type', selectedSop?._source?.tag_type);
 				setKeywordsList(selectedSop?._source?.keywords);
-				if (perams.id1 === 'tagging_found') {
-					setTagList(selectedSop?._source?.tag_list);
-				}
+
+				// if (perams.sop_slug === 'tagging_found') {
+				// 	setTagList(selectedSop?._source?.tag_list);
+				// }
+				// if (perams.sop_slug === 'skill_set_found') {
+				// 	setSkillSetList(selectedSop?._source?.skill_set_list);
+				// }
 				// setTagList(selectedSop?._source?.tag_list);
 				const teamList = [];
 				// eslint-disable-next-line array-callback-return
@@ -74,7 +85,15 @@ const AddUpdateSubSops = () => {
 				setValue('team_list', teamList);
 			}
 		}
-	}, [perams.id, perams.sop_slug, location?.state?.id, setValue, subSops, tagLists, perams.id1]);
+	}, [
+		perams.id,
+		perams.sop_slug,
+		location?.state?.id,
+		setValue,
+		subSops,
+		tagLists,
+		skillSetLists,
+	]);
 
 	const onSubmit = (data) => {
 		console.log('SopAddUpdate FormData', data);
@@ -92,11 +111,29 @@ const AddUpdateSubSops = () => {
 				user_id: Number(perams.id),
 			},
 		};
+		const formDataCreateVerification = {
+			record: {
+				doctype: perams.sop_slug.replace('_found', ''),
+				text: data.text,
+				score: Number(data.score),
+				team_list: teamList,
+				skill_set_list: data.skill_set_list,
+				user_id: Number(perams.id),
+			},
+		};
 		const formDataUpdate = {
 			doctype: perams.sop_slug.replace('_found', ''),
 			text: data.text,
 			score: Number(data.score),
 			team_list: teamList,
+			user_id: Number(perams.id),
+		};
+		const formDataUpdateVerification = {
+			doctype: perams.sop_slug.replace('_found', ''),
+			text: data.text,
+			score: Number(data.score),
+			team_list: teamList,
+			skill_set_list: data.skill_set_list,
 			user_id: Number(perams.id),
 		};
 
@@ -195,6 +232,13 @@ const AddUpdateSubSops = () => {
 						record: formDataUpdateCallInfoChannel,
 					}),
 				);
+			} else if (perams.sop_slug === 'customer_verification_found') {
+				dispatch(
+					updateSubSopsStart({
+						id: location?.state?.id,
+						record: formDataUpdateVerification,
+					}),
+				);
 			} else {
 				dispatch(updateSubSopsStart({ id: location?.state?.id, record: formDataUpdate }));
 			}
@@ -236,6 +280,8 @@ const AddUpdateSubSops = () => {
 				perams.sop_slug === 'call_alternate_channel_found'
 			) {
 				dispatch(createSubSopsStart(formDataCreateCallInfoChannel));
+			} else if (perams.sop_slug === 'customer_verification_found') {
+				dispatch(createSubSopsStart(formDataCreateVerification));
 			} else {
 				dispatch(createSubSopsStart(formDataCreate));
 			}
@@ -318,6 +364,34 @@ const AddUpdateSubSops = () => {
 									})}
 								</Select>
 								<span style={{ color: 'red' }}>{errors.team_list?.message}</span>
+							</FormGroup>
+						</div>
+					)}
+
+					{perams.sop_slug === 'customer_verification_found' && (
+						<div className='col-12'>
+							<Label>Select Skill Set </Label>
+							<FormGroup>
+								<Select
+									size='sm'
+									multiple
+									ariaLabel='Select Category'
+									{...register('skill_set_list', {
+										required: 'skill_set_list is required',
+									})}>
+									<Option value=''>Select skill_set_list</Option>
+									{skillSetList &&
+										skillSetList?.map((skill) => {
+											return (
+												<Option key={skill} value={skill}>
+													{skill}
+												</Option>
+											);
+										})}
+								</Select>
+								<span style={{ color: 'red' }}>
+									{errors.skill_set_list?.message}
+								</span>
 							</FormGroup>
 						</div>
 					)}
@@ -425,6 +499,69 @@ const AddUpdateSubSops = () => {
 													onClick={() =>
 														setTagList((tags) =>
 															tags.filter((tg) => tg !== tag),
+														)
+													}
+												/>
+											</div>
+										);
+									})}
+							</div>
+						</>
+					)}
+
+					{perams.sop_slug === 'skill_set_found' && (
+						<>
+							<div className='col-12'>
+								<FormGroup
+									id='skill_set_list'
+									isFloating
+									label='Your skill_set_list'>
+									<Input
+										autoComplete='off'
+										{...register('skill_set_list', {
+											required: editMode
+												? false
+												: 'skill_set_list is required',
+										})}
+										onKeyPress={(ev) => {
+											if (ev.key === 'Enter') {
+												ev.preventDefault();
+												setSkillSetList([...skillSetList, ev.target.value]);
+											}
+										}}
+									/>
+								</FormGroup>
+								<span style={{ color: 'red' }}>
+									{errors.skill_set_list?.message}
+								</span>
+							</div>
+							<div className='d-flex align-items-center'>
+								{skillSetList &&
+									skillSetList?.map((skill) => {
+										return (
+											<div
+												key={skill}
+												style={{
+													display: 'flex',
+													alignItems: 'center',
+													justifyContent: 'space-between',
+													padding: '5px',
+													border: '1px solid gray',
+													borderRadius: '12px',
+													width: '140px',
+													margin: '8px',
+												}}>
+												<span className='fw-bold'>{skill}</span>
+												<Icon
+													size='lg'
+													icon='Cancel'
+													color='danger'
+													style={{
+														cursor: 'pointer',
+													}}
+													onClick={() =>
+														setSkillSetList((skills) =>
+															skills.filter((sk) => sk !== skill),
 														)
 													}
 												/>

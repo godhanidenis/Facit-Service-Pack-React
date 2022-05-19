@@ -6,6 +6,7 @@ import agentReducer from './ducks/agents';
 import categoryReducer from './ducks/category';
 import lobReducer from './ducks/lobs';
 import locationReducer from './ducks/locations';
+import skillSetListReducer from './ducks/skillSetList';
 import sopReducer from './ducks/sops';
 import subSopReducer from './ducks/subSops';
 import tagListReducer from './ducks/tagList';
@@ -25,6 +26,7 @@ const reducer = combineReducers({
 	category: categoryReducer,
 	subSops: subSopReducer,
 	tagLists: tagListReducer,
+	skillSetLists: skillSetListReducer,
 });
 
 const sagaMiddleWares = createSagaMiddleware();

@@ -8,19 +8,26 @@ import SopsDetails from './SopsDetails';
 import AddUpdateSubSops from './AddUpdateSubSops';
 import Spinner from '../../../components/bootstrap/Spinner';
 import { loadTagListStart } from '../../../redux/ducks/tagList';
+import { loadSkillSetListStart } from '../../../redux/ducks/skillSetList';
 
 const Sops = () => {
 	const [selectedSopTab, setSelectedSopTab] = useState();
 	const id = useParams();
+	console.log('iddddddd', id);
 	const dispatch = useDispatch();
 	const { sops, loading } = useSelector((state) => state.sops);
 	const { subSops } = useSelector((state) => state.subSops);
 	console.log('sops .??', sops.length);
 	useEffect(() => {
-		const formData = {
+		const formDataTag = {
 			doctype: 'tagging_found',
 		};
-		dispatch(loadTagListStart({ id: id.id, slug: formData }));
+		dispatch(loadTagListStart({ id: id.id, slug: formDataTag }));
+
+		const formDataSkill = {
+			doctype: 'skill_set_found',
+		};
+		dispatch(loadSkillSetListStart({ id: id.id, slug: formDataSkill }));
 	}, [dispatch, id.id]);
 
 	const handleActiveListTab = (sopId) => {
@@ -89,6 +96,7 @@ const Sops = () => {
 												/>
 											</div>
 											{(selectedSopTab?.slug === 'tagging_found' ||
+												selectedSopTab?.slug === 'skill_set_found' ||
 												selectedSopTab?.slug ===
 													'customer_call_end_sentiment_found' ||
 												selectedSopTab?.slug ===

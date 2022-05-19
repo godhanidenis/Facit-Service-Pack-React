@@ -26,7 +26,7 @@ export function* handleUpdateTagList({ payload: { id, record } }) {
 		console.log('response..', response);
 
 		if (response.status === 200) {
-			yield put(updateTagListSuccess(response.data.data));
+			yield put(updateTagListSuccess(response?.data?.data));
 		}
 	} catch (error) {
 		yield put(updateTagListError(error));
