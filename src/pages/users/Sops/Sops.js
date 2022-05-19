@@ -36,13 +36,13 @@ const Sops = () => {
 					<Spinner isGrow={false} />
 				</div>
 			) : (
-				<div className='row' style={{ height: '95%' }}>
+				<div className='row' style={{ height: '100%' }}>
 					<div className='col-3'>
 						<Card stretch>
 							<CardBody isScrollable>
-								<div className='row g-5 rounded-3'>
+								<div className='row'>
 									{sops?.map((sop) => (
-										<div className='col-12' key={sop?.id}>
+										<div className='col-12 mb-3' key={sop?.id}>
 											<Button
 												className='w-100'
 												color={

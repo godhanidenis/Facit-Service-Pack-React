@@ -28,6 +28,7 @@ import { createTeamLeadsStart, deleteTeamLeadsStart } from '../../../redux/ducks
 import { createLobsStart, deleteLobsStart, updateLobsStart } from '../../../redux/ducks/lobs';
 import Spinner from '../../../components/bootstrap/Spinner';
 import Toasts from '../../../components/bootstrap/Toasts';
+import Card, { CardActions } from '../../../components/bootstrap/Card';
 
 const AddEditTeam = () => {
 	const id = useParams();
@@ -249,19 +250,33 @@ const AddEditTeam = () => {
 					<hr style={{ opacity: '0.05' }} />
 					<div
 						className='row d-flex align-items-center justify-content-center'
-						style={{ marginBottom: 20, marginLeft: 5, marginTop: 20 }}>
-						<div className='col-md-10'>
-							<h1>
-								<b>{!editMode ? 'Add Team Details' : 'Update Team Details'}</b>
-							</h1>
+						style={{ marginBottom: 20, marginTop: 20 }}>
+						<div className='d-flex align-items-center justify-content-between'>
+							<div>
+								<h1>
+									<b>{!editMode ? 'Add Team Details' : 'Update Team Details'}</b>
+								</h1>
+							</div>
+							<div>
+								<CardActions className='d-flex justify-content-end'>
+									<Button
+										icon='Backspace'
+										color='info'
+										isLight
+										tag='a'
+										to={`/users/${id.id}/teams`}>
+										Back to teams
+									</Button>
+								</CardActions>
+							</div>
 						</div>
 					</div>
-					<div className='row d-flex align-items-center justify-content-center'>
+					<div className='row align-items-center'>
 						<form
-							className='row justify-content-center align-items-center'
+							className='row align-items-center'
 							onSubmit={handleSubmit(onSubmit, onError)}
 							onReset={reset}>
-							<div className='col-10'>
+							<div className='col'>
 								<FormGroup id='Team_name' isFloating label='Your Team Name'>
 									<Input
 										autoComplete='off'
@@ -274,7 +289,7 @@ const AddEditTeam = () => {
 							</div>
 
 							<div style={{ marginTop: 10 }}>
-								<div className='row justify-content-center align-items-center'>
+								<div className='row align-items-center'>
 									<div className='col-4'>
 										<Label>Select Location</Label>
 										<FormGroup>
@@ -317,7 +332,7 @@ const AddEditTeam = () => {
 											onClick={handleLocationDelete}
 										/>
 									</div>
-									<div className='col-3' style={{ marginTop: '30px' }}>
+									<div className='col-3 ms-auto' style={{ marginTop: '30px' }}>
 										<Button
 											icon='add'
 											isLight
@@ -334,7 +349,7 @@ const AddEditTeam = () => {
 							</div>
 
 							<div style={{ marginTop: 10 }}>
-								<div className='row justify-content-center align-items-center'>
+								<div className='row align-items-center'>
 									<div className='col-4'>
 										<Label>Select Team Lead</Label>
 										<FormGroup>
@@ -378,7 +393,7 @@ const AddEditTeam = () => {
 											onClick={handleTeamLeadDelete}
 										/>
 									</div>
-									<div className='col-3' style={{ marginTop: '30px' }}>
+									<div className='col-3 ms-auto' style={{ marginTop: '30px' }}>
 										<Button
 											icon='add'
 											isLight
@@ -394,7 +409,7 @@ const AddEditTeam = () => {
 							</div>
 
 							<div style={{ marginTop: 10 }}>
-								<div className='row justify-content-center align-items-center'>
+								<div className='row align-items-center'>
 									<div className='col-4'>
 										<Label>Select LOB</Label>
 										<FormGroup>
@@ -438,7 +453,7 @@ const AddEditTeam = () => {
 											style={{ margin: 5 }}
 										/>
 									</div>
-									<div className='col-3' style={{ marginTop: '30px' }}>
+									<div className='col-3 ms-auto' style={{ marginTop: '30px' }}>
 										<Button
 											icon='add'
 											isLight
@@ -455,8 +470,8 @@ const AddEditTeam = () => {
 							</div>
 
 							<div style={{ marginTop: 40 }}>
-								<div className='row align-items-center justify-content-center'>
-									<div className='col-md-10 d-flex justify-content-end p-0'>
+								<div className='row'>
+									<div className='col d-flex justify-content-end p-0'>
 										<Button
 											color='info'
 											isLight

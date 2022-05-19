@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../components/bootstrap/Button';
 import FormGroup from '../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../components/bootstrap/forms/Input';
-
+import { CardActions } from '../../../components/bootstrap/Card';
 import { createLobsStart, updateLobsStart } from '../../../redux/ducks/lobs';
 import Spinner from '../../../components/bootstrap/Spinner';
 
@@ -81,50 +81,63 @@ const AddUpdateLob = () => {
 				className='row d-flex align-items-center justify-content-center'
 				style={{ marginTop: 30, opacity: loading ? 0.5 : 1 }}>
 				<div className='col-md-4'>
-					<div className='col-12'>
-						<h3>
-							<b>{!editMode ? 'Add Lob Details' : 'Update Lob Details'}</b>
-						</h3>
-					</div>
-					<form
-						className='row g-4'
-						onSubmit={handleSubmit(onSubmit, onError)}
-						onReset={reset}>
-						<div className='col-12 mt-5'>
-							<FormGroup id='Lob_name' isFloating label='Your Lob name'>
-								<Input
-									autoComplete='off'
-									{...register('Lob_name', {
-										required: 'Lob name is required',
-									})}
-								/>
-							</FormGroup>
-							<span style={{ color: 'red' }}>{errors.Lob_name?.message}</span>
-						</div>
-
-						<div className='col-12'>
-							<div className='row d-flex'>
-								<div className='col'>
+					<div className='row'>
+						<hr style={{ opacity: '0.05' }} />
+						<div className='col-12 d-flex justify-content-between'>
+							<div>
+								<h3>
+									<b>{!editMode ? 'Add Lob Details' : 'Update Lob Details'}</b>
+								</h3>
+							</div>
+							<div>
+								<CardActions className='d-flex justify-content-end'>
 									<Button
-										isLight
-										className='float-end'
-										color='success'
-										type='submit'>
-										{!editMode ? 'Create' : 'Update'}
-									</Button>
-
-									<Button
+										icon='Backspace'
 										color='info'
-										className='float-end'
 										isLight
 										tag='a'
 										to={`/users/${id.id}/lobs`}>
-										cancle
+										Back to users
 									</Button>
-								</div>
+								</CardActions>
 							</div>
 						</div>
-					</form>
+						<form
+							className='row pe-0'
+							onSubmit={handleSubmit(onSubmit, onError)}
+							onReset={reset}>
+							<div className='col-12 mt-4 pe-0'>
+								<FormGroup id='Lob_name' isFloating label='Your Lob name'>
+									<Input
+										autoComplete='off'
+										{...register('Lob_name', {
+											required: 'Lob name is required',
+										})}
+									/>
+								</FormGroup>
+								<span style={{ color: 'red' }}>{errors.Lob_name?.message}</span>
+							</div>
+
+							<div className='col-12 pe-0' style={{ marginTop: 30 }}>
+								<div className='row'>
+									<div className='col d-flex justify-content-end'>
+										<Button
+											color='info'
+											isLight
+											className='me-2'
+											tag='a'
+											to={`/users/${id.id}/lobs`}>
+											cancle
+										</Button>
+
+										<Button isLight color='success' type='submit'>
+											{!editMode ? 'Create' : 'Update'}
+										</Button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
 		</>

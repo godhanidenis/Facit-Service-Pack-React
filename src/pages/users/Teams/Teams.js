@@ -59,6 +59,7 @@ const UsersTeams = () => {
 	};
 
 	useEffect(() => {
+		console.log('Error in Teams :', error);
 		if (error !== '') {
 			addToast(
 				<Toasts

@@ -121,16 +121,25 @@ const TeamDetail = () => {
 					<div className='col-6 d-flex justify-content-center flex-column'>
 						<hr style={{ opacity: '0.05' }} />
 						<div className='row align-items-center'>
-							<CardActions className='d-flex justify-content-end'>
-								<Button
-									icon='Backspace'
-									color='info'
-									isLight
-									tag='a'
-									to={`../../../../../users/${id.id}/teams`}>
-									Back to teams
-								</Button>
-							</CardActions>
+							<div className='d-flex justify-content-between'>
+								<div>
+									<h3>
+										<b>Team Details</b>
+									</h3>
+								</div>
+								<div>
+									<CardActions className='d-flex justify-content-end'>
+										<Button
+											icon='Backspace'
+											color='info'
+											isLight
+											tag='a'
+											to={`../../../../../users/${id.id}/teams`}>
+											Back to teams
+										</Button>
+									</CardActions>
+								</div>
+							</div>
 						</div>
 						<div className='row align-items-center' style={{ marginTop: 20 }}>
 							<div className='col'>

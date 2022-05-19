@@ -13,6 +13,7 @@ import Option from '../../../../components/bootstrap/Option';
 import { createAgentsStart, updateAgentsStart } from '../../../../redux/ducks/agents';
 import Spinner from '../../../../components/bootstrap/Spinner';
 import Toasts from '../../../../components/bootstrap/Toasts';
+import Card, { CardActions } from '../../../../components/bootstrap/Card';
 
 const AddEditAgent = () => {
 	const id = useParams();
@@ -102,17 +103,33 @@ const AddEditAgent = () => {
 				className='row align-items-center justify-content-center m-4'
 				style={{ opacity: loading ? 0.5 : 1 }}>
 				<div className='col-md-6'>
-					<div className='col-12 mb-4'>
-						<h3>
-							<b>{!editMode ? 'Add Lob Details' : 'Update Lob Details'}</b>
-						</h3>
+					<hr style={{ opacity: '0.05' }} />
+					<div className='col-12 d-flex align-items-center justify-content-between mb-4'>
+						<div>
+							<h3>
+								<b>{!editMode ? 'Add Agent Details' : 'Update Agent Details'}</b>
+							</h3>
+						</div>
+
+						<div>
+							<CardActions className='d-flex justify-content-end'>
+								<Button
+									icon='Backspace'
+									color='info'
+									isLight
+									tag='a'
+									to={`/users/${id.id}/teams/${id.teamId}/agents`}>
+									Back to Agents
+								</Button>
+							</CardActions>
+						</div>
 					</div>
 					<form
 						className='row g-4'
 						onSubmit={handleSubmit(onSubmit, onError)}
 						onReset={reset}>
 						<div className='col-12'>
-							<FormGroup id='Agent_id' isFloating label='Your Agent Id'>
+							<FormGroup id='Agent_id' isFloating label='Agent Id'>
 								<Input
 									autoComplete='off'
 									type='number'
@@ -124,7 +141,7 @@ const AddEditAgent = () => {
 							<span style={{ color: 'red' }}>{errors.Agent_id?.message}</span>
 						</div>
 						<div className='col-12'>
-							<FormGroup id='Agent_name' isFloating label='Your Agent Name'>
+							<FormGroup id='Agent_name' isFloating label='Agent Name'>
 								<Input
 									autoComplete='off'
 									{...register('Agent_name', {
@@ -136,7 +153,7 @@ const AddEditAgent = () => {
 						</div>
 
 						<div className='col-12'>
-							<FormGroup id='phone_no' isFloating label='Your Phone Number'>
+							<FormGroup id='phone_no' isFloating label='Agent Phone Number'>
 								<Input
 									type='number'
 									autoComplete='off'
@@ -159,11 +176,12 @@ const AddEditAgent = () => {
 						<div className='col-12'>
 							<div className='row'>
 								<Label>Select Team</Label>
-								<div className='col-auto'>
+								<div className='col-md-4'>
 									<FormGroup>
 										<Select
 											size='sm'
 											ariaLabel='Select Team'
+											style={{ padding: 10 }}
 											{...register('Team', {
 												required: 'Team is required',
 											})}>
@@ -181,7 +199,7 @@ const AddEditAgent = () => {
 								</div>
 							</div>
 
-							<div className='col-12' style={{ marginTop: 50 }}>
+							<div className='col-12' style={{ marginTop: 30 }}>
 								<div className='row d-flex'>
 									<div className='col'>
 										<Button

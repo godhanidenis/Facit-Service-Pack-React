@@ -12,6 +12,7 @@ import Avatar from '../../components/Avatar';
 import Icon from '../../components/icon/Icon';
 import Spinner from '../../components/bootstrap/Spinner';
 import Toasts from '../../components/bootstrap/Toasts';
+import { CardActions } from '../../components/bootstrap/Card';
 
 const AddUpdateUser = () => {
 	const dispatch = useDispatch();
@@ -133,7 +134,6 @@ const AddUpdateUser = () => {
 	};
 
 	useEffect(() => {
-		console.log('loading???????????', error);
 		if (error !== '') {
 			addToast(
 				<Toasts
@@ -150,22 +150,6 @@ const AddUpdateUser = () => {
 				},
 			);
 		}
-
-		// if (error === '' && loading === false) {
-		// 	addToast(
-		// 		<Toasts
-		// 			title={!editMode ? 'Successfully User Created' : 'Successfully User Updated'}
-		// 			icon='warning'
-		// 			iconColor='success'
-		// 			time='Now'
-		// 			isDismiss>
-		// 			{`${error}`}
-		// 		</Toasts>,
-		// 		{
-		// 			autoDismiss: true,
-		// 		},
-		// 	);
-		// }
 	}, [addToast, editMode, error, loading]);
 	return (
 		<>
@@ -180,241 +164,255 @@ const AddUpdateUser = () => {
 			</div>
 
 			<div style={{ opacity: loading ? 0.5 : 1 }}>
-				<div className='row align-items-center justify-content-center p-5'>
-					<form
-						className='row g-4'
-						onSubmit={handleSubmit(onSubmit, onError)}
-						onReset={reset}>
-						<div>
-							<h1>{!editMode ? 'Create New User' : 'Update User'}</h1>
-						</div>
-						<div className='row pt-5 '>
-							<div className='col-4 d-flex align-items-center justify-content-center flex-column'>
-								<div className='row g-4 d-flex align-items-right justify-content-right p-0'>
-									<div className='row-md-auto d-flex p-0'>
-										<Avatar
-											src={selectedImage || UserImage}
-											onClick={() => Open()}
-										/>
-										<div
-											className='bg-success rounded-circle'
-											style={{
-												position: 'relative',
-												right: 20,
-												top: 90,
-												height: 20,
-												width: 20,
-												color: '#5cb85c',
-											}}
-										/>
-									</div>
+				<div className='row align-items-center justify-content-center'>
+					<div className='col-md-6'>
+						<form onSubmit={handleSubmit(onSubmit, onError)} onReset={reset}>
+							<div
+								className='d-flex align-items-center justify-content-between'
+								style={{ marginTop: 20 }}>
+								<div>
+									<h1>{!editMode ? 'Create New User' : 'Update User Details'}</h1>
 								</div>
-								<div className='row g-4 d-flex align-items-right justify-content-right p-0 mt-4'>
-									<div className='col-lg'>
-										<Input
-											type='file'
-											autoComplete='off'
-											{...register('profile_picture', {
-												required: editMode
-													? false
-													: 'Profile Picture is required',
-											})}
-											onChange={imageChange}
-											style={{ display: 'none' }}
-											id='profile'
-										/>
-										<span style={{ color: 'red' }}>
-											{errors.profile_picture?.message}
-										</span>
-									</div>
+								<div>
+									<CardActions>
+										<Button
+											icon='Backspace'
+											color='info'
+											isLight
+											tag='a'
+											to='/users'>
+											Back to teams
+										</Button>
+									</CardActions>
 								</div>
 							</div>
-							<div className='col'>
-								<div className='row d-flex'>
-									<div className='col-auto mt-3'>
-										<Icon
-											size='lg'
-											icon='Person'
-											color='success'
-											style={{
-												cursor: 'pointer',
-												marginLeft: '10px',
-											}}
-										/>
+							<div className='row mt-4'>
+								<div className='col-4 d-flex align-items-center justify-content-center flex-column'>
+									<div className='row align-items-right justify-content-right p-0'>
+										<div className='row-md-auto d-flex p-0'>
+											<Avatar
+												src={selectedImage || UserImage}
+												onClick={() => Open()}
+											/>
+											<div
+												className='bg-success rounded-circle'
+												style={{
+													position: 'relative',
+													right: 20,
+													top: 90,
+													height: 20,
+													width: 20,
+													color: '#5cb85c',
+												}}
+											/>
+										</div>
 									</div>
-									<div className='col'>
-										<div className='row'>
-											<div className='col-md-auto'>
+									<div className='row align-items-right justify-content-right p-0 mt-4'>
+										<div className='col-lg'>
+											<Input
+												type='file'
+												autoComplete='off'
+												{...register('profile_picture', {
+													required: editMode
+														? false
+														: 'Profile Picture is required',
+												})}
+												onChange={imageChange}
+												style={{ display: 'none' }}
+												id='profile'
+											/>
+											<span style={{ color: 'red' }}>
+												{errors.profile_picture?.message}
+											</span>
+										</div>
+									</div>
+								</div>
+								<div className='col-8'>
+									<div className='row'>
+										<div className='col-auto mt-3'>
+											<Icon
+												size='lg'
+												icon='Person'
+												color='success'
+												style={{
+													cursor: 'pointer',
+													marginLeft: '10px',
+												}}
+											/>
+										</div>
+										<div className='col'>
+											<div className='row'>
+												<div className='col-md-auto'>
+													<FormGroup
+														id='first_name'
+														isFloating
+														label='Your FirstName'>
+														<Input
+															type='text'
+															autoComplete='off'
+															{...register('first_name', {
+																required: 'First Name is required',
+															})}
+														/>
+													</FormGroup>
+
+													<span style={{ color: 'red' }}>
+														{errors.first_name?.message}
+													</span>
+												</div>
+												<div className='col-md-auto'>
+													<FormGroup
+														id='last_name'
+														isFloating
+														label='Your LastName'>
+														<Input
+															autoComplete='off'
+															{...register('last_name', {
+																required: 'Last Name is required',
+															})}
+														/>
+													</FormGroup>
+													<span style={{ color: 'red' }}>
+														{errors.last_name?.message}
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div className='row mt-4'>
+										<div className='col-auto mt-3'>
+											<Icon
+												size='lg'
+												icon='Email'
+												color='success'
+												style={{
+													cursor: 'pointer',
+													marginLeft: '10px',
+												}}
+											/>
+										</div>
+										<div className='col'>
+											<div className='col-12'>
 												<FormGroup
-													id='first_name'
+													id='username'
 													isFloating
-													label='Your FirstName'>
+													label='Your Username'>
 													<Input
-														type='text'
 														autoComplete='off'
-														{...register('first_name', {
-															required: 'First Name is required',
+														{...register('username', {
+															required: 'Username is required',
 														})}
 													/>
 												</FormGroup>
-
 												<span style={{ color: 'red' }}>
-													{errors.first_name?.message}
+													{errors.username?.message}
 												</span>
 											</div>
-											<div className='col-md-auto'>
-												<FormGroup
-													id='last_name'
-													isFloating
-													label='Your LastName'>
+										</div>
+									</div>
+									<div className='row mt-4'>
+										<div className='col-auto mt-3'>
+											<Icon
+												size='lg'
+												icon='Email'
+												color='success'
+												style={{
+													cursor: 'pointer',
+													marginLeft: '10px',
+												}}
+											/>
+										</div>
+										<div className='col'>
+											<div className='col-12'>
+												<FormGroup id='email' isFloating label='Your email'>
 													<Input
+														type='email'
 														autoComplete='off'
-														{...register('last_name', {
-															required: 'Last Name is required',
+														{...register('email', {
+															required: 'Email is required',
+															pattern: {
+																value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+																message:
+																	'Please enter a valid email',
+															},
 														})}
 													/>
 												</FormGroup>
 												<span style={{ color: 'red' }}>
-													{errors.last_name?.message}
+													{errors.email?.message}
 												</span>
 											</div>
 										</div>
 									</div>
-								</div>
-								<div className='row d-flex mt-4'>
-									<div className='col-auto mt-3'>
-										<Icon
-											size='lg'
-											icon='Email'
-											color='success'
-											style={{
-												cursor: 'pointer',
-												marginLeft: '10px',
-											}}
-										/>
-									</div>
-									<div className='col-md-6'>
-										<div className='col-12'>
-											<FormGroup
-												id='username'
-												isFloating
-												label='Your Username'>
-												<Input
-													autoComplete='off'
-													{...register('username', {
-														required: 'Username is required',
-													})}
-												/>
-											</FormGroup>
-											<span style={{ color: 'red' }}>
-												{errors.username?.message}
-											</span>
+									<div className='row mt-4'>
+										<div className='col-auto mt-3'>
+											<Icon
+												size='lg'
+												icon='LocalPhone'
+												color='success'
+												style={{
+													cursor: 'pointer',
+													marginLeft: '10px',
+												}}
+											/>
 										</div>
-									</div>
-								</div>
-								<div className='row d-flex mt-4'>
-									<div className='col-auto mt-3'>
-										<Icon
-											size='lg'
-											icon='Email'
-											color='success'
-											style={{
-												cursor: 'pointer',
-												marginLeft: '10px',
-											}}
-										/>
-									</div>
-									<div className='col-md-6'>
-										<div className='col-12'>
-											<FormGroup id='email' isFloating label='Your email'>
-												<Input
-													type='email'
-													autoComplete='off'
-													{...register('email', {
-														required: 'Email is required',
-														pattern: {
-															value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-															message: 'Please enter a valid email',
-														},
-													})}
-												/>
-											</FormGroup>
-											<span style={{ color: 'red' }}>
-												{errors.email?.message}
-											</span>
-										</div>
-									</div>
-								</div>
-								<div className='row d-flex mt-4'>
-									<div className='col-auto mt-3'>
-										<Icon
-											size='lg'
-											icon='LocalPhone'
-											color='success'
-											style={{
-												cursor: 'pointer',
-												marginLeft: '10px',
-											}}
-										/>
-									</div>
-									<div className='col-md-6'>
-										<div className='col-12'>
-											<FormGroup
-												id='phone_number'
-												isFloating
-												label='Your PhoneNumber'>
-												<Input
-													autoComplete='off'
-													type='number'
-													{...register('phone_number', {
-														required: 'Phone Number is required',
-														minLength: {
-															value: 10,
-															message:
-																'Phone Number must be 10 numbers',
-														},
-														maxLength: {
-															value: 10,
-															message:
-																'Phone Number must be 10 numbers',
-														},
-													})}
-												/>
-											</FormGroup>
-											<span style={{ color: 'red' }}>
-												{errors.phone_number?.message}
-											</span>
-										</div>
-									</div>
-								</div>
-								<div className='col-md-7'>
-									<div className='col-12' style={{ marginTop: 50 }}>
-										<div className='row d-flex'>
-											<div className='col'>
-												<Button
-													isLight
-													color='success'
-													// className='w-100 py-3 float-right'
-													className='float-end mx-2'
-													type='submit'>
-													{!editMode ? 'Create' : 'Update'}
-												</Button>
-
-												<Button
-													color='info'
-													isLight
-													className='float-end'
-													tag='a'
-													to='/users'>
-													cancle
-												</Button>
+										<div className='col'>
+											<div className='col-12'>
+												<FormGroup
+													id='phone_number'
+													isFloating
+													label='Your PhoneNumber'>
+													<Input
+														autoComplete='off'
+														type='number'
+														{...register('phone_number', {
+															required: 'Phone Number is required',
+															minLength: {
+																value: 10,
+																message:
+																	'Phone Number must be 10 numbers',
+															},
+															maxLength: {
+																value: 10,
+																message:
+																	'Phone Number must be 10 numbers',
+															},
+														})}
+													/>
+												</FormGroup>
+												<span style={{ color: 'red' }}>
+													{errors.phone_number?.message}
+												</span>
 											</div>
+										</div>
+									</div>
+									<div
+										className='row justify-content-end'
+										style={{ marginTop: 50 }}>
+										<div className='col'>
+											<Button
+												isLight
+												color='success'
+												// className='w-100 py-3 float-right'
+												className='float-end mx-2'
+												type='submit'>
+												{!editMode ? 'Create' : 'Update'}
+											</Button>
+
+											<Button
+												color='info'
+												isLight
+												className='float-end'
+												tag='a'
+												to='/users'>
+												cancle
+											</Button>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</form>
+						</form>
+					</div>
 				</div>
 			</div>
 		</>
