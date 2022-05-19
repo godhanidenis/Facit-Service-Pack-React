@@ -20,6 +20,7 @@ import Option from '../../../components/bootstrap/Option';
 import DeleteModel from '../../../common/ConfirmationModal';
 import { updateTagListStart } from '../../../redux/ducks/tagList';
 import { updateSkillSetListStart } from '../../../redux/ducks/skillSetList';
+import Spinner from '../../../components/bootstrap/Spinner';
 
 const SopsDetails = () => {
 	const dispatch = useDispatch();
@@ -27,8 +28,7 @@ const SopsDetails = () => {
 	const perams = useParams();
 	console.log('peramssssss', perams);
 	const [tagId, setTagId] = useState();
-	const { subSops } = useSelector((state) => state.subSops);
-	console.log('sub sops::', subSops);
+	const { subSops, loading } = useSelector((state) => state.subSops);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [currentSubSops, setCurrentSubSops] = useState();
 	const {
@@ -47,10 +47,8 @@ const SopsDetails = () => {
 		};
 		dispatch(loadSubSopsStart({ id: perams.id, slug: formData }));
 	}, [dispatch, perams.id, perams.sop_slug]);
-	console.log('sub sops::', subSops);
 
 	const handleDeleteSubSops = () => {
-		console.log('currentSubSops?._id,', currentSubSops?._id);
 		dispatch(
 			deleteSubSopsStart({
 				id: currentSubSops?._id,
@@ -60,7 +58,6 @@ const SopsDetails = () => {
 	};
 
 	const taggingData = () => {
-		console.log('lng', subSops.length);
 		if (subSops.length) {
 			subSops?.map((sub) => {
 				console.log('sub/..............', sub);
@@ -86,7 +83,6 @@ const SopsDetails = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [subSops]);
 	const onSubmit = (data) => {
-		console.log('data', data);
 		const formDataUpdateTagging = {
 			doctype: perams.sop_slug.replace('_found', ''),
 			tag_list: tagList,
@@ -194,6 +190,15 @@ const SopsDetails = () => {
 
 	return (
 		<>
+			<div
+				className={
+					loading
+						? 'd-flex align-items-center justify-content-center w-100 h-100'
+						: 'visually-hidden'
+				}
+				style={{ position: 'absolute', top: 50, left: 50, opacity: 1, zIndex: 1 }}>
+				<Spinner isGrow={false} />
+			</div>
 			<PageWrapper>
 				<Page className='p-0'>
 					{(() => {
@@ -217,7 +222,6 @@ const SopsDetails = () => {
 															onKeyPress={(ev) => {
 																if (ev.key === 'Enter') {
 																	ev.preventDefault();
-																	console.log(ev.target.value);
 																	setTagList([
 																		...tagList,
 																		ev.target.value,
@@ -387,7 +391,7 @@ const SopsDetails = () => {
 							case 'call_end_sentiment_found':
 							case 'overtalk_incidents_found':
 								return (
-									<div>
+									<div style={{ opacity: loading ? 0.5 : 1 }}>
 										{subSops.length ? (
 											<form
 												className='row g-4 w-75'
@@ -464,7 +468,7 @@ const SopsDetails = () => {
 							case 'customer_silence_incidents_found':
 							case 'silence_incidents_found':
 								return (
-									<div>
+									<div style={{ opacity: loading ? 0.5 : 1 }}>
 										{subSops.length ? (
 											<form
 												className='row g-4 w-75'
@@ -544,7 +548,7 @@ const SopsDetails = () => {
 							case 'customer_responsiveness_found':
 							case 'customer_clarity_found':
 								return (
-									<div>
+									<div style={{ opacity: loading ? 0.5 : 1 }}>
 										{subSops.length ? (
 											<form
 												className='row g-4 w-75'
@@ -624,7 +628,9 @@ const SopsDetails = () => {
 							case 'call_additional_info_found':
 							case 'call_alternate_channel_found':
 								return (
-									<div className='row d-flex align-items-center justify-content-between'>
+									<div
+										className='row d-flex align-items-center justify-content-between'
+										style={{ opacity: loading ? 0.5 : 1 }}>
 										{subSops.length &&
 											subSops?.map((subSop) => {
 												return (

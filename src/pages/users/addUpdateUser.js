@@ -71,7 +71,6 @@ const AddUpdateUser = () => {
 	}
 
 	useEffect(() => {
-		console.log('useefect laodinh', loading);
 		if (!loading && dataSubmited && !error) {
 			// if (error === '' && loading === false) {
 			addToast(
@@ -93,8 +92,6 @@ const AddUpdateUser = () => {
 	}, [loading, dataSubmited, navigate, error, addToast, editMode]);
 
 	const onSubmit = (data) => {
-		console.log('AddEdit FormData', data);
-
 		const formData = new FormData();
 		formData.append('username', data.username);
 		if (!editMode) {
@@ -122,8 +119,7 @@ const AddUpdateUser = () => {
 		if (e.target.files && e.target.files.length > 0) {
 			setUpdateProfilePictureFile(e.target.files[0]);
 			setSelectedImage(URL.createObjectURL(e.target.files[0]));
-			console.log('selectedImage...???????', selectedImage);
-			console.log('updateProfilePictureFile?????????', updateProfilePictureFile);
+
 			errors.profile_picture = '';
 		}
 	};
@@ -133,7 +129,6 @@ const AddUpdateUser = () => {
 	};
 
 	useEffect(() => {
-		console.log('loading???????????', error);
 		if (error !== '') {
 			addToast(
 				<Toasts
@@ -175,7 +170,7 @@ const AddUpdateUser = () => {
 						? 'd-flex align-items-center justify-content-center w-100 h-100'
 						: 'visually-hidden'
 				}
-				style={{ position: 'absolute', top: 50, left: 50 }}>
+				style={{ position: 'absolute', top: 50, left: 50, opacity: 1, zIndex: 1 }}>
 				<Spinner isGrow={false} />
 			</div>
 
@@ -285,7 +280,7 @@ const AddUpdateUser = () => {
 									<div className='col-auto mt-3'>
 										<Icon
 											size='lg'
-											icon='Email'
+											icon='person'
 											color='success'
 											style={{
 												cursor: 'pointer',
@@ -314,31 +309,44 @@ const AddUpdateUser = () => {
 								</div>
 								{!editMode && (
 									<>
-										<div className='col-12'>
-											<FormGroup
-												id='password'
-												isFloating
-												label='Your Password'>
-												<Input
-													autoComplete='off'
-													type='password'
-													{...register('password', {
-														required: editMode
-															? false
-															: 'Password is required',
-														minLength: {
-															value: 4,
-															message:
-																'Password must be more than 4 characters',
-														},
-														maxLength: {
-															value: 15,
-															message:
-																'Password cannot exceed more than 15 characters',
-														},
-													})}
+										<div className='row d-flex mt-4'>
+											<div className='col-auto mt-3'>
+												<Icon
+													size='lg'
+													icon='VpnKey'
+													color='success'
+													style={{
+														cursor: 'pointer',
+														marginLeft: '10px',
+													}}
 												/>
-											</FormGroup>
+											</div>
+											<div className='col-md-6'>
+												<FormGroup
+													id='password'
+													isFloating
+													label='Your Password'>
+													<Input
+														autoComplete='off'
+														type='password'
+														{...register('password', {
+															required: editMode
+																? false
+																: 'Password is required',
+															minLength: {
+																value: 4,
+																message:
+																	'Password must be more than 4 characters',
+															},
+															maxLength: {
+																value: 15,
+																message:
+																	'Password cannot exceed more than 15 characters',
+															},
+														})}
+													/>
+												</FormGroup>
+											</div>
 										</div>
 										{errors.password?.message}
 									</>

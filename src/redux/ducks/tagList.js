@@ -53,16 +53,13 @@ const tagListReducer = (state = initialState, action) => {
 			};
 
 		case LOAD_TAGLIST_SUCCESS:
-			console.log('load ppp', action);
 			return {
 				...state,
 				loading: false,
 				tagLists: action.payload,
 			};
 		case UPDATE_TAGLIST_SUCCESS:
-			console.log('actions', action);
 			const index = state.tagLists.findIndex((tag) => tag._id === action.payload[0]._id);
-			console.log('index', index);
 
 			const newArray = [...state.tagLists];
 

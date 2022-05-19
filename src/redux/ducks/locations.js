@@ -106,11 +106,6 @@ const locationReducer = (state = initialState, action) => {
 			};
 
 		case DELETE_LOCATION_SUCCESS: {
-			console.log('action.payload locationss:', action.payload);
-			console.log(
-				'Filtered locationss:',
-				state.locations.filter((location) => location.id !== action.payload),
-			);
 			return {
 				...state,
 				loading: false,

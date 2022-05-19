@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Page from '../../../layout/Page/Page';
 import Button from '../../../components/bootstrap/Button';
@@ -13,6 +14,8 @@ import Label from '../../../components/bootstrap/forms/Label';
 import Select from '../../../components/bootstrap/forms/Select';
 import Option from '../../../components/bootstrap/Option';
 import { createSubSopsStart, updateSubSopsStart } from '../../../redux/ducks/subSops';
+import Spinner from '../../../components/bootstrap/Spinner';
+import Toasts from '../../../components/bootstrap/Toasts';
 
 const AddUpdateSubSops = () => {
 	const dispatch = useDispatch();
@@ -28,7 +31,7 @@ const AddUpdateSubSops = () => {
 
 	// Selectors
 	const { teams } = useSelector((state) => state.teams);
-	const { subSops } = useSelector((state) => state.subSops);
+	const { subSops, loading, error } = useSelector((state) => state.subSops);
 	const { tagLists } = useSelector((state) => state.tagLists);
 	const { skillSetLists } = useSelector((state) => state.skillSetLists);
 	console.log('skillSetLists', skillSetLists);
@@ -39,6 +42,8 @@ const AddUpdateSubSops = () => {
 		setValue,
 		reset,
 	} = useForm();
+	const { addToast } = useToasts();
+	const [dataSubmited, setDataSubmited] = useState(false);
 
 	useEffect(() => {
 		if (editMode) {
@@ -58,7 +63,6 @@ const AddUpdateSubSops = () => {
 			setEditMode(true);
 			if (subSops?.length) {
 				const selectedSop = subSops.find((subSop) => subSop._id === location?.state?.id);
-				console.log('selectedSop :', selectedSop);
 
 				setValue('text', selectedSop?._source?.text);
 				setValue('score', selectedSop?._source?.score);
@@ -96,7 +100,6 @@ const AddUpdateSubSops = () => {
 	]);
 
 	const onSubmit = (data) => {
-		console.log('SopAddUpdate FormData', data);
 		const teamList = [];
 		// eslint-disable-next-line array-callback-return
 		data.team_list?.map((ar) => {
@@ -242,7 +245,8 @@ const AddUpdateSubSops = () => {
 			} else {
 				dispatch(updateSubSopsStart({ id: location?.state?.id, record: formDataUpdate }));
 			}
-			navigate(`/users/${perams.id}/sops/${perams.sop_slug}`);
+			// navigate(`/users/${perams.id}/sops/${perams.sop_slug}`);
+			setDataSubmited(true);
 		} else {
 			if (
 				perams.sop_slug === 'on_hold_found' ||
@@ -285,456 +289,411 @@ const AddUpdateSubSops = () => {
 			} else {
 				dispatch(createSubSopsStart(formDataCreate));
 			}
-			navigate(`/users/${perams.id}/sops/${perams.sop_slug}`);
+			// navigate(`/users/${perams.id}/sops/${perams.sop_slug}`);
+			setDataSubmited(true);
 		}
 	};
 	const onError = (errors) => console.log('Errors Occurred !! :', errors);
 
+	useEffect(() => {
+		if (!loading && dataSubmited && !error) {
+			addToast(
+				<Toasts
+					title={!editMode ? 'Successfully Sop Created' : 'Successfully Sop Updated'}
+					icon='warning'
+					iconColor='success'
+					time='Now'
+					isDismiss>
+					{`${error}`}
+				</Toasts>,
+				{
+					autoDismiss: true,
+				},
+			);
+			// }
+			navigate(`/users/${perams.id}/sops/${perams.sop_slug}`);
+		}
+	}, [loading, dataSubmited, navigate, error, addToast, editMode, perams.id, perams.sop_slug]);
 	return (
-		<PageWrapper>
-			<Page className='p-0'>
-				<form
-					className='row g-4 w-75'
-					onSubmit={handleSubmit(onSubmit, onError)}
-					onReset={reset}>
-					{(perams.sop_slug === 'call_opening_found' ||
-						perams.sop_slug === 'customer_verification_found' ||
-						perams.sop_slug === 'on_hold_found' ||
-						perams.sop_slug === 'call_refreshment_found' ||
-						perams.sop_slug === 'call_closures_found' ||
-						perams.sop_slug === 'call_additional_info_found' ||
-						perams.sop_slug === 'call_alternate_channel_found') && (
-						<div className='col-12'>
-							<FormGroup id='text' isFloating label='Your Text'>
-								<Input
-									autoComplete='off'
-									{...register('text', {
-										required: 'Text is required',
-									})}
-								/>
-							</FormGroup>
-							<span style={{ color: 'red' }}>{errors.text?.message}</span>
-						</div>
-					)}
+		<>
+			<div
+				className={
+					loading
+						? 'd-flex align-items-center justify-content-center w-100 h-100'
+						: 'visually-hidden'
+				}
+				style={{ position: 'absolute', top: 50, left: 50, opacity: 1, zIndex: 1 }}>
+				<Spinner isGrow={false} />
+			</div>
+			<div style={{ opacity: loading ? 0.5 : 1 }}>
+				<PageWrapper>
+					<Page className='p-0'>
+						<form
+							className='row g-4 w-75'
+							onSubmit={handleSubmit(onSubmit, onError)}
+							onReset={reset}>
+							{(perams.sop_slug === 'call_opening_found' ||
+								perams.sop_slug === 'customer_verification_found' ||
+								perams.sop_slug === 'on_hold_found' ||
+								perams.sop_slug === 'call_refreshment_found' ||
+								perams.sop_slug === 'call_closures_found' ||
+								perams.sop_slug === 'call_additional_info_found' ||
+								perams.sop_slug === 'call_alternate_channel_found') && (
+								<div className='col-12'>
+									<FormGroup id='text' isFloating label='Your Text'>
+										<Input
+											autoComplete='off'
+											{...register('text', {
+												required: 'Text is required',
+											})}
+										/>
+									</FormGroup>
+									<span style={{ color: 'red' }}>{errors.text?.message}</span>
+								</div>
+							)}
 
-					{(perams.sop_slug === 'call_opening_found' ||
-						perams.sop_slug === 'customer_verification_found' ||
-						perams.sop_slug === 'on_hold_found' ||
-						perams.sop_slug === 'call_refreshment_found' ||
-						perams.sop_slug === 'call_closures_found' ||
-						perams.sop_slug === 'call_additional_info_found' ||
-						perams.sop_slug === 'call_alternate_channel_found') && (
-						<div className='col-12'>
-							<FormGroup id='score' isFloating label='Your Score'>
-								<Input
-									autoComplete='off'
-									type='number'
-									{...register('score', {
-										required: 'Score is required',
-									})}
-								/>
-							</FormGroup>
-							<span style={{ color: 'red' }}>{errors.score?.message}</span>
-						</div>
-					)}
-					{(perams.sop_slug === 'call_opening_found' ||
-						perams.sop_slug === 'customer_verification_found' ||
-						perams.sop_slug === 'on_hold_found' ||
-						perams.sop_slug === 'call_refreshment_found' ||
-						perams.sop_slug === 'call_closures_found' ||
-						perams.sop_slug === 'call_additional_info_found' ||
-						perams.sop_slug === 'call_alternate_channel_found') && (
-						<div className='col-12'>
-							<Label>Select teamList</Label>
-							<FormGroup>
-								<Select
-									size='sm'
-									ariaLabel='Select Category'
-									multiple
-									{...register('team_list', {
-										required: 'teamList is required',
-									})}>
-									<Option value=''>Select teamList</Option>
-									{teams?.map((team) => {
-										return (
-											<Option key={team?.id} value={team?.id}>
-												{team?.Team_name}
-											</Option>
-										);
-									})}
-								</Select>
-								<span style={{ color: 'red' }}>{errors.team_list?.message}</span>
-							</FormGroup>
-						</div>
-					)}
-
-					{perams.sop_slug === 'customer_verification_found' && (
-						<div className='col-12'>
-							<Label>Select Skill Set </Label>
-							<FormGroup>
-								<Select
-									size='sm'
-									multiple
-									ariaLabel='Select Category'
-									{...register('skill_set_list', {
-										required: 'skill_set_list is required',
-									})}>
-									<Option value=''>Select skill_set_list</Option>
-									{skillSetList &&
-										skillSetList?.map((skill) => {
-											return (
-												<Option key={skill} value={skill}>
-													{skill}
-												</Option>
-											);
-										})}
-								</Select>
-								<span style={{ color: 'red' }}>
-									{errors.skill_set_list?.message}
-								</span>
-							</FormGroup>
-						</div>
-					)}
-					{(perams.sop_slug === 'on_hold_found' ||
-						perams.sop_slug === 'call_refreshment_found') && (
-						<>
-							<div className='col-12'>
-								<FormGroup id='keywords' isFloating label='Your keywords'>
-									<Input
-										autoComplete='off'
-										{...register('keywords', {
-											required: editMode ? false : 'keywords is required',
-										})}
-										onKeyPress={(ev) => {
-											if (ev.key === 'Enter') {
-												ev.preventDefault();
-												setKeywordsList([...keywordsList, ev.target.value]);
-											}
-										}}
-									/>
-								</FormGroup>
-								<span style={{ color: 'red' }}>{errors.keywords?.message}</span>
-							</div>
-							<div className='d-flex align-items-center'>
-								{keywordsList &&
-									keywordsList?.map((keyword) => {
-										return (
-											<div
-												key={keyword}
-												style={{
-													display: 'flex',
-													alignItems: 'center',
-													justifyContent: 'space-between',
-													padding: '5px',
-													border: '1px solid gray',
-													borderRadius: '12px',
-													width: '140px',
-													margin: '8px',
-												}}>
-												<span className='fw-bold'>{keyword}</span>
-												<Icon
-													size='lg'
-													icon='Cancel'
-													color='danger'
-													style={{
-														cursor: 'pointer',
-													}}
-													onClick={() =>
-														setKeywordsList((keywords) =>
-															keywords.filter(
-																(keyw) => keyw !== keyword,
-															),
-														)
+							{(perams.sop_slug === 'call_opening_found' ||
+								perams.sop_slug === 'customer_verification_found' ||
+								perams.sop_slug === 'on_hold_found' ||
+								perams.sop_slug === 'call_refreshment_found' ||
+								perams.sop_slug === 'call_closures_found' ||
+								perams.sop_slug === 'call_additional_info_found' ||
+								perams.sop_slug === 'call_alternate_channel_found') && (
+								<div className='col-12'>
+									<FormGroup id='score' isFloating label='Your Score'>
+										<Input
+											autoComplete='off'
+											type='number'
+											{...register('score', {
+												required: 'Score is required',
+											})}
+										/>
+									</FormGroup>
+									<span style={{ color: 'red' }}>{errors.score?.message}</span>
+								</div>
+							)}
+							{(perams.sop_slug === 'call_opening_found' ||
+								perams.sop_slug === 'customer_verification_found' ||
+								perams.sop_slug === 'on_hold_found' ||
+								perams.sop_slug === 'call_refreshment_found' ||
+								perams.sop_slug === 'call_closures_found' ||
+								perams.sop_slug === 'call_additional_info_found' ||
+								perams.sop_slug === 'call_alternate_channel_found') && (
+								<div className='col-12'>
+									<Label>Select teamList</Label>
+									<FormGroup>
+										<Select
+											size='sm'
+											ariaLabel='Select Category'
+											multiple
+											{...register('team_list', {
+												required: 'teamList is required',
+											})}>
+											<Option value=''>Select teamList</Option>
+											{teams?.map((team) => {
+												return (
+													<Option key={team?.id} value={team?.id}>
+														{team?.Team_name}
+													</Option>
+												);
+											})}
+										</Select>
+										<span style={{ color: 'red' }}>
+											{errors.team_list?.message}
+										</span>
+									</FormGroup>
+								</div>
+							)}
+							{(perams.sop_slug === 'on_hold_found' ||
+								perams.sop_slug === 'call_refreshment_found') && (
+								<>
+									<div className='col-12'>
+										<FormGroup id='keywords' isFloating label='Your keywords'>
+											<Input
+												autoComplete='off'
+												{...register('keywords', {
+													required: editMode
+														? false
+														: 'keywords is required',
+												})}
+												onKeyPress={(ev) => {
+													if (ev.key === 'Enter') {
+														ev.preventDefault();
+														setKeywordsList([
+															...keywordsList,
+															ev.target.value,
+														]);
 													}
-												/>
-											</div>
-										);
-									})}
-							</div>
-						</>
-					)}
-					{perams.sop_slug === 'tagging_found' && (
-						<>
-							<div className='col-12'>
-								<FormGroup id='tag_list' isFloating label='Your tag_list'>
-									<Input
-										autoComplete='off'
-										{...register('tag_list', {
-											required: editMode ? false : 'tag_list is required',
-										})}
-										onKeyPress={(ev) => {
-											if (ev.key === 'Enter') {
-												ev.preventDefault();
-												setTagList([...tagList, ev.target.value]);
-											}
-										}}
-									/>
-								</FormGroup>
-								<span style={{ color: 'red' }}>{errors.tag_list?.message}</span>
-							</div>
-							<div className='d-flex align-items-center'>
-								{tagList &&
-									tagList?.map((tag) => {
-										return (
-											<div
-												key={tag}
-												style={{
-													display: 'flex',
-													alignItems: 'center',
-													justifyContent: 'space-between',
-													padding: '5px',
-													border: '1px solid gray',
-													borderRadius: '12px',
-													width: '140px',
-													margin: '8px',
-												}}>
-												<span className='fw-bold'>{tag}</span>
-												<Icon
-													size='lg'
-													icon='Cancel'
-													color='danger'
-													style={{
-														cursor: 'pointer',
-													}}
-													onClick={() =>
-														setTagList((tags) =>
-															tags.filter((tg) => tg !== tag),
-														)
+												}}
+											/>
+										</FormGroup>
+										<span style={{ color: 'red' }}>
+											{errors.keywords?.message}
+										</span>
+									</div>
+									<div className='d-flex align-items-center'>
+										{keywordsList &&
+											keywordsList?.map((keyword) => {
+												return (
+													<div
+														key={keyword}
+														style={{
+															display: 'flex',
+															alignItems: 'center',
+															justifyContent: 'space-between',
+															padding: '5px',
+															border: '1px solid gray',
+															borderRadius: '12px',
+															width: '140px',
+															margin: '8px',
+														}}>
+														<span className='fw-bold'>{keyword}</span>
+														<Icon
+															size='lg'
+															icon='Cancel'
+															color='danger'
+															style={{
+																cursor: 'pointer',
+															}}
+															onClick={() =>
+																setKeywordsList((keywords) =>
+																	keywords.filter(
+																		(keyw) => keyw !== keyword,
+																	),
+																)
+															}
+														/>
+													</div>
+												);
+											})}
+									</div>
+								</>
+							)}
+							{perams.sop_slug === 'tagging_found' && (
+								<>
+									<div className='col-12'>
+										<FormGroup id='tag_list' isFloating label='Your tag_list'>
+											<Input
+												autoComplete='off'
+												{...register('tag_list', {
+													required: editMode
+														? false
+														: 'tag_list is required',
+												})}
+												onKeyPress={(ev) => {
+													if (ev.key === 'Enter') {
+														ev.preventDefault();
+														setTagList([...tagList, ev.target.value]);
 													}
-												/>
-											</div>
-										);
-									})}
-							</div>
-						</>
-					)}
+												}}
+											/>
+										</FormGroup>
+										<span style={{ color: 'red' }}>
+											{errors.tag_list?.message}
+										</span>
+									</div>
+									<div className='d-flex align-items-center'>
+										{tagList &&
+											tagList?.map((tag) => {
+												return (
+													<div
+														key={tag}
+														style={{
+															display: 'flex',
+															alignItems: 'center',
+															justifyContent: 'space-between',
+															padding: '5px',
+															border: '1px solid gray',
+															borderRadius: '12px',
+															width: '140px',
+															margin: '8px',
+														}}>
+														<span className='fw-bold'>{tag}</span>
+														<Icon
+															size='lg'
+															icon='Cancel'
+															color='danger'
+															style={{
+																cursor: 'pointer',
+															}}
+															onClick={() =>
+																setTagList((tags) =>
+																	tags.filter((tg) => tg !== tag),
+																)
+															}
+														/>
+													</div>
+												);
+											})}
+									</div>
+								</>
+							)}
 
-					{perams.sop_slug === 'skill_set_found' && (
-						<>
-							<div className='col-12'>
-								<FormGroup
-									id='skill_set_list'
-									isFloating
-									label='Your skill_set_list'>
-									<Input
-										autoComplete='off'
-										{...register('skill_set_list', {
-											required: editMode
-												? false
-												: 'skill_set_list is required',
-										})}
-										onKeyPress={(ev) => {
-											if (ev.key === 'Enter') {
-												ev.preventDefault();
-												setSkillSetList([...skillSetList, ev.target.value]);
-											}
-										}}
-									/>
-								</FormGroup>
-								<span style={{ color: 'red' }}>
-									{errors.skill_set_list?.message}
-								</span>
-							</div>
-							<div className='d-flex align-items-center'>
-								{skillSetList &&
-									skillSetList?.map((skill) => {
-										return (
-											<div
-												key={skill}
-												style={{
-													display: 'flex',
-													alignItems: 'center',
-													justifyContent: 'space-between',
-													padding: '5px',
-													border: '1px solid gray',
-													borderRadius: '12px',
-													width: '140px',
-													margin: '8px',
-												}}>
-												<span className='fw-bold'>{skill}</span>
-												<Icon
-													size='lg'
-													icon='Cancel'
-													color='danger'
-													style={{
-														cursor: 'pointer',
-													}}
-													onClick={() =>
-														setSkillSetList((skills) =>
-															skills.filter((sk) => sk !== skill),
-														)
-													}
-												/>
-											</div>
-										);
-									})}
-							</div>
-						</>
-					)}
+							{(perams.sop_slug === 'call_additional_info_found' ||
+								perams.sop_slug === 'call_alternate_channel_found') && (
+								<div className='col-12'>
+									<Label>Select Tag Type</Label>
+									<FormGroup>
+										<Select
+											size='sm'
+											multiple
+											ariaLabel='Select Category'
+											{...register('tag_type', {
+												required: 'tag_type is required',
+											})}>
+											<Option value=''>Select tag_type</Option>
+											{tagList &&
+												tagList?.map((tag) => {
+													return (
+														<Option key={tag} value={tag}>
+															{tag}
+														</Option>
+													);
+												})}
+										</Select>
+										<span style={{ color: 'red' }}>
+											{errors.tag_type?.message}
+										</span>
+									</FormGroup>
+								</div>
+							)}
 
-					{(perams.sop_slug === 'call_additional_info_found' ||
-						perams.sop_slug === 'call_alternate_channel_found') && (
-						<div className='col-12'>
-							<Label>Select Tag Type</Label>
-							<FormGroup>
-								<Select
-									size='sm'
-									multiple
-									ariaLabel='Select Category'
-									{...register('tag_type', {
-										required: 'tag_type is required',
-									})}>
-									<Option value=''>Select tag_type</Option>
-									{tagList &&
-										tagList?.map((tag) => {
-											return (
-												<Option key={tag} value={tag}>
-													{tag}
-												</Option>
-											);
-										})}
-								</Select>
-								<span style={{ color: 'red' }}>{errors.tag_type?.message}</span>
-							</FormGroup>
-						</div>
-					)}
+							{(perams.sop_slug === 'customer_call_end_sentiment_found' ||
+								perams.sop_slug === 'customer_overall_call_sentiment_found' ||
+								perams.sop_slug === 'customer_call_start_sentiment_found' ||
+								perams.sop_slug === 'customer_overtalk_incidents_found' ||
+								perams.sop_slug === 'overall_call_sentiment_found' ||
+								perams.sop_slug === 'call_start_sentiment_found' ||
+								perams.sop_slug === 'call_end_sentiment_found' ||
+								perams.sop_slug === 'overtalk_incidents_found' ||
+								perams.sop_slug === 'silence_incidents_found' ||
+								perams.sop_slug === 'customer_silence_incidents_found' ||
+								perams.sop_slug === 'rate_of_speech_found' ||
+								perams.sop_slug === 'responsiveness_found' ||
+								perams.sop_slug === 'customer_rate_of_speech_found' ||
+								perams.sop_slug === 'customer_responsiveness_found' ||
+								perams.sop_slug === 'customer_clarity_found') && (
+								<>
+									<div className='col-12'>
+										<FormGroup id='min' isFloating label='Your min value'>
+											<Input
+												autoComplete='off'
+												type='number'
+												{...register('min', {
+													required: 'min is required',
+												})}
+											/>
+										</FormGroup>
+										<span style={{ color: 'red' }}>{errors.min?.message}</span>
+									</div>
+									<div className='col-12'>
+										<FormGroup id='max' isFloating label='Your max value'>
+											<Input
+												autoComplete='off'
+												type='number'
+												{...register('max', {
+													required: 'max is required',
+												})}
+											/>
+										</FormGroup>
+										<span style={{ color: 'red' }}>{errors.max?.message}</span>
+									</div>
+								</>
+							)}
+							{(perams.sop_slug === 'customer_call_end_sentiment_found' ||
+								perams.sop_slug === 'customer_overall_call_sentiment_found' ||
+								perams.sop_slug === 'customer_call_start_sentiment_found' ||
+								perams.sop_slug === 'customer_overtalk_incidents_found' ||
+								perams.sop_slug === 'overall_call_sentiment_found' ||
+								perams.sop_slug === 'call_start_sentiment_found' ||
+								perams.sop_slug === 'call_end_sentiment_found' ||
+								perams.sop_slug === 'overtalk_incidents_found') && (
+								<div className='col-12'>
+									<Label>Select Sentiment Type</Label>
+									<FormGroup>
+										<Select
+											size='sm'
+											ariaLabel='Select sentiment_type'
+											{...register('sentiment_type', {
+												required: 'sentiment_type is required',
+											})}>
+											<Option value=''>Select sentiment_type</Option>
+											<Option value='True'>True</Option>
+											<Option value='False'>False</Option>
+										</Select>
+										<span style={{ color: 'red' }}>
+											{errors.sentiment_type?.message}
+										</span>
+									</FormGroup>
+								</div>
+							)}
+							{(perams.sop_slug === 'silence_incidents_found' ||
+								perams.sop_slug === 'customer_silence_incidents_found') && (
+								<div className='col-12'>
+									<Label>Select incident Type</Label>
+									<FormGroup>
+										<Select
+											size='sm'
+											ariaLabel='Select incidents_type'
+											{...register('incidents_type', {
+												required: 'incidents_type is required',
+											})}>
+											<Option value=''>Select incidents_type</Option>
+											<Option value='True'>True</Option>
+											<Option value='False'>False</Option>
+										</Select>
+										<span style={{ color: 'red' }}>
+											{errors.incidents_type?.message}
+										</span>
+									</FormGroup>
+								</div>
+							)}
 
-					{(perams.sop_slug === 'customer_call_end_sentiment_found' ||
-						perams.sop_slug === 'customer_overall_call_sentiment_found' ||
-						perams.sop_slug === 'customer_call_start_sentiment_found' ||
-						perams.sop_slug === 'customer_overtalk_incidents_found' ||
-						perams.sop_slug === 'overall_call_sentiment_found' ||
-						perams.sop_slug === 'call_start_sentiment_found' ||
-						perams.sop_slug === 'call_end_sentiment_found' ||
-						perams.sop_slug === 'overtalk_incidents_found' ||
-						perams.sop_slug === 'silence_incidents_found' ||
-						perams.sop_slug === 'customer_silence_incidents_found' ||
-						perams.sop_slug === 'rate_of_speech_found' ||
-						perams.sop_slug === 'responsiveness_found' ||
-						perams.sop_slug === 'customer_rate_of_speech_found' ||
-						perams.sop_slug === 'customer_responsiveness_found' ||
-						perams.sop_slug === 'customer_clarity_found') && (
-						<>
-							<div className='col-12'>
-								<FormGroup id='min' isFloating label='Your min value'>
-									<Input
-										autoComplete='off'
-										type='number'
-										{...register('min', {
-											required: 'min is required',
-										})}
-									/>
-								</FormGroup>
-								<span style={{ color: 'red' }}>{errors.min?.message}</span>
-							</div>
-							<div className='col-12'>
-								<FormGroup id='max' isFloating label='Your max value'>
-									<Input
-										autoComplete='off'
-										type='number'
-										{...register('max', {
-											required: 'max is required',
-										})}
-									/>
-								</FormGroup>
-								<span style={{ color: 'red' }}>{errors.max?.message}</span>
-							</div>
-						</>
-					)}
-					{(perams.sop_slug === 'customer_call_end_sentiment_found' ||
-						perams.sop_slug === 'customer_overall_call_sentiment_found' ||
-						perams.sop_slug === 'customer_call_start_sentiment_found' ||
-						perams.sop_slug === 'customer_overtalk_incidents_found' ||
-						perams.sop_slug === 'overall_call_sentiment_found' ||
-						perams.sop_slug === 'call_start_sentiment_found' ||
-						perams.sop_slug === 'call_end_sentiment_found' ||
-						perams.sop_slug === 'overtalk_incidents_found') && (
-						<div className='col-12'>
-							<Label>Select Sentiment Type</Label>
-							<FormGroup>
-								<Select
-									size='sm'
-									ariaLabel='Select sentiment_type'
-									{...register('sentiment_type', {
-										required: 'sentiment_type is required',
-									})}>
-									<Option value=''>Select sentiment_type</Option>
-									<Option value='True'>True</Option>
-									<Option value='False'>False</Option>
-								</Select>
-								<span style={{ color: 'red' }}>
-									{errors.sentiment_type?.message}
-								</span>
-							</FormGroup>
-						</div>
-					)}
-					{(perams.sop_slug === 'silence_incidents_found' ||
-						perams.sop_slug === 'customer_silence_incidents_found') && (
-						<div className='col-12'>
-							<Label>Select incident Type</Label>
-							<FormGroup>
-								<Select
-									size='sm'
-									ariaLabel='Select incidents_type'
-									{...register('incidents_type', {
-										required: 'incidents_type is required',
-									})}>
-									<Option value=''>Select incidents_type</Option>
-									<Option value='True'>True</Option>
-									<Option value='False'>False</Option>
-								</Select>
-								<span style={{ color: 'red' }}>
-									{errors.incidents_type?.message}
-								</span>
-							</FormGroup>
-						</div>
-					)}
+							{(perams.sop_slug === 'rate_of_speech_found' ||
+								perams.sop_slug === 'responsiveness_found' ||
+								perams.sop_slug === 'customer_rate_of_speech_found' ||
+								perams.sop_slug === 'customer_responsiveness_found' ||
+								perams.sop_slug === 'customer_clarity_found') && (
+								<div className='col-12'>
+									<Label>Select Type</Label>
+									<FormGroup>
+										<Select
+											size='sm'
+											ariaLabel='Select incidents_type'
+											{...register('type', {
+												required: 'type is required',
+											})}>
+											<Option value=''>Select type</Option>
+											<Option value='True'>True</Option>
+											<Option value='False'>False</Option>
+										</Select>
+										<span style={{ color: 'red' }}>{errors.type?.message}</span>
+									</FormGroup>
+								</div>
+							)}
+							<div className='col-12' style={{ marginTop: 50 }}>
+								<div className='row d-flex'>
+									<div className='col'>
+										<Button
+											isLight
+											color='success'
+											className='float-end mx-2'
+											type='submit'>
+											{!editMode ? 'Create' : 'Update'}
+										</Button>
 
-					{(perams.sop_slug === 'rate_of_speech_found' ||
-						perams.sop_slug === 'responsiveness_found' ||
-						perams.sop_slug === 'customer_rate_of_speech_found' ||
-						perams.sop_slug === 'customer_responsiveness_found' ||
-						perams.sop_slug === 'customer_clarity_found') && (
-						<div className='col-12'>
-							<Label>Select Type</Label>
-							<FormGroup>
-								<Select
-									size='sm'
-									ariaLabel='Select incidents_type'
-									{...register('type', {
-										required: 'type is required',
-									})}>
-									<Option value=''>Select type</Option>
-									<Option value='True'>True</Option>
-									<Option value='False'>False</Option>
-								</Select>
-								<span style={{ color: 'red' }}>{errors.type?.message}</span>
-							</FormGroup>
-						</div>
-					)}
-					<div className='col-12' style={{ marginTop: 50 }}>
-						<div className='row d-flex'>
-							<div className='col'>
-								<Button
-									isLight
-									color='success'
-									className='float-end mx-2'
-									type='submit'>
-									{!editMode ? 'Create' : 'Update'}
-								</Button>
-
-								<Button
-									color='info'
-									isLight
-									className='float-end'
-									tag='a'
-									to={`/users/${perams.id}/sops/${perams.sop_slug}`}>
-									cancle
-								</Button>
+										<Button
+											color='info'
+											isLight
+											className='float-end'
+											tag='a'
+											to={`/users/${perams.id}/sops/${perams.sop_slug}`}>
+											cancle
+										</Button>
+									</div>
+								</div>
 							</div>
-						</div>
-					</div>
-					{/* <div className='col-12'>
+							{/* <div className='col-12'>
 						<div className='row d-flex'>
 							<div className='col'>
 								<Button
@@ -754,9 +713,11 @@ const AddUpdateSubSops = () => {
 							</div>
 						</div>
 					</div> */}
-				</form>
-			</Page>
-		</PageWrapper>
+						</form>
+					</Page>
+				</PageWrapper>
+			</div>
+		</>
 	);
 };
 

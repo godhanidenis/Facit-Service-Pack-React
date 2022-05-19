@@ -1,6 +1,5 @@
 import { useToasts } from 'react-toast-notifications';
 import { call, put } from 'redux-saga/effects';
-import Toasts from '../../../components/bootstrap/Toasts';
 import {
 	loadAgentsSuccess,
 	loadAgentsError,

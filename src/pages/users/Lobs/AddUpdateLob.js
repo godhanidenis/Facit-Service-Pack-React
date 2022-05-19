@@ -26,10 +26,8 @@ const AddUpdateLob = () => {
 	} = useForm();
 
 	const { lobs, loading } = useSelector((state) => state.lobs);
-	console.log('lobs::', lobs);
 
 	useEffect(() => {
-		console.log('useefect laodinh', loading);
 		if (!loading && dataSubmited) navigate(`/users/${id.id}/lobs`);
 	}, [loading, dataSubmited, navigate, id.id]);
 	useEffect(() => {
@@ -49,8 +47,6 @@ const AddUpdateLob = () => {
 	}, [id, lobs, setValue]);
 
 	const onSubmit = (data) => {
-		console.log('AddEdit FormData', data);
-
 		const formData = new FormData();
 		formData.append('Lob_name', data.Lob_name);
 		formData.append('User', Number(id.id));
@@ -74,7 +70,7 @@ const AddUpdateLob = () => {
 						? 'd-flex align-items-center justify-content-center w-100 h-100'
 						: 'visually-hidden'
 				}
-				style={{ position: 'absolute', top: 50, left: 50 }}>
+				style={{ position: 'absolute', top: 50, left: 50, opacity: 1, zIndex: 1 }}>
 				<Spinner isGrow={false} />
 			</div>
 			<div

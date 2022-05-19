@@ -37,7 +37,6 @@ const AddEditAgent = () => {
 
 			if (agents.length) {
 				const singleAgent = agents.find((agent) => agent.id === Number(id.agentId));
-				console.log('singleAgent', singleAgent.Team.id);
 				setValue('Agent_id', singleAgent.Agent_id);
 				setValue('Agent_name', singleAgent.Agent_name);
 				setValue('phone_no', singleAgent.phone_no);
@@ -49,7 +48,6 @@ const AddEditAgent = () => {
 	}, [id, agents, setValue]);
 
 	useEffect(() => {
-		console.log('useefect laodinh', loading);
 		if (!loading && dataSubmited && !error) {
 			addToast(
 				<Toasts
@@ -69,7 +67,6 @@ const AddEditAgent = () => {
 	}, [dataSubmited, navigate, id.id, id.teamId, loading, addToast, editMode, error]);
 
 	const onSubmit = (data) => {
-		console.log('data', data);
 		const formData = {
 			Agent_id: Number(data.Agent_id),
 			Agent_name: data.Agent_name,
@@ -95,7 +92,7 @@ const AddEditAgent = () => {
 						? 'd-flex align-items-center justify-content-center w-100 h-100'
 						: 'visually-hidden'
 				}
-				style={{ position: 'absolute', top: 50, left: 50 }}>
+				style={{ position: 'absolute', top: 50, left: 50, opacity: 1, zIndex: 1 }}>
 				<Spinner isGrow={false} />
 			</div>
 			<div

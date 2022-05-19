@@ -17,7 +17,6 @@ const Sops = () => {
 	const dispatch = useDispatch();
 	const { sops, loading } = useSelector((state) => state.sops);
 	const { subSops } = useSelector((state) => state.subSops);
-	console.log('sops .??', sops.length);
 	useEffect(() => {
 		const formDataTag = {
 			doctype: 'tagging_found',
@@ -39,7 +38,9 @@ const Sops = () => {
 		// eslint-disable-next-line react/jsx-no-useless-fragment
 		<>
 			{loading ? (
-				<div className='d-flex align-items-center justify-content-center w-100 h-100'>
+				<div
+					className='d-flex align-items-center justify-content-center w-100 h-100'
+					style={{ position: 'absolute', top: 50, left: 50, opacity: 1, zIndex: 1 }}>
 					<Spinner isGrow={false} />
 				</div>
 			) : (

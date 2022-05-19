@@ -9,8 +9,6 @@ export function requestGetSubSops(id, slug) {
 }
 
 export function requestCreateSubSops(subSop) {
-	console.log('subSop...Id', subSop);
-
 	return axios.request({
 		method: 'post',
 		url: `${process.env.REACT_APP_DOMAIN}/admin_panel/sopelasticsearch/`,
@@ -19,7 +17,6 @@ export function requestCreateSubSops(subSop) {
 }
 
 export function requestDeleteSubSops(subSopId) {
-	console.log('subSopId', subSopId);
 	return axios.request({
 		method: 'delete',
 		url: `${process.env.REACT_APP_DOMAIN}/admin_panel/sopelasticsearch/`,

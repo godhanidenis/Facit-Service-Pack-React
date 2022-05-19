@@ -101,7 +101,7 @@ const UsersTeams = () => {
 						? 'd-flex align-items-center justify-content-center w-100 h-100'
 						: 'visually-hidden'
 				}
-				style={{ position: 'absolute', top: 50, left: 50 }}>
+				style={{ position: 'absolute', top: 50, left: 50, opacity: 1, zIndex: 1 }}>
 				<Spinner isGrow={false} />
 			</div>
 			<div style={{ opacity: loading ? 0.5 : 1 }}>

@@ -112,73 +112,77 @@ const TeamDetail = () => {
 	return (
 		// eslint-disable-next-line react/jsx-no-useless-fragment
 		<>
-			{loading ? (
-				<div className='d-flex align-items-center justify-content-center w-100 h-100'>
-					<Spinner isGrow={false} />
-				</div>
-			) : (
-				<div className='row justify-content-center w-100'>
-					<div className='col-6 d-flex justify-content-center flex-column'>
-						<hr style={{ opacity: '0.05' }} />
-						<div className='row align-items-center'>
-							<CardActions className='d-flex justify-content-end'>
-								<Button
-									icon='Backspace'
-									color='info'
-									isLight
-									tag='a'
-									to={`../../../../../users/${id.id}/teams`}>
-									Back to teams
-								</Button>
-							</CardActions>
+			<div
+				className={
+					loading
+						? 'd-flex align-items-center justify-content-center w-100 h-100'
+						: 'visually-hidden'
+				}
+				style={{ position: 'absolute', top: 50, left: 50, opacity: 1, zIndex: 1 }}>
+				<Spinner isGrow={false} />
+			</div>
+
+			<div
+				className='row justify-content-center w-100'
+				style={{ opacity: loading ? 0.5 : 1 }}>
+				<div
+					className='col-6 d-flex justify-content-center flex-column'
+					style={{ opacity: loading ? 0.5 : 1 }}>
+					<hr style={{ opacity: '0.05' }} />
+					<div className='row align-items-center'>
+						<CardActions className='d-flex justify-content-end'>
+							<Button
+								icon='Backspace'
+								color='info'
+								isLight
+								tag='a'
+								to={`../../../../../users/${id.id}/teams`}>
+								Back to teams
+							</Button>
+						</CardActions>
+					</div>
+					<div className='row align-items-center' style={{ marginTop: 20 }}>
+						<div className='col'>
+							<p className='mb-1'>
+								<b>Team Name</b>
+							</p>
+							<div className=' border rounded p-2'>{teamInfoData?.Team_name}</div>
 						</div>
-						<div className='row align-items-center' style={{ marginTop: 20 }}>
-							<div className='col'>
-								<p className='mb-1'>
-									<b>Team Name</b>
-								</p>
-								<div className=' border rounded p-2'>{teamInfoData?.Team_name}</div>
-							</div>
-							<div className='col'>
-								<p className='mb-1'>
-									<b>TeamLead Name</b>
-								</p>
-								<div className=' border rounded p-2'>
-									{teamInfoData?.Team_lead.TeamLead_name}
-								</div>
-							</div>
-						</div>
-						<div className='row align-items-center' style={{ marginTop: 20 }}>
-							<div className='col'>
-								<p className='mb-1'>
-									<b>location</b>
-								</p>
-								<div className=' border rounded p-2'>
-									{teamInfoData?.Location.Location_name}
-								</div>
-							</div>
-							<div className='col'>
-								<p className='mb-1'>
-									<b>No Agentns</b>
-								</p>
-								<div className=' border rounded p-2'>
-									{teamInfoData?.No_agentns}
-								</div>
-							</div>
-						</div>
-						<div className='row align-items-center' style={{ marginTop: 20 }}>
-							<div className='col-md-6'>
-								<p className='mb-1'>
-									<b>Lob</b>
-								</p>
-								<div className=' border rounded p-2'>
-									{teamInfoData?.LOB.Lob_name}
-								</div>
+						<div className='col'>
+							<p className='mb-1'>
+								<b>TeamLead Name</b>
+							</p>
+							<div className=' border rounded p-2'>
+								{teamInfoData?.Team_lead.TeamLead_name}
 							</div>
 						</div>
 					</div>
+					<div className='row align-items-center' style={{ marginTop: 20 }}>
+						<div className='col'>
+							<p className='mb-1'>
+								<b>location</b>
+							</p>
+							<div className=' border rounded p-2'>
+								{teamInfoData?.Location.Location_name}
+							</div>
+						</div>
+						<div className='col'>
+							<p className='mb-1'>
+								<b>No Agentns</b>
+							</p>
+							<div className=' border rounded p-2'>{teamInfoData?.No_agentns}</div>
+						</div>
+					</div>
+					<div className='row align-items-center' style={{ marginTop: 20 }}>
+						<div className='col-md-6'>
+							<p className='mb-1'>
+								<b>Lob</b>
+							</p>
+							<div className=' border rounded p-2'>{teamInfoData?.LOB.Lob_name}</div>
+						</div>
+					</div>
 				</div>
-			)}
+			</div>
 		</>
 	);
 };
