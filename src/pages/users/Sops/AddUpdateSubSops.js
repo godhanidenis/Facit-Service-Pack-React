@@ -34,7 +34,7 @@ const AddUpdateSubSops = () => {
 	const { subSops, loading, error } = useSelector((state) => state.subSops);
 	const { tagLists } = useSelector((state) => state.tagLists);
 	const { skillSetLists } = useSelector((state) => state.skillSetLists);
-	console.log('skillSetLists', skillSetLists);
+	console.log('tagLists ------> ', tagLists);
 	const {
 		register,
 		handleSubmit,
@@ -52,10 +52,10 @@ const AddUpdateSubSops = () => {
 			setValue('tag_type', singleSubSop?._source?.tag_type);
 			setValue('skill_set_list', singleSubSop?._source?.skill_set_list);
 		}
-	}, [editMode, location?.state?.id, setValue, subSops, tagLists, skillSetLists]);
+	}, [editMode, location?.state?.id, setValue, subSops, skillSetLists]);
 
 	useEffect(() => {
-		setTagList(tagLists[0]?._source?.tag_list);
+		setTagList(tagLists[0]?._source?.tag_list ? tagLists[0]?._source?.tag_list : []);
 		setSkillSetList(skillSetLists[0]?._source?.skill_set_list);
 		if (!location?.state?.id) {
 			setEditMode(false);
@@ -295,6 +295,26 @@ const AddUpdateSubSops = () => {
 	};
 	const onError = (errors) => console.log('Errors Occurred !! :', errors);
 
+	function addToTagList(tagName) {
+		console.log('Helllooozzz');
+		if (
+			tagName &&
+			!tagList.filter((tag) => tag?.toLowerCase() === tagName?.toLowerCase()).length
+		) {
+			setTagList([...tagList, tagName]);
+			setValue('tag_list', '');
+		} else {
+			addToast(
+				<Toasts title='warning' icon='warning' iconColor='danger' isDismiss>
+					{tagName ? 'Tag is already added!' : 'Tag should not be empty!'}
+				</Toasts>,
+				{
+					autoDismiss: true,
+				},
+			);
+		}
+	}
+
 	useEffect(() => {
 		if (!loading && dataSubmited && !error) {
 			addToast(
@@ -302,7 +322,6 @@ const AddUpdateSubSops = () => {
 					title={!editMode ? 'Successfully Sop Created' : 'Successfully Sop Updated'}
 					icon='warning'
 					iconColor='success'
-					time='Now'
 					isDismiss>
 					{`${error}`}
 				</Toasts>,
@@ -483,7 +502,7 @@ const AddUpdateSubSops = () => {
 												onKeyPress={(ev) => {
 													if (ev.key === 'Enter') {
 														ev.preventDefault();
-														setTagList([...tagList, ev.target.value]);
+														addToTagList(ev.target.value);
 													}
 												}}
 											/>

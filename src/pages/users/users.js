@@ -64,7 +64,6 @@ const Userstbl = () => {
 					icon='warning'
 					iconColor='danger'
 					color='danger'
-					time='Now'
 					isDismiss>
 					{`${error}`}
 				</Toasts>,

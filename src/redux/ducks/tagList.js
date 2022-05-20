@@ -59,16 +59,17 @@ const tagListReducer = (state = initialState, action) => {
 				tagLists: action.payload,
 			};
 		case UPDATE_TAGLIST_SUCCESS:
-			const index = state.tagLists.findIndex((tag) => tag._id === action.payload[0]._id);
+			// console.log('ADDD UPDATE TAGS :', action.payload);
+			// const index = state.tagLists.findIndex((tag) => tag._id === action.payload[0]._id);
 
-			const newArray = [...state.tagLists];
+			// const newArray = [...state.tagLists];
 
-			// eslint-disable-next-line prefer-destructuring
-			newArray[index] = action.payload[0];
+			// // eslint-disable-next-line prefer-destructuring
+			// newArray[index] = action.payload[0];
 			return {
 				...state,
 				loading: false,
-				tagLists: newArray,
+				tagLists: action.payload,
 			};
 		case LOAD_TAGLIST_ERROR:
 		case UPDATE_TAGLIST_ERROR:

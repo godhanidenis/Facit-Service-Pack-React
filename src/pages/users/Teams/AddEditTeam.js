@@ -94,7 +94,6 @@ const AddEditTeam = () => {
 					title={editMode ? 'Successfully Team Updated' : 'Successfully Team Created'}
 					icon='warning'
 					iconColor='success'
-					time='Now'
 					isDismiss>
 					{`${error}`}
 				</Toasts>,

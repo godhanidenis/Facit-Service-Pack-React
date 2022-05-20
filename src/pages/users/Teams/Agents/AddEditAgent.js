@@ -55,7 +55,6 @@ const AddEditAgent = () => {
 					title={!editMode ? 'Successfully Agent Created' : 'Successfully Agent Updated'}
 					icon='warning'
 					iconColor='success'
-					time='Now'
 					isDismiss>
 					{`${error}`}
 				</Toasts>,

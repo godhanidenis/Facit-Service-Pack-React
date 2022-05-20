@@ -79,7 +79,6 @@ const AddUpdateUser = () => {
 					title={!editMode ? 'Successfully User Created' : 'Successfully User Updated'}
 					icon='warning'
 					iconColor='success'
-					time='Now'
 					isDismiss>
 					{`${error}`}
 				</Toasts>,
@@ -137,7 +136,6 @@ const AddUpdateUser = () => {
 					icon='warning'
 					iconColor='danger'
 					color='red'
-					time='Now'
 					isDismiss>
 					{`${error}`}
 				</Toasts>,
@@ -163,23 +161,25 @@ const AddUpdateUser = () => {
 				<div className='row align-items-center justify-content-center'>
 					<div className='col-md-6'>
 						<form onSubmit={handleSubmit(onSubmit, onError)} onReset={reset}>
-							<div
-								className='d-flex align-items-center justify-content-between'
-								style={{ marginTop: 20 }}>
-								<div>
-									<h1>{!editMode ? 'Create New User' : 'Update User Details'}</h1>
-								</div>
-								<div>
-									<CardActions>
-										<Button
-											icon='Backspace'
-											color='info'
-											isLight
-											tag='a'
-											to='/users'>
-											Back to teams
-										</Button>
-									</CardActions>
+							<div className='row' style={{ marginTop: 20 }}>
+								<div className='d-flex align-items-center justify-content-between'>
+									<div>
+										<h1>
+											{!editMode ? 'Create New User' : 'Update User Details'}
+										</h1>
+									</div>
+									<div>
+										<CardActions>
+											<Button
+												icon='Backspace'
+												color='info'
+												isLight
+												tag='a'
+												to='/users'>
+												Back to teams
+											</Button>
+										</CardActions>
+									</div>
 								</div>
 							</div>
 							<div className='row mt-4'>
@@ -238,7 +238,7 @@ const AddUpdateUser = () => {
 										</div>
 										<div className='col'>
 											<div className='row'>
-												<div className='col-md-auto'>
+												<div className='col'>
 													<FormGroup
 														id='first_name'
 														isFloating
@@ -256,7 +256,7 @@ const AddUpdateUser = () => {
 														{errors.first_name?.message}
 													</span>
 												</div>
-												<div className='col-md-auto'>
+												<div className='col'>
 													<FormGroup
 														id='last_name'
 														isFloating
@@ -275,11 +275,11 @@ const AddUpdateUser = () => {
 											</div>
 										</div>
 									</div>
-									<div className='row mt-4'>
+									<div className='row d-flex mt-4'>
 										<div className='col-auto mt-3'>
 											<Icon
 												size='lg'
-												icon='Email'
+												icon='person'
 												color='success'
 												style={{
 													cursor: 'pointer',
@@ -306,182 +306,85 @@ const AddUpdateUser = () => {
 											</div>
 										</div>
 									</div>
-								</div>
-								<div className='row d-flex mt-4'>
-									<div className='col-auto mt-3'>
-										<Icon
-											size='lg'
-											icon='person'
-											color='success'
-											style={{
-												cursor: 'pointer',
-												marginLeft: '10px',
-											}}
-										/>
-									</div>
-									<div className='col-md-6'>
-										<div className='col-12'>
-											<FormGroup
-												id='username'
-												isFloating
-												label='Your Username'>
-												<Input
-													autoComplete='off'
-													{...register('username', {
-														required: 'Username is required',
-													})}
-												/>
-											</FormGroup>
-											<span style={{ color: 'red' }}>
-												{errors.username?.message}
-											</span>
-										</div>
-									</div>
-								</div>
-								{!editMode && (
-									<>
-										<div className='row d-flex mt-4'>
-											<div className='col-auto mt-3'>
-												<Icon
-													size='lg'
-													icon='VpnKey'
-													color='success'
-													style={{
-														cursor: 'pointer',
-														marginLeft: '10px',
-													}}
-												/>
+									{!editMode && (
+										<>
+											<div className='row d-flex mt-4'>
+												<div className='col-auto mt-3'>
+													<Icon
+														size='lg'
+														icon='VpnKey'
+														color='success'
+														style={{
+															cursor: 'pointer',
+															marginLeft: '10px',
+														}}
+													/>
+												</div>
+												<div className='col'>
+													<FormGroup
+														id='password'
+														isFloating
+														label='Your Password'>
+														<Input
+															autoComplete='off'
+															type='password'
+															{...register('password', {
+																required: editMode
+																	? false
+																	: 'Password is required',
+																minLength: {
+																	value: 4,
+																	message:
+																		'Password must be more than 4 characters',
+																},
+																maxLength: {
+																	value: 15,
+																	message:
+																		'Password cannot exceed more than 15 characters',
+																},
+															})}
+														/>
+													</FormGroup>
+												</div>
 											</div>
-											<div className='col-md-6'>
-												<FormGroup
-													id='password'
-													isFloating
-													label='Your Password'>
+											{errors.password?.message}
+										</>
+									)}
+									<div className='row d-flex mt-4'>
+										<div className='col-auto mt-3'>
+											<Icon
+												size='lg'
+												icon='Email'
+												color='success'
+												style={{
+													cursor: 'pointer',
+													marginLeft: '10px',
+												}}
+											/>
+										</div>
+										<div className='col'>
+											<div className='col-12'>
+												<FormGroup id='email' isFloating label='Your email'>
 													<Input
+														type='email'
 														autoComplete='off'
-														type='password'
-														{...register('password', {
-															required: editMode
-																? false
-																: 'Password is required',
-															minLength: {
-																value: 4,
+														{...register('email', {
+															required: 'Email is required',
+															pattern: {
+																value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 																message:
-																	'Password must be more than 4 characters',
-															},
-															maxLength: {
-																value: 15,
-																message:
-																	'Password cannot exceed more than 15 characters',
+																	'Please enter a valid email',
 															},
 														})}
 													/>
 												</FormGroup>
-											</div>
-										</div>
-										{errors.password?.message}
-									</>
-								)}
-								<div className='row d-flex mt-4'>
-									<div className='col-auto mt-3'>
-										<Icon
-											size='lg'
-											icon='Email'
-											color='success'
-											style={{
-												cursor: 'pointer',
-												marginLeft: '10px',
-											}}
-										/>
-									</div>
-									<div className='col-md-6'>
-										<div className='col-12'>
-											<FormGroup id='email' isFloating label='Your email'>
-												<Input
-													type='email'
-													autoComplete='off'
-													{...register('email', {
-														required: 'Email is required',
-														pattern: {
-															value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-															message: 'Please enter a valid email',
-														},
-													})}
-												/>
-											</FormGroup>
-											<span style={{ color: 'red' }}>
-												{errors.email?.message}
-											</span>
-										</div>
-									</div>
-								</div>
-								<div className='row d-flex mt-4'>
-									<div className='col-auto mt-3'>
-										<Icon
-											size='lg'
-											icon='LocalPhone'
-											color='success'
-											style={{
-												cursor: 'pointer',
-												marginLeft: '10px',
-											}}
-										/>
-									</div>
-									<div className='col-md-6'>
-										<div className='col-12'>
-											<FormGroup
-												id='phone_number'
-												isFloating
-												label='Your PhoneNumber'>
-												<Input
-													autoComplete='off'
-													type='number'
-													{...register('phone_number', {
-														required: 'Phone Number is required',
-														minLength: {
-															value: 10,
-															message:
-																'Phone Number must be 10 numbers',
-														},
-														maxLength: {
-															value: 10,
-															message:
-																'Phone Number must be 10 numbers',
-														},
-													})}
-												/>
-											</FormGroup>
-											<span style={{ color: 'red' }}>
-												{errors.phone_number?.message}
-											</span>
-										</div>
-									</div>
-								</div>
-								<div className='col-md-7'>
-									<div className='col-12' style={{ marginTop: 50 }}>
-										<div className='row d-flex'>
-											<div className='col'>
-												<Button
-													isLight
-													color='success'
-													// className='w-100 py-3 float-right'
-													className='float-end mx-2'
-													type='submit'>
-													{!editMode ? 'Create' : 'Update'}
-												</Button>
-
-												<Button
-													color='info'
-													isLight
-													className='float-end'
-													tag='a'
-													to='/users'>
-													cancle
-												</Button>
+												<span style={{ color: 'red' }}>
+													{errors.email?.message}
+												</span>
 											</div>
 										</div>
 									</div>
-									<div className='row mt-4'>
+									<div className='row d-flex mt-4'>
 										<div className='col-auto mt-3'>
 											<Icon
 												size='lg'
@@ -523,9 +426,7 @@ const AddUpdateUser = () => {
 											</div>
 										</div>
 									</div>
-									<div
-										className='row justify-content-end'
-										style={{ marginTop: 50 }}>
+									<div className='row d-flex' style={{ marginTop: 30 }}>
 										<div className='col'>
 											<Button
 												isLight

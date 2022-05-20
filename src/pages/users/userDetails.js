@@ -16,6 +16,8 @@ import Icon from '../../components/icon/Icon';
 import { loadTeamsStart } from '../../redux/ducks/teams';
 import { loadSopsStart } from '../../redux/ducks/sops';
 import Spinner from '../../components/bootstrap/Spinner';
+import { loadTagListStart } from '../../redux/ducks/tagList';
+import { loadSkillSetListStart } from '../../redux/ducks/skillSetList';
 
 const UserDetails = () => {
 	const { id } = useParams();
@@ -27,8 +29,16 @@ const UserDetails = () => {
 		dispatch(loadLobsStart(id));
 		dispatch(loadTeamsStart(id));
 		dispatch(loadSopsStart(id));
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+		const formDataTag = {
+			doctype: 'tagging_found',
+		};
+		dispatch(loadTagListStart({ id, slug: formDataTag }));
+
+		const formDataSkill = {
+			doctype: 'skill_set_found',
+		};
+		dispatch(loadSkillSetListStart({ id, slug: formDataSkill }));
+	}, [dispatch, id]);
 
 	return (
 		<>

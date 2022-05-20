@@ -13,26 +13,24 @@ import { loadSkillSetListStart } from '../../../redux/ducks/skillSetList';
 const Sops = () => {
 	const [selectedSopTab, setSelectedSopTab] = useState();
 	const id = useParams();
-	console.log('iddddddd', id);
 	const dispatch = useDispatch();
 	const { sops, loading } = useSelector((state) => state.sops);
 	const { subSops } = useSelector((state) => state.subSops);
+
+	const handleActiveListTab = React.useCallback(
+		(sopId) => {
+			/* function body */
+			const selectedSop = sops.find((sop) => sop.id === Number(sopId));
+			setSelectedSopTab(selectedSop);
+		},
+		[sops],
+	);
+
 	useEffect(() => {
-		const formDataTag = {
-			doctype: 'tagging_found',
-		};
-		dispatch(loadTagListStart({ id: id.id, slug: formDataTag }));
-
-		const formDataSkill = {
-			doctype: 'skill_set_found',
-		};
-		dispatch(loadSkillSetListStart({ id: id.id, slug: formDataSkill }));
-	}, [dispatch, id.id]);
-
-	const handleActiveListTab = (sopId) => {
-		const selectedSop = sops.find((sop) => sop.id === Number(sopId));
-		setSelectedSopTab(selectedSop);
-	};
+		if (!selectedSopTab && sops?.length > 0) {
+			handleActiveListTab(sops[0].id);
+		}
+	}, [handleActiveListTab, sops, selectedSopTab]);
 
 	return (
 		// eslint-disable-next-line react/jsx-no-useless-fragment

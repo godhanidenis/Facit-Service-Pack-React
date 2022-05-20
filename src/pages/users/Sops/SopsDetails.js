@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useToasts } from 'react-toast-notifications';
 import {
 	deleteSubSopsStart,
 	loadSubSopsStart,
@@ -21,16 +22,17 @@ import DeleteModel from '../../../common/ConfirmationModal';
 import { updateTagListStart } from '../../../redux/ducks/tagList';
 import { updateSkillSetListStart } from '../../../redux/ducks/skillSetList';
 import Spinner from '../../../components/bootstrap/Spinner';
+import Toasts from '../../../components/bootstrap/Toasts';
 
 const SopsDetails = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const perams = useParams();
-	console.log('peramssssss', perams);
 	const [tagId, setTagId] = useState();
 	const { subSops, loading } = useSelector((state) => state.subSops);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [currentSubSops, setCurrentSubSops] = useState();
+	const { addToast } = useToasts();
 	const {
 		register,
 		handleSubmit,
@@ -188,6 +190,26 @@ const SopsDetails = () => {
 	};
 	const onError = (errors) => console.log('Errors Occurred !! :', errors);
 
+	function addToTagList(tagName) {
+		console.log('Helllooozzz');
+		if (
+			tagName &&
+			!tagList.filter((tag) => tag?.toLowerCase() === tagName?.toLowerCase()).length
+		) {
+			setTagList([...tagList, tagName]);
+			setValue('tag_list', '');
+		} else {
+			addToast(
+				<Toasts title='warning' icon='warning' iconColor='danger' isDismiss>
+					{tagName ? 'Tag is already added!' : 'Tag should not be empty!'}
+				</Toasts>,
+				{
+					autoDismiss: true,
+				},
+			);
+		}
+	}
+
 	return (
 		<>
 			<div
@@ -199,7 +221,7 @@ const SopsDetails = () => {
 				style={{ position: 'absolute', top: 50, left: 50, opacity: 1, zIndex: 1 }}>
 				<Spinner isGrow={false} />
 			</div>
-			<PageWrapper>
+			<PageWrapper className='p-0'>
 				<Page className='p-0'>
 					{(() => {
 						switch (perams.sop_slug) {
@@ -222,10 +244,7 @@ const SopsDetails = () => {
 															onKeyPress={(ev) => {
 																if (ev.key === 'Enter') {
 																	ev.preventDefault();
-																	setTagList([
-																		...tagList,
-																		ev.target.value,
-																	]);
+																	addToTagList(ev.target.value);
 																}
 															}}
 														/>
@@ -637,48 +656,71 @@ const SopsDetails = () => {
 													<div className='col-md-6'>
 														<Card key={subSop?._id}>
 															<CardBody>
-																<div className='row'>
-																	<div className='col-md-10'>
-																		<h4>
-																			{subSop?._source?.text}
-																		</h4>
-																	</div>
-																	<div className='col-md-2 d-flex align-items-center justify-content-between'>
-																		<Icon
-																			size='lg'
-																			icon='Edit'
-																			color='info'
-																			style={{
-																				cursor: 'pointer',
-																			}}
-																			onClick={() => {
-																				navigate(
-																					`/users/${perams.id}/sops/${perams.sop_slug}/sub/update`,
-																					{
-																						state: {
-																							id: subSop?._id,
+																<div
+																	className='row align-items-center justify-content-center'
+																	style={{
+																		height: '32px',
+																	}}>
+																	<div className='d-flex'>
+																		<div className='flex-grow-1'>
+																			<span
+																				style={{
+																					fontWeight:
+																						'500',
+																					overflow:
+																						'hidden',
+																					'text-overflow':
+																						'ellipsis',
+																					display:
+																						'-webkit-box',
+																					'-webkit-line-clamp':
+																						'2',
+																					'-webkit-box-orient':
+																						'vertical',
+																				}}>
+																				{
+																					subSop?._source
+																						?.text
+																				}
+																			</span>
+																		</div>
+																		<div className='d-flex align-items-center'>
+																			<Icon
+																				size='lg'
+																				icon='Edit'
+																				color='info'
+																				style={{
+																					cursor: 'pointer',
+																					marginRight: 12,
+																				}}
+																				onClick={() => {
+																					navigate(
+																						`/users/${perams.id}/sops/${perams.sop_slug}/sub/update`,
+																						{
+																							state: {
+																								id: subSop?._id,
+																							},
 																						},
-																					},
-																				);
-																			}}
-																		/>
-																		<Icon
-																			size='lg'
-																			icon='Delete'
-																			color='danger'
-																			style={{
-																				cursor: 'pointer',
-																				// marginLeft: '25px',
-																			}}
-																			onClick={() => {
-																				setCurrentSubSops(
-																					subSop,
-																				);
-																				setDeleteModalOpen(
-																					true,
-																				);
-																			}}
-																		/>
+																					);
+																				}}
+																			/>
+																			<Icon
+																				size='lg'
+																				icon='Delete'
+																				color='danger'
+																				style={{
+																					cursor: 'pointer',
+																				}}
+																				onClick={() => {
+																					setCurrentSubSops(
+																						subSop,
+																					);
+																					setDeleteModalOpen(
+																						true,
+																					);
+																				}}
+																			/>
+																		</div>
 																	</div>
 																</div>
 															</CardBody>

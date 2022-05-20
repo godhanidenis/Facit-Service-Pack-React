@@ -90,7 +90,6 @@ const TeamDetail = () => {
 					icon='warning'
 					iconColor='danger'
 					color='red'
-					time='Now'
 					isDismiss>
 					{`${error}`}
 				</Toasts>,
