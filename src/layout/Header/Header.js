@@ -131,7 +131,7 @@ const Header = ({ children, hasLeftMobileMenu, hasRightMobileMenu }) => {
 					'header-right-open': rightMenuStatus,
 				})}>
 				<div className='container-fluid'>
-					<div className='row d-flex align-items-center'>
+					<div className='row d-flex align-items-center justify-content-end'>
 						{children}
 						{(leftMenuStatus || rightMenuStatus) && (
 							<Portal>

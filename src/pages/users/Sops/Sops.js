@@ -13,6 +13,8 @@ import { loadSkillSetListStart } from '../../../redux/ducks/skillSetList';
 const Sops = () => {
 	const [selectedSopTab, setSelectedSopTab] = useState();
 	const id = useParams();
+	// console.log('idddd', id);
+	// console.log('sluggggggg', window.location.pathname.split('/').pop());
 	const dispatch = useDispatch();
 	const { sops, loading } = useSelector((state) => state.sops);
 	const { subSops } = useSelector((state) => state.subSops);
@@ -28,7 +30,16 @@ const Sops = () => {
 
 	useEffect(() => {
 		if (!selectedSopTab && sops?.length > 0) {
-			handleActiveListTab(sops[0].id);
+			const selectedSop = sops.find(
+				(sop) => sop.slug === window.location.pathname.split('/').pop(),
+			);
+			// console.log('selectedSop', selectedSop);
+			setSelectedSopTab(selectedSop);
+			if (selectedSop === undefined) {
+				handleActiveListTab(sops[0].id);
+			} else {
+				handleActiveListTab(selectedSop.id);
+			}
 		}
 	}, [handleActiveListTab, sops, selectedSopTab]);
 
@@ -44,6 +55,7 @@ const Sops = () => {
 			) : (
 				<div className='row' style={{ height: '100%' }}>
 					<div className='col-3'>
+						<hr style={{ opacity: '0.05' }} />
 						<Card stretch>
 							<CardBody isScrollable>
 								<div className='row'>
@@ -52,8 +64,7 @@ const Sops = () => {
 											<Button
 												className='w-100'
 												color={
-													selectedSopTab?.Sub_category ===
-													sop?.Sub_category
+													selectedSopTab?.slug === sop?.slug
 														? 'success'
 														: 'light'
 												}
@@ -69,6 +80,7 @@ const Sops = () => {
 						</Card>
 					</div>
 					<div className='col-9'>
+						<hr style={{ opacity: '0.05' }} />
 						<Card stretch>
 							<CardBody isScrollable>
 								{selectedSopTab && (
@@ -122,8 +134,8 @@ const Sops = () => {
 													'customer_rate_of_speech_found' ||
 												selectedSopTab?.slug ===
 													'customer_responsiveness_found' ||
-												selectedSopTab?.slug ===
-													'customer_clarity_found') &&
+												selectedSopTab?.slug === 'customer_clarity_found' ||
+												selectedSopTab?.slug === 'clarity_found') &&
 											subSops.length ? (
 												''
 											) : (

@@ -26,6 +26,7 @@ const AddUpdateSubSops = () => {
 
 	const [editMode, setEditMode] = useState(false);
 	const [keywordsList, setKeywordsList] = useState([]);
+	const [verificationKeywordsList, setVerificationKeywordsList] = useState([]);
 	const [tagList, setTagList] = useState([]);
 	const [skillSetList, setSkillSetList] = useState([]);
 
@@ -51,6 +52,7 @@ const AddUpdateSubSops = () => {
 			console.log('singleSubSop', singleSubSop);
 			setValue('tag_type', singleSubSop?._source?.tag_type);
 			setValue('skill_set_list', singleSubSop?._source?.skill_set_list);
+			setValue('tag_list', singleSubSop?._source?.tag_list);
 		}
 	}, [editMode, location?.state?.id, setValue, subSops, skillSetLists]);
 
@@ -63,7 +65,7 @@ const AddUpdateSubSops = () => {
 			setEditMode(true);
 			if (subSops?.length) {
 				const selectedSop = subSops.find((subSop) => subSop._id === location?.state?.id);
-
+				console.log('selectedSop', selectedSop);
 				setValue('text', selectedSop?._source?.text);
 				setValue('score', selectedSop?._source?.score);
 				setValue('min', selectedSop?._source?.min);
@@ -73,6 +75,7 @@ const AddUpdateSubSops = () => {
 				setValue('type', selectedSop?._source?.type);
 				// setValue('tag_type', selectedSop?._source?.tag_type);
 				setKeywordsList(selectedSop?._source?.keywords);
+				setVerificationKeywordsList(selectedSop?._source?.verification_keywords);
 
 				// if (perams.sop_slug === 'tagging_found') {
 				// 	setTagList(selectedSop?._source?.tag_list);
@@ -100,6 +103,7 @@ const AddUpdateSubSops = () => {
 	]);
 
 	const onSubmit = (data) => {
+		console.log('dataaaa', data);
 		const teamList = [];
 		// eslint-disable-next-line array-callback-return
 		data.team_list?.map((ar) => {
@@ -121,6 +125,8 @@ const AddUpdateSubSops = () => {
 				score: Number(data.score),
 				team_list: teamList,
 				skill_set_list: data.skill_set_list,
+				tag_list: data.tag_list,
+				verification_keywords: verificationKeywordsList,
 				user_id: Number(perams.id),
 			},
 		};
@@ -137,6 +143,8 @@ const AddUpdateSubSops = () => {
 			score: Number(data.score),
 			team_list: teamList,
 			skill_set_list: data.skill_set_list,
+			tag_list: data.tag_list,
+			verification_keywords: verificationKeywordsList,
 			user_id: Number(perams.id),
 		};
 
@@ -276,7 +284,8 @@ const AddUpdateSubSops = () => {
 				perams.sop_slug === 'responsiveness_found' ||
 				perams.sop_slug === 'customer_rate_of_speech_found' ||
 				perams.sop_slug === 'customer_responsiveness_found' ||
-				perams.sop_slug === 'customer_clarity_found'
+				perams.sop_slug === 'customer_clarity_found' ||
+				perams.sop_slug === 'clarity_found'
 			) {
 				dispatch(createSubSopsStart(formDataCreateMinMaxType));
 			} else if (
@@ -363,7 +372,11 @@ const AddUpdateSubSops = () => {
 										<Input
 											autoComplete='off'
 											{...register('text', {
-												required: 'Text is required',
+												required:
+													perams.sop_slug ===
+													'customer_verification_found'
+														? false
+														: 'Text is required',
 											})}
 										/>
 									</FormGroup>
@@ -423,6 +436,131 @@ const AddUpdateSubSops = () => {
 									</FormGroup>
 								</div>
 							)}
+							{perams.sop_slug === 'customer_verification_found' && (
+								<>
+									<div className='col-12'>
+										<Label>Select TagList</Label>
+										<FormGroup>
+											<Select
+												size='sm'
+												ariaLabel='Select Category'
+												multiple
+												{...register('tag_list', {
+													required: 'tagList is required',
+												})}>
+												<Option value=''>Select TagList</Option>
+												{tagList?.map((tag) => {
+													return (
+														<Option key={tag} value={tag}>
+															{tag}
+														</Option>
+													);
+												})}
+											</Select>
+											<span style={{ color: 'red' }}>
+												{errors.tag_list?.message}
+											</span>
+										</FormGroup>
+									</div>
+									<div className='col-12'>
+										<Label>Select Skill Set List</Label>
+										<FormGroup>
+											<Select
+												size='sm'
+												ariaLabel='Select Category'
+												multiple
+												{...register('skill_set_list', {
+													required: 'skill_set_list is required',
+												})}>
+												<Option value=''>Select skill_set_list</Option>
+												{skillSetList?.map((skill) => {
+													return (
+														<Option key={skill} value={skill}>
+															{skill}
+														</Option>
+													);
+												})}
+											</Select>
+											<span style={{ color: 'red' }}>
+												{errors.skill_set_list?.message}
+											</span>
+										</FormGroup>
+									</div>
+
+									<div className='col-12'>
+										<FormGroup id='keywords' isFloating label='Your keywords'>
+											<Input
+												autoComplete='off'
+												{...register('verification_keywords', {
+													required: editMode
+														? false
+														: 'verification_keywords is required',
+												})}
+												onKeyPress={(ev) => {
+													if (ev.key === 'Enter') {
+														ev.preventDefault();
+														setVerificationKeywordsList([
+															...verificationKeywordsList,
+															ev.target.value,
+														]);
+													}
+												}}
+											/>
+										</FormGroup>
+										<span style={{ color: 'red' }}>
+											{errors.verification_keywords?.message}
+										</span>
+									</div>
+									<div className='d-flex align-items-center w-100'>
+										<div className='container'>
+											<div className='row'>
+												{verificationKeywordsList &&
+													verificationKeywordsList?.map((Vkeyword) => {
+														return (
+															<div
+																className='col-md-6 col-lg-4 col-xl-3'
+																key={Vkeyword}
+																style={{
+																	padding: '5px',
+																	border: '1px solid gray',
+																	borderRadius: '12px',
+																	margin: '8px',
+																}}>
+																<div className='row'>
+																	<div className='col-md-9 fw-bold d-flex align-items-center justify-content-start'>
+																		{Vkeyword}
+																	</div>
+																	<div className='col-md-3 d-flex align-items-center justify-content-center'>
+																		<Icon
+																			size='lg'
+																			icon='Cancel'
+																			color='danger'
+																			style={{
+																				cursor: 'pointer',
+																			}}
+																			onClick={() =>
+																				setVerificationKeywordsList(
+																					(Vkeywords) =>
+																						Vkeywords.filter(
+																							(
+																								Vkeyw,
+																							) =>
+																								Vkeyw !==
+																								Vkeyword,
+																						),
+																				)
+																			}
+																		/>
+																	</div>
+																</div>
+															</div>
+														);
+													})}
+											</div>
+										</div>
+									</div>
+								</>
+							)}
 							{(perams.sop_slug === 'on_hold_found' ||
 								perams.sop_slug === 'call_refreshment_found') && (
 								<>
@@ -450,41 +588,53 @@ const AddUpdateSubSops = () => {
 											{errors.keywords?.message}
 										</span>
 									</div>
-									<div className='d-flex align-items-center'>
-										{keywordsList &&
-											keywordsList?.map((keyword) => {
-												return (
-													<div
-														key={keyword}
-														style={{
-															display: 'flex',
-															alignItems: 'center',
-															justifyContent: 'space-between',
-															padding: '5px',
-															border: '1px solid gray',
-															borderRadius: '12px',
-															width: '140px',
-															margin: '8px',
-														}}>
-														<span className='fw-bold'>{keyword}</span>
-														<Icon
-															size='lg'
-															icon='Cancel'
-															color='danger'
-															style={{
-																cursor: 'pointer',
-															}}
-															onClick={() =>
-																setKeywordsList((keywords) =>
-																	keywords.filter(
-																		(keyw) => keyw !== keyword,
-																	),
-																)
-															}
-														/>
-													</div>
-												);
-											})}
+									<div className='d-flex align-items-center w-100'>
+										<div className='container'>
+											<div className='row'>
+												{keywordsList &&
+													keywordsList?.map((keyword) => {
+														return (
+															<div
+																className='col-md-6 col-lg-4 col-xl-3'
+																key={keyword}
+																style={{
+																	padding: '5px',
+																	border: '1px solid gray',
+																	borderRadius: '12px',
+																	margin: '8px',
+																}}>
+																<div className='row'>
+																	<div className='col-md-9 fw-bold d-flex align-items-center justify-content-start'>
+																		{keyword}
+																	</div>
+																	<div className='col-md-3 d-flex align-items-center justify-content-center'>
+																		<Icon
+																			size='lg'
+																			icon='Cancel'
+																			color='danger'
+																			style={{
+																				cursor: 'pointer',
+																			}}
+																			onClick={() =>
+																				setKeywordsList(
+																					(keywords) =>
+																						keywords.filter(
+																							(
+																								keyw,
+																							) =>
+																								keyw !==
+																								keyword,
+																						),
+																				)
+																			}
+																		/>
+																	</div>
+																</div>
+															</div>
+														);
+													})}
+											</div>
+										</div>
 									</div>
 								</>
 							)}
@@ -591,7 +741,8 @@ const AddUpdateSubSops = () => {
 								perams.sop_slug === 'responsiveness_found' ||
 								perams.sop_slug === 'customer_rate_of_speech_found' ||
 								perams.sop_slug === 'customer_responsiveness_found' ||
-								perams.sop_slug === 'customer_clarity_found') && (
+								perams.sop_slug === 'customer_clarity_found' ||
+								perams.sop_slug === 'clarity_found') && (
 								<>
 									<div className='col-12'>
 										<FormGroup id='min' isFloating label='Your min value'>
@@ -672,7 +823,8 @@ const AddUpdateSubSops = () => {
 								perams.sop_slug === 'responsiveness_found' ||
 								perams.sop_slug === 'customer_rate_of_speech_found' ||
 								perams.sop_slug === 'customer_responsiveness_found' ||
-								perams.sop_slug === 'customer_clarity_found') && (
+								perams.sop_slug === 'customer_clarity_found' ||
+								perams.sop_slug === 'clarity_found') && (
 								<div className='col-12'>
 									<Label>Select Type</Label>
 									<FormGroup>

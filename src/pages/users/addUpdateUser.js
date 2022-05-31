@@ -426,6 +426,7 @@ const AddUpdateUser = () => {
 											</div>
 										</div>
 									</div>
+
 									<div className='row d-flex' style={{ marginTop: 30 }}>
 										<div className='col'>
 											<Button
@@ -436,7 +437,6 @@ const AddUpdateUser = () => {
 												type='submit'>
 												{!editMode ? 'Create' : 'Update'}
 											</Button>
-
 											<Button
 												color='info'
 												isLight

@@ -28,6 +28,7 @@ const SopsDetails = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const perams = useParams();
+	console.log('perams', perams);
 	const [tagId, setTagId] = useState();
 	const { subSops, loading } = useSelector((state) => state.subSops);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -178,7 +179,8 @@ const SopsDetails = () => {
 			perams.sop_slug === 'responsiveness_found' ||
 			perams.sop_slug === 'customer_rate_of_speech_found' ||
 			perams.sop_slug === 'customer_responsiveness_found' ||
-			perams.sop_slug === 'customer_clarity_found'
+			perams.sop_slug === 'customer_clarity_found' ||
+			perams.sop_slug === 'clarity_found'
 		) {
 			dispatch(
 				updateSubSopsStart({
@@ -252,44 +254,55 @@ const SopsDetails = () => {
 													{errors.tag_list?.message}
 												</div>
 												<div className='d-flex align-items-center'>
-													{tagList &&
-														tagList?.map((tag) => {
-															return (
-																<div
-																	key={tag}
-																	style={{
-																		display: 'flex',
-																		alignItems: 'center',
-																		justifyContent:
-																			'space-between',
-																		padding: '5px',
-																		border: '1px solid gray',
-																		borderRadius: '12px',
-																		width: '140px',
-																		margin: '8px',
-																	}}>
-																	<span className='fw-bold'>
-																		{tag}
-																	</span>
-																	<Icon
-																		size='lg'
-																		icon='Cancel'
-																		color='danger'
-																		style={{
-																			cursor: 'pointer',
-																		}}
-																		onClick={() =>
-																			setTagList((tags) =>
-																				tags.filter(
-																					(tg) =>
-																						tg !== tag,
-																				),
-																			)
-																		}
-																	/>
-																</div>
-															);
-														})}
+													<div className='container'>
+														<div className='row'>
+															{tagList &&
+																tagList?.map((tag) => {
+																	return (
+																		<div
+																			className='col-md-6 col-lg-4 col-xl-3'
+																			key={tag}
+																			style={{
+																				padding: '5px',
+																				border: '1px solid gray',
+																				borderRadius:
+																					'12px',
+																				margin: '8px',
+																			}}>
+																			<div className='row'>
+																				<div className='col-md-9 fw-bold d-flex align-items-center justify-content-start'>
+																					{tag}
+																				</div>
+																				<div className='col-md-3 d-flex align-items-center justify-content-center'>
+																					<Icon
+																						size='lg'
+																						icon='Cancel'
+																						color='danger'
+																						style={{
+																							cursor: 'pointer',
+																						}}
+																						onClick={() =>
+																							setTagList(
+																								(
+																									tags,
+																								) =>
+																									tags.filter(
+																										(
+																											tg,
+																										) =>
+																											tg !==
+																											tag,
+																									),
+																							)
+																						}
+																					/>
+																				</div>
+																			</div>
+																		</div>
+																	);
+																})}
+														</div>
+													</div>
 												</div>
 												<div className='col-12'>
 													<Button
@@ -340,47 +353,56 @@ const SopsDetails = () => {
 													</FormGroup>
 													{errors.skill_set_list?.message}
 												</div>
-												<div className='d-flex align-items-center'>
-													{skillSetList &&
-														skillSetList?.map((skill) => {
-															return (
-																<div
-																	key={skill}
-																	style={{
-																		display: 'flex',
-																		alignItems: 'center',
-																		justifyContent:
-																			'space-between',
-																		padding: '5px',
-																		border: '1px solid gray',
-																		borderRadius: '12px',
-																		width: '150px',
-																		margin: '8px',
-																	}}>
-																	<span className='fw-bold'>
-																		{skill}
-																	</span>
-																	<Icon
-																		size='lg'
-																		icon='Cancel'
-																		color='danger'
-																		style={{
-																			cursor: 'pointer',
-																		}}
-																		onClick={() =>
-																			setSkillSetList(
-																				(skills) =>
-																					skills.filter(
-																						(sk) =>
-																							sk !==
-																							skill,
-																					),
-																			)
-																		}
-																	/>
-																</div>
-															);
-														})}
+												<div className='d-flex align-items-center w-100'>
+													<div className='container'>
+														<div className='row'>
+															{skillSetList &&
+																skillSetList?.map((skill) => {
+																	return (
+																		<div
+																			className='col-md-6 col-lg-4 col-xl-3'
+																			key={skill}
+																			style={{
+																				padding: '5px',
+																				border: '1px solid gray',
+																				borderRadius:
+																					'12px',
+																				margin: '8px',
+																			}}>
+																			<div className='row'>
+																				<div className='col-md-9 fw-bold d-flex align-items-center justify-content-start'>
+																					{skill}
+																				</div>
+																				<div className='col-md-3 d-flex align-items-center justify-content-center'>
+																					<Icon
+																						size='lg'
+																						icon='Cancel'
+																						color='danger'
+																						style={{
+																							cursor: 'pointer',
+																						}}
+																						onClick={() =>
+																							setSkillSetList(
+																								(
+																									skills,
+																								) =>
+																									skills.filter(
+																										(
+																											sk,
+																										) =>
+																											sk !==
+																											skill,
+																									),
+																							)
+																						}
+																					/>
+																				</div>
+																			</div>
+																		</div>
+																	);
+																})}
+														</div>
+													</div>
 												</div>
 												<div className='col-12'>
 													<Button
@@ -566,6 +588,7 @@ const SopsDetails = () => {
 							case 'customer_rate_of_speech_found':
 							case 'customer_responsiveness_found':
 							case 'customer_clarity_found':
+							case 'clarity_found':
 								return (
 									<div style={{ opacity: loading ? 0.5 : 1 }}>
 										{subSops.length ? (
@@ -642,7 +665,7 @@ const SopsDetails = () => {
 							case 'call_refreshment_found':
 							case 'on_hold_found':
 							case 'customer_verification_found':
-							case 'call_closure_found':
+							case 'call_closures_found':
 							case 'call_opening_found':
 							case 'call_additional_info_found':
 							case 'call_alternate_channel_found':
@@ -669,13 +692,13 @@ const SopsDetails = () => {
 																						'500',
 																					overflow:
 																						'hidden',
-																					'text-overflow':
+																					textOverflow:
 																						'ellipsis',
 																					display:
 																						'-webkit-box',
-																					'-webkit-line-clamp':
+																					WebkitLineClamp:
 																						'2',
-																					'-webkit-box-orient':
+																					WebkitBoxOrient:
 																						'vertical',
 																				}}>
 																				{

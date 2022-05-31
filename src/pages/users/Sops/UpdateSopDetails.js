@@ -40,6 +40,7 @@ const UpdateSopDetails = () => {
 
 	useEffect(() => {
 		const singleSop = sops.find((sop) => sop.slug === perams.sop_slug);
+		console.log('singleSop', singleSop);
 		setSelectedSop(singleSop);
 
 		setValue('Sub_category', singleSop?.Sub_category);
@@ -48,8 +49,9 @@ const UpdateSopDetails = () => {
 		setValue('filter', JSON.stringify(singleSop?.filter));
 		setValue('sop', JSON.stringify(singleSop?.sop));
 		setValue('type', singleSop?.type);
-		setValue('user_type', singleSop?.user_type);
+		// setValue('user_type', singleSop?.user_type);
 		setValue('weightage', singleSop?.weightage);
+		setValue('customer_weightage', singleSop?.customer_weightage);
 	}, [perams.sop_slug, setValue, sops]);
 	const onError = (errors) => console.log('Errors Occurred !! :', errors);
 
@@ -61,8 +63,9 @@ const UpdateSopDetails = () => {
 			filter: JSON.parse(data.filter),
 			sop: JSON.parse(data.sop),
 			type: data.type,
-			user_type: data.user_type,
+			// user_type: data.user_type,
 			weightage: data.weightage,
+			customer_weightage: data.customer_weightage,
 			User: Number(perams.id),
 		};
 
@@ -204,7 +207,7 @@ const UpdateSopDetails = () => {
 									<span style={{ color: 'red' }}>{errors.type?.message}</span>
 								</FormGroup>
 							</div>
-							<div className='col-12'>
+							{/* <div className='col-12'>
 								<Label>Select User Type</Label>
 								<FormGroup>
 									<Select
@@ -221,7 +224,7 @@ const UpdateSopDetails = () => {
 										{errors.user_type?.message}
 									</span>
 								</FormGroup>
-							</div>
+							</div> */}
 							<div className='col-12'>
 								<FormGroup id='weightage' isFloating label='Sop Weighatge'>
 									<Input
@@ -242,6 +245,33 @@ const UpdateSopDetails = () => {
 								</FormGroup>
 								<span style={{ color: 'red' }}>{errors.weightage?.message}</span>
 							</div>
+
+							<div className='col-12'>
+								<FormGroup
+									id='customer_weightage'
+									isFloating
+									label='Customer Weighatge'>
+									<Input
+										autoComplete='off'
+										type='number'
+										{...register('customer_weightage', {
+											required: 'customer_weightage is required',
+											min: {
+												value: 0,
+												message: 'Weighate between 0 to 100',
+											},
+											max: {
+												value: 100,
+												message: 'Weighate between 0 to 100',
+											},
+										})}
+									/>
+								</FormGroup>
+								<span style={{ color: 'red' }}>
+									{errors.customer_weightage?.message}
+								</span>
+							</div>
+
 							<div className='col-12' style={{ marginTop: 50 }}>
 								<div className='row d-flex'>
 									<div className='col'>
